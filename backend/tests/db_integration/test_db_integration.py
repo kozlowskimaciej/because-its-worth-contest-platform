@@ -1,4 +1,5 @@
 from testcontainers.mongodb import MongoDbContainer
+from pymongo.database import Database
 from pymongo import MongoClient
 import pytest
 
@@ -9,8 +10,17 @@ def mongo_client() -> MongoClient:
         yield mongo.get_connection_client()
 
 
-def test_mongo_insert_and_find(mongo_client: MongoClient):
-    db = mongo_client.first_instance
+@pytest.fixture
+def shared_db(mongo_client) -> Database:
+    return mongo_client.shared_instance
+
+
+@pytest.fixture
+def unique_db(request: pytest.FixtureRequest, mongo_client) -> Database:
+    return getattr(mongo_client, request.node.name)
+
+
+def test_mongo_insert_and_find(unique_db: Database):
     doc = {
         "address": {
             "street": "2 Avenue",
@@ -23,14 +33,13 @@ def test_mongo_insert_and_find(mongo_client: MongoClient):
         "name": "Vella",
         "restaurant_id": "41704620",
     }
-    db.restaurants.insert_one(doc)
-    cursor = db.restaurants.find({"borough": "Manhattan"})
+    unique_db.restaurants.insert_one(doc)
+    cursor = unique_db.restaurants.find({"borough": "Manhattan"})
     assert cursor.next()["restaurant_id"] == doc["restaurant_id"]
 
 
 # This test uses other db instance so no data will be found
-def test_mongo_no_data(mongo_client: MongoClient):
-    db = mongo_client.second_instance
-    cursor = db.restaurants.find({"borough": "Manhattan"})
+def test_mongo_no_data(unique_db: Database):
+    cursor = unique_db.restaurants.find({"borough": "Manhattan"})
     with pytest.raises(StopIteration):
         cursor.next()["restaurant_id"]
