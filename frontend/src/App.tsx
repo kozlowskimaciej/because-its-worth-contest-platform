@@ -1,5 +1,6 @@
 import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Loading from "./components/common/Loading";
 
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -16,8 +17,7 @@ function App() {
       <Suspense
         fallback={
           <div style={suspenseStyles}>
-            {/* <Loading text="" /> */}
-            loading...
+            <Loading text="" />
           </div>
         }
       >

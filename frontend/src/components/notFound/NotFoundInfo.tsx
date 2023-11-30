@@ -10,6 +10,7 @@ export default function NotFoundInfo() {
       <img
         className={styles.image}
         src={`${process.env.PUBLIC_URL}/images/logo.jpg`}
+        alt="logo"
       />
       <p className={styles.p}>Podana strona nie istnieje.</p>
       <button className={styles.button} onClick={() => navigate("/")}>
