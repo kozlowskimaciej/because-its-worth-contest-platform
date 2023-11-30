@@ -1,0 +1,45 @@
+.form {
+  background-color: var(--secondary-color);
+  width: 100%;
+  padding: 40px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.label {
+  font-size: large;
+  font-weight: 600;
+  margin: 10px;
+}
+
+.title-input {
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  font-size: 25px;
+  padding: 10px;
+}
+
+.textarea {
+  margin-top: 10px;
+  resize: vertical;
+  font-size: 18px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 20px;
+  border: none;
+}
+
+.button {
+  all: unset;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  padding: 10px 50px;
+  border-radius: 20px;
+}
+
+.button:hover {
+  cursor: pointer;
+}
