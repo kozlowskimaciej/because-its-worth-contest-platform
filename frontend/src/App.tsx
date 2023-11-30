@@ -2,6 +2,7 @@ import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const Home = lazy(() => import("./pages/Home"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   const suspensify = (Component: ComponentType) => {
@@ -29,6 +30,10 @@ function App() {
     {
       path: "/",
       component: Home,
+    },
+    {
+      path: "*",
+      component: NotFound,
     },
   ];
 
