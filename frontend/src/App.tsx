@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 
 const Home = lazy(() => import("./pages/Home"));
+const Contests = lazy(() => import("./pages/Contests"));
 const ContestCreation = lazy(() => import("./pages/ContestCreation"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -31,6 +32,10 @@ function App() {
     {
       path: "/",
       component: Home,
+    },
+    {
+      path: "/contests",
+      component: Contests,
     },
     {
       path: "/contest/new",

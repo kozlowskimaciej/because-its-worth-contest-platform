@@ -6,7 +6,7 @@ export default function ContestCreation() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "800px", margin: "auto", paddingTop: "140px" }}>
+      <div style={{ width: "700px", margin: "auto", paddingTop: "140px" }}>
         <ContestCreationForm />
       </div>
     </>
