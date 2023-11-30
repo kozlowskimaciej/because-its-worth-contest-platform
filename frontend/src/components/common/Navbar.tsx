@@ -14,7 +14,7 @@ export default function Navbar() {
     {
       text: "konkursy",
       onclick: () => navigate("/contests"),
-      isActive: window.location.pathname === "/contests",
+      isActive: window.location.pathname.startsWith("/contests"),
     },
     {
       text: "stwórz",

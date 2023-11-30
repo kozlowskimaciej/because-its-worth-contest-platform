@@ -7,6 +7,7 @@ interface IContestGroup {
     id: number;
     title: string;
     description: string;
+    onclick: React.MouseEventHandler<HTMLButtonElement>;
   }[];
 }
 
@@ -16,7 +17,7 @@ export default function ContestGroup({ title, items }: IContestGroup) {
       <h2>{title}</h2>
       <div className={styles.group}>
         {items.map((item, index) => (
-          <button key={index} className={styles.card}>
+          <button key={index} className={styles.card} onClick={item.onclick}>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
           </button>
