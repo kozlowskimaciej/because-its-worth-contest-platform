@@ -1,14 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
+import ContestPreview from "../components/contest/ContestPreview";
 
 export default function Contest() {
-  const { id } = useParams();
-
   return (
-    <div>
+    <>
       <Navbar />
-      <div style={{ paddingTop: "100px" }}>Contest {id}</div>
-    </div>
+      <div style={{ height: "100px" }} />
+      <ContestPreview />
+    </>
   );
 }
