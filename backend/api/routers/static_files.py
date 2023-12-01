@@ -15,6 +15,10 @@ class AllowedMimeTypes(str, Enum):
     PNG = 'image/png'
     MP4 = 'video/mp4'
 
+    @classmethod
+    def get_list(cls):
+        return [type.value for type in cls]
+
 router = APIRouter(prefix='/uploads', tags=['Upload'])
 
 
@@ -38,19 +42,10 @@ def __allowed_file(filename):
     return file_extension[1:].lower() in ALLOWED_EXTENSIONS
 
 def __validate_file_size(file: UploadFile):
-    if file.file._file.seekable():
-        file.file._file.seek(0, 2)  # Przejście na koniec pliku, aby uzyskać długość
-        file_size = file.file._file.tell()
-        file.file._file.seek(0)  # Powrót na początek pliku
-        if file_size > MAX_FILE_SIZE:
-            raise HTTPException(
-                status_code=413, # Request entity too large
-                detail=f"File size is too large. Max allowed size is {MAX_FILE_SIZE}."
-            )
-    else:
+    if file.size > MAX_FILE_SIZE:
         raise HTTPException(
-            status_code=500,
-            detail="File is not seekable. Unable to determine file size."
+            status_code=413, # Request entity too large
+            detail=f"File size is too large. Max allowed size is {MAX_FILE_SIZE}MB."
         )
 
 def __validate_file_name(file: UploadFile):
@@ -64,7 +59,7 @@ def __validate_file_name(file: UploadFile):
 def __validate_file_type(file: UploadFile):
     # Extract primary type using mimetypes module
     primary_type, _ = mimetypes.guess_type(file.filename)
-    if primary_type not in AllowedMimeTypes:
+    if primary_type not in AllowedMimeTypes.get_list():
         raise HTTPException(
             status_code=400,
             detail=f"Invalid MIME type. Allowed types: {', '.join(AllowedMimeTypes)}."
