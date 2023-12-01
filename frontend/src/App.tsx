@@ -5,6 +5,7 @@ import Loading from "./components/common/Loading";
 const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));
 const Contest = lazy(() => import("./pages/Contest"));
+const Publish = lazy(() => import("./pages/Publish"));
 const ContestCreation = lazy(() => import("./pages/ContestCreation"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -41,6 +42,10 @@ function App() {
     {
       path: "/contests/:id/preview",
       component: Contest,
+    },
+    {
+      path: "/contests/:id/publish",
+      component: Publish,
     },
     {
       path: "/contest/new",

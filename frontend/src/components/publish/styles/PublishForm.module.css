@@ -1,0 +1,29 @@
+.form {
+  background-color: var(--secondary-color);
+  text-align: left;
+  width: 40%;
+  margin: auto;
+  padding: 40px 40px;
+  border-radius: 20px;
+}
+
+.label {
+  background-color: var(--primary-color);
+  padding: 10px 40px;
+  border-radius: 20px;
+}
+
+.button {
+  all: unset;
+  background-color: var(--accent-color);
+  padding: 10px 80px;
+  border-radius: 20px;
+  color: var(--primary-color);
+  margin-top: 40px;
+  transition: scale 400ms ease;
+}
+
+.button:hover {
+  scale: 1.03;
+  cursor: pointer;
+}
