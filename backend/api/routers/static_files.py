@@ -3,22 +3,14 @@ from fastapi.staticfiles import StaticFiles
 import uuid
 import datetime
 import os
-import mimetypes
-from enum import Enum
+
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'mp4'}
 MAX_FILE_SIZE = 5 * 1024 * 1024 # 5MB
-STATIC_FOLDER_NAME = "uploads"
+STATIC_FOLDER_NAME = "backend/uploads" # path for testing
+# STATIC_FOLDER_NAME = "uploads" # for development
 
-class AllowedMimeTypes(str, Enum):
-    JPEG = 'image/jpeg'
-    PNG = 'image/png'
-    MP4 = 'video/mp4'
-
-    @classmethod
-    def get_list(cls):
-        return [type.value for type in cls]
-
+# API path for post
 router = APIRouter(prefix='/uploads', tags=['Upload'])
 
 
@@ -56,19 +48,9 @@ def __validate_file_name(file: UploadFile):
             detail="Invalid file format. Allowed formats: JPG, PNG, MP4."
         )
 
-def __validate_file_type(file: UploadFile):
-    # Extract primary type using mimetypes module
-    primary_type, _ = mimetypes.guess_type(file.filename)
-    if primary_type not in AllowedMimeTypes.get_list():
-        raise HTTPException(
-            status_code=400,
-            detail=f"Invalid MIME type. Allowed types: {', '.join(AllowedMimeTypes)}."
-    )
-
 def validate_file(file: UploadFile):
     __validate_file_size(file)
     __validate_file_name(file)
-    __validate_file_type(file)
 
 @router.post('/')
 async def upload_file(file: UploadFile = File(...)):
