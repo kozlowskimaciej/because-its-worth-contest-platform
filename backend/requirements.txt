@@ -1,3 +1,5 @@
 fastapi
 pydantic
 uvicorn
+python-magic
+python-multipart
