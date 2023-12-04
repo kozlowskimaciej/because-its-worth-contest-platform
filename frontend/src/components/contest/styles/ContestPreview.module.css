@@ -1,0 +1,51 @@
+.wrapper {
+  width: 50%;
+  margin: auto;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}
+
+.publish {
+  all: unset;
+  width: 250px;
+  height: 50px;
+  text-align: center;
+  background-color: var(--accent-color);
+  border-radius: 20px;
+  color: var(--primary-color);
+  transition: scale 400ms ease;
+}
+
+.delete {
+  all: unset;
+  width: 250px;
+  height: 50px;
+  text-align: center;
+  background-color: #dc3545;
+  border-radius: 20px;
+  color: var(--primary-color);
+  transition: scale 400ms ease;
+}
+
+.publish:hover, .delete:hover {
+  cursor: pointer;
+  scale: 1.03;
+}
+
+.info {
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  padding: 20px 40px;
+  margin-bottom: 20px;
+}
+
+.entry {
+  background-color: var(--primary-color);
+  padding: 10px;
+  border-radius: 20px;
+  width: calc(100% - 20px);
+}
