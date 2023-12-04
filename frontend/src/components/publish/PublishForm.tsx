@@ -24,6 +24,23 @@ export default function PublishForm() {
     formData.forEach((val, key) => {
       console.log(key, val);
     });
+
+    files.forEach((file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      fetch("http://localhost:8000/uploads", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
   };
 
   return (
