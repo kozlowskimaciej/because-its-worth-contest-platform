@@ -38,15 +38,17 @@ API response prototype for fetching contests
       "type": "contests",
       "attributes": {
         "title": "bardzo warto",
-        "description": "Zaprawdę zaprawdę powiadam wam, nie warto."
+        "description": "Zaprawdę zaprawdę powiadam wam, warto.",
+        "status": "ongoing"
       }
     },
     {
       "id": "2",
       "type": "contests",
       "attributes": {
-        "title": "No nie wiem czy warto",
-        "description": "Czy warto czy nie warto, oto jest pytanie. Dziwne są te historie za przeproszeniem."
+        "title": "Chyba będzie warto",
+        "description": "Czy warto czy nie warto, oto jest pytanie. Dziwne są te historie za przeproszeniem.",
+        "status": "finished"
       }
     }
   ]
