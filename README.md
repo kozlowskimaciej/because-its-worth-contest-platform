@@ -51,11 +51,11 @@ API response prototype for fetching competition entries
 {
   "data": [
     {
-      "id": 1,
+      "id": "1",
       "type": "entries",
       "attributes": {
         "author": {
-          "id": 5,
+          "id": "5",
           "attributes": {
             "name": "Elon",
             "lastname": "Musk",
@@ -80,11 +80,11 @@ API response prototype for fetching competition entries
       }
     },
     {
-      "id": 2,
+      "id": "2",
       "type": "entries",
       "attributes": {
         "author": {
-          "id": 5,
+          "id": "5",
           "attributes": {
             "name": "Jan",
             "lastname": "Kowalski",
