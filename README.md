@@ -58,7 +58,7 @@ API response prototype for fetching contests
 API request prototype for fetching competition entries
 
 ```plaintext
-http://foundation.com/contest/?id=1
+http://foundation.com/contest/entries/?id=1
 ```
 
 API response prototype for fetching competition entries
