@@ -75,12 +75,19 @@ API response prototype for fetching competition entries
         "author": {
           "id": "5",
           "attributes": {
-            "name": "Elon",
-            "lastname": "Musk",
+            "firstName": "Elon",
+            "lastName": "Musk",
             "phone": "123456789",
-            "email": "elon.musk@gmail.com"
+            "email": "elon.musk@gmail.com",
+            "address": "Polna 2"
           }
         },
+        "guardian": {
+          "firstName": "Joe",
+          "lastName": "Biden"
+        },
+        "place": "none",
+        "submissionDate": "2023-04-20T18:34:59.000Z",
         "files": [
           {
             "type": "image",
@@ -104,12 +111,16 @@ API response prototype for fetching competition entries
         "author": {
           "id": "5",
           "attributes": {
-            "name": "Jan",
-            "lastname": "Kowalski",
-            "phone": "694202137",
-            "email": "jan.kowalski@gmail.com"
+            "firstName": "Jan",
+            "lastName": "Kowalski",
+            "phone": null,
+            "email": null,
+            "address": null
           }
         },
+        "guardian": null,
+        "place": "laureat",
+        "submissionDate": "2023-04-20T18:34:59.000Z",
         "files": [
           {
             "type": "image",
