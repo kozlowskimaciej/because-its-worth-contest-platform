@@ -37,18 +37,28 @@ API response prototype for fetching contests
       "id": "1",
       "type": "contests",
       "attributes": {
-        "title": "bardzo warto",
+        "name": "bardzo warto",
         "description": "Zaprawdę zaprawdę powiadam wam, warto.",
-        "status": "ongoing"
+        "categories": ["filmowy", "literacki"],
+        "published": true,
+        "deadline": "2023-04-20T18:34:59.000Z",
+        "termsAndConditions": ["regulamin.pdf", "zgoda.docx"],
+        "acceptedFileFormats": ["mp3", "mp4", "pdf", "docx"],
+        "background": "http://ydfItExists/image.png"
       }
     },
     {
       "id": "2",
       "type": "contests",
       "attributes": {
-        "title": "Chyba będzie warto",
+        "name": "Chyba będzie warto",
         "description": "Czy warto czy nie warto, oto jest pytanie. Dziwne są te historie za przeproszeniem.",
-        "status": "finished"
+        "categories": ["fotograficzny"],
+        "published": false,
+        "deadline": "2023-04-20T18:34:59.000Z",
+        "termsAndConditions": ["regulamin.docx"],
+        "acceptedFileFormats": ["png", "jpg", "jpeg"],
+        "background": "http://justY/image.jpg"
       }
     }
   ]
