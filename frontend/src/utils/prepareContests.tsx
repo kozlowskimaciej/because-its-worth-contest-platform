@@ -1,4 +1,4 @@
-import { Contest } from "../../../models/Contest";
+import { Contest } from "../models/Contest";
 
 export const prepareContests = (contests: any): Contest[] => {
   const data = contests.data;

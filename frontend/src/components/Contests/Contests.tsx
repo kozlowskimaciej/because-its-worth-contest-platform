@@ -1,7 +1,7 @@
 import React from "react";
 import ContestGroup from "./ContestGroup";
 import { useNavigate } from "react-router-dom";
-import { prepareContests } from "./utils/prepareContests";
+import { prepareContests } from "../../utils/prepareContests";
 import { contests as apiContests } from "../../fakeApi/contests";
 
 export default function Contests() {

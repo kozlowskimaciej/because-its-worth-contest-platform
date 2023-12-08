@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles/ContestPreview.module.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { prepareContests } from "../Contests/utils/prepareContests";
+import { prepareContests } from "../../utils/prepareContests";
 import { contests as apiContests } from "../../fakeApi/contests";
 import NotFoundInfo from "../notFound/NotFoundInfo";
 
