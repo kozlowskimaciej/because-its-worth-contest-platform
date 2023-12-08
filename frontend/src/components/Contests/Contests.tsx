@@ -2,12 +2,12 @@ import React from "react";
 import ContestGroup from "./ContestGroup";
 import { useNavigate } from "react-router-dom";
 import { prepareContests } from "../../utils/prepareContests";
-import { contests as apiContests } from "../../fakeApi/contests";
+import * as api from "../../fakeApi/contests";
 
 export default function Contests() {
   const navigate = useNavigate();
 
-  const contests = prepareContests(apiContests);
+  const contests = prepareContests(api.contests);
 
   contests.forEach((contest) => {
     if (contest.description.length > 300) {

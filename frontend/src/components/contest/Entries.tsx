@@ -1,17 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import * as api from "../../fakeApi/entries";
 import Entry from "../common/Entry";
-import { prepareEntries } from "../../utils/prepareEntries";
 import styles from "./styles/Entries.module.css";
+import { Entry as EntryType } from "../../models/Entry";
 
-export default function Entries() {
-  const { id } = useParams();
+interface IProps {
+  entries: EntryType[];
+}
 
-  // fetch entries based on id
-
-  const entries = prepareEntries(api.entries);
-
+export default function Entries({ entries }: IProps) {
   return (
     <div className={styles.wrapper}>
       <h2>Zgłoszone prace</h2>

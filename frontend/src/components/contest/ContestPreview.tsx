@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./styles/ContestPreview.module.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { prepareContests } from "../../utils/prepareContests";
-import { contests as apiContests } from "../../fakeApi/contests";
-import NotFoundInfo from "../notFound/NotFoundInfo";
+import { useNavigate } from "react-router-dom";
+import { Contest } from "../../models/Contest";
 
-export default function ContestPreview() {
+interface IProps {
+  contest: Contest;
+}
+
+export default function ContestPreview({ contest }: IProps) {
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const formatDate = (inputDate: Date) => {
     const options = { day: "numeric", month: "long", year: "numeric" };
@@ -15,15 +16,6 @@ export default function ContestPreview() {
 
     return date.toLocaleDateString("pl-PL", options as any);
   };
-
-  const contests = prepareContests(apiContests);
-  const matchingContest = contests.filter((contest) => contest.id === id);
-
-  if (matchingContest.length === 0) {
-    return <NotFoundInfo />;
-  }
-
-  const contest = matchingContest[0];
 
   return (
     <div className={styles.wrapper}>
