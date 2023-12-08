@@ -11,7 +11,7 @@ export default function Contests() {
 
   contests.forEach((contest) => {
     if (contest.description.length > 300) {
-      contest.description = contest.description.slice(300) + "...";
+      contest.description = contest.description.slice(0, 300) + "...";
     }
   });
 
