@@ -1,5 +1,10 @@
 import React, { useState, useRef } from "react";
 import styles from "./styles/ContestCreationForm.module.css";
+import {
+  AVAILABLE_IMAGE_FORMATS,
+  AVAILABLE_OTHER_FORMATS,
+  AVAILABLE_VIDEOS_FORMATS,
+} from "../../constants";
 
 export default function ContestCreationForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -43,16 +48,11 @@ export default function ContestCreationForm() {
 
   const participantsTypes = ["5 - 8", "8 - 10", "10 - 12", "12 - 14"];
 
-  const allFilesFormats = [
-    ".jpg",
-    ".png",
-    ".svg",
-    ".pdf",
-    ".mp3",
-    ".mp4",
-    ".wav",
-    ".docx",
-  ];
+  const allFilesFormats = AVAILABLE_IMAGE_FORMATS.concat(
+    AVAILABLE_VIDEOS_FORMATS
+  )
+    .concat(AVAILABLE_OTHER_FORMATS)
+    .map((ext) => `.${ext}`);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

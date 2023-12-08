@@ -2,6 +2,7 @@ import React from "react";
 import { Entry as EntryType } from "../../models/Entry";
 import {
   AVAILABLE_IMAGE_FORMATS,
+  AVAILABLE_OTHER_FORMATS,
   AVAILABLE_VIDEOS_FORMATS,
 } from "../../constants";
 import styles from "./styles/Entry.module.css";
@@ -56,7 +57,7 @@ export default function Entry({ entry }: IProps) {
                 </video>
               </li>
             );
-          } else {
+          } else if (AVAILABLE_OTHER_FORMATS.includes(ext)) {
             return (
               <li key={index}>
                 <a href={file} target="_blank" rel="noopener noreferrer">
