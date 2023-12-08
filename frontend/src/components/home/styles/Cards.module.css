@@ -1,0 +1,42 @@
+.wrapper {
+  padding-top: 242px;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.card {
+  all: unset;
+  width: 40%;
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 400ms ease;
+}
+
+.card:hover {
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+
+.title {
+  font-size: x-large;
+  padding-left: 2rem;
+}
+
+.description {
+  height: calc(100% - 5px);
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 11;
+  display: -webkit-box;
+}
+
+.image {
+  width: 269px;
+  height: 269px;
+  border-radius: 20px;
+  object-fit: cover;
+}

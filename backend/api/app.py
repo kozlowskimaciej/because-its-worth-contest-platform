@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+
 # from api.routers import hello, static_files # for development
-from backend.api.routers import hello, static_files # for testing
+from backend.api.routers import hello, static_files  # for testing
 
 STATIC_FILES_PATH = "/static_files"
+
 
 def create_app():
     app = FastAPI()
@@ -16,5 +18,6 @@ def create_app():
 
     return app
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     create_app()

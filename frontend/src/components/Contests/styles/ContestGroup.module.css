@@ -1,0 +1,27 @@
+.wrapper {
+  width: 80%;
+  padding-bottom: 20px;
+  margin: auto;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  row-gap: 20px;
+}
+
+.card {
+  all: unset;
+  width: 22%;
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 400ms ease;
+}
+
+.card:hover {
+  cursor: pointer;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.6);
+}
