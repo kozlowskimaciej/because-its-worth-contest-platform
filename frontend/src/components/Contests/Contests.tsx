@@ -25,13 +25,6 @@ export default function Contests() {
     contest.onclick = () => navigate(`/contests/${contest.id}/rate`);
   });
 
-  // const activeContests = Array.from({ length: 10 }, (_, index) => ({
-  //   id: index + 1,
-  //   title: `Kreatywna Eksplozja Barw`,
-  //   description: `Zapraszamy wszystkich pasjonatów sztuki i kreatywności do udziału w naszym ekscytującym konkursie "Kreatywna Eksplozja Barw". Celem konkursu jest wyrażenie swojej wyjątkowej wizji poprzez kolor i formę. Zadaniem uczestników jest stworzenie dzieła sztuki, które wyróżnia się ...`,
-  //   onclick: () => navigate(`/contests/${index + 1}/preview`),
-  // }));
-
   return (
     <div>
       <ContestGroup title="W trakcie" items={active as any} />
