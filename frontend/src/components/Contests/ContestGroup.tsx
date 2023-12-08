@@ -1,14 +1,14 @@
 import React from "react";
 import styles from "./styles/ContestGroup.module.css";
+import { Contest } from "../../models/Contest";
 
 interface IContestGroup {
   title: string;
-  items: {
-    id: number;
-    title: string;
-    description: string;
-    onclick: React.MouseEventHandler<HTMLButtonElement>;
-  }[];
+  items: Array<
+    {
+      onclick: React.MouseEventHandler<HTMLButtonElement>;
+    } & Contest
+  >;
 }
 
 export default function ContestGroup({ title, items }: IContestGroup) {
@@ -18,7 +18,7 @@ export default function ContestGroup({ title, items }: IContestGroup) {
       <div className={styles.group}>
         {items.map((item, index) => (
           <button key={index} className={styles.card} onClick={item.onclick}>
-            <h3>{item.title}</h3>
+            <h3>{item.name}</h3>
             <p>{item.description}</p>
           </button>
         ))}
