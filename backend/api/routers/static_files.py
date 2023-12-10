@@ -24,12 +24,12 @@ def __allowed_file(filename):
     # Check file extension existence
     if '.' not in filename:
         return False
-    
+
     # Ensure the filename doesn't contain directory traversal attempts
     normalized_path = os.path.normpath(filename)
     if normalized_path != filename or normalized_path.startswith(".."):
         return False
-    
+
     # Check file extension name
     _, file_extension = os.path.splitext(filename)
     return file_extension[1:].lower() in ALLOWED_EXTENSIONS
