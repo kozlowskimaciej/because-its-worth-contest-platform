@@ -17,6 +17,11 @@ export default function ContestPreview({ contest }: IProps) {
     return date.toLocaleDateString("pl-PL", options as any);
   };
 
+  const prepareFilename = (file: string): string => {
+    const splitted = file.split("/");
+    return splitted[splitted.length - 1];
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles["btn-wrapper"]}>
@@ -45,7 +50,11 @@ export default function ContestPreview({ contest }: IProps) {
           <h3>pliki z regulaminem</h3>
           <ul>
             {contest.termsAndConditions.map((file, index) => (
-              <li key={index}>{file}</li>
+              <li key={index}>
+                <a href={file} target="_blank">
+                  {prepareFilename(file)}
+                </a>
+              </li>
             ))}
           </ul>
         </div>

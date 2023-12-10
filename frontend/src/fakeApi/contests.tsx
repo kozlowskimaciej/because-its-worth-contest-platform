@@ -43,8 +43,7 @@ export const contests = {
         published: true,
         deadline: "2023-12-15T18:34:59.000Z",
         termsAndConditions: [
-          "http://url/regulamin.pdf",
-          "http://url/zgoda.docx",
+          "http://localhost:8000/static_files/regulamin.pdf",
         ],
         acceptedFileFormats: ["mp3", "mp4", "pdf", "docx"],
         background: "http://ydfItExists/image.png",
