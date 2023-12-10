@@ -1,11 +1,12 @@
 import os
 
-TEST_IMAGES_PATH='backend/tests/test_images/'
-VALID_FILE_NAME='valid_file.jpg'
-TOO_BIG_FILE_NAME='too_big_file.png'
-INVALID_FORMAT_FILE_NAME='invalid_format.pdf'
+TEST_IMAGES_PATH = 'backend/tests/test_images/'
+VALID_FILE_NAME = 'valid_file.jpg'
+TOO_BIG_FILE_NAME = 'too_big_file.png'
+INVALID_FORMAT_FILE_NAME = 'invalid_format.pdf'
 
 STATIC_FILES_PATH = "/static_files/"
+
 
 def test_upload_valid_file(client):
     file_path = TEST_IMAGES_PATH + VALID_FILE_NAME
@@ -27,6 +28,7 @@ def test_upload_invalid_file_size(client):
 
     assert response.status_code == 413
     assert 'File size is too large' in response.json()['detail']
+
 
 def test_upload_invalid_file_format(client):
     file_path = TEST_IMAGES_PATH + INVALID_FORMAT_FILE_NAME
