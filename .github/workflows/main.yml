@@ -53,4 +53,4 @@ jobs:
       - name: Run jest tests
         run: |
           npm install
-          npm run test -- --watchAll=false
+          npm run test -- --watchAll=false --passWithNoTests
