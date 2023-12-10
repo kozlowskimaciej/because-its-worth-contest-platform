@@ -5,12 +5,14 @@ import {
   AVAILABLE_OTHER_FORMATS,
   AVAILABLE_VIDEOS_FORMATS,
 } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 export default function ContestCreationForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [participants, setParticipants] = useState<string[]>([]);
   const [acceptableFiles, setAcceptableFiles] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
 
   const handleTextareaChange = () => {
     if (!textareaRef.current) return;
@@ -42,6 +44,8 @@ export default function ContestCreationForm() {
     formData.forEach((val, key) => {
       console.log(key, val);
     });
+
+    navigate("/contests");
   };
 
   const contestTypes = ["literacki", "muzyczny", "fotograficzny", "filmowy"];
@@ -110,7 +114,6 @@ export default function ContestCreationForm() {
           <input
             type="file"
             multiple
-            required
             id="file-input"
             accept=".docx, .pdf"
             onChange={handleFileInputChange}

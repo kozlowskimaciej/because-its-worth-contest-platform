@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./styles/PublishForm.module.css";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function PublishForm() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState<File[]>([]);
 
   const handleNewFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +26,8 @@ export default function PublishForm() {
     formData.forEach((val, key) => {
       console.log(key, val);
     });
+
+    navigate(`/contests`);
   };
 
   return (
