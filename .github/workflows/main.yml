@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - development
+  pull_request:
+    branches:
+      - master
+      - development
+
+jobs:
+  run-python-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      MIN_TEST_COV: 65
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt -r backend/requirements.dev.txt
+          pip install pytest-cov
+          pip install flake8
+
+      - name: Run flake8 checks
+        run: flake8 `find backend/ -name *.py`
+
+      - name: Run python tests
+        run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
+
+  run-jest-tests:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Run jest tests
+        run: |
+          npm install
+          npm run test -- --watchAll=false
