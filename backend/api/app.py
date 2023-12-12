@@ -26,7 +26,8 @@ def create_app():
 
     # static files are available under /static_files path
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
-    app.mount("/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
+    app.mount(
+        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
 
     return app
 
