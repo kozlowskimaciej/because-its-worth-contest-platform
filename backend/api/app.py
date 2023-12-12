@@ -1,11 +1,12 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
+from backend.api.routers.static_files import STATIC_FOLDER_NAME
 from backend.api.database.db import Database
 from backend.api.routers import hello, static_files
-
-STATIC_FILES_PATH = "/static_files"
 
 
 @asynccontextmanager
@@ -24,7 +25,8 @@ def create_app():
     app.include_router(static_files.router)
 
     # static files are available under /static_files path
-    app.mount(STATIC_FILES_PATH, static_files.static_router, name="uploading")
+    os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
+    app.mount("/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
 
     return app
 

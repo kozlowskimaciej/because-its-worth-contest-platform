@@ -1,13 +1,14 @@
-from fastapi import File, UploadFile, HTTPException, APIRouter
-from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 import uuid
 import datetime
 import os
 
+from fastapi import File, UploadFile, HTTPException, APIRouter
+
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'mp4'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
-STATIC_FOLDER_NAME = "backend/uploads"  # path for testing
+STATIC_FOLDER_NAME = Path(__file__).parent.parent.parent / "uploads"  # path for testing
 
 # API path for post
 router = APIRouter(prefix='/uploads', tags=['Upload'])
@@ -69,6 +70,4 @@ async def upload_file(file: UploadFile = File(...)):
     with open(filepath, "wb") as f:
         f.write(file.file.read())
 
-    return {"filename": file.filename, "size": file.size}
-
-static_router = StaticFiles(directory=STATIC_FOLDER_NAME)
+    return {"filename": generated_filename, "size": file.size}
