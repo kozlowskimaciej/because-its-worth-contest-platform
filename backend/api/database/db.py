@@ -22,7 +22,8 @@ class Database:
     @property
     async def database(self):
         if not self.__database:
-            self.__database = self.__client.get_database(self.get_instance_name())
+            self.__database = self.__client.get_database(
+                self.get_instance_name())
         return self.__database
 
     async def close(self):
