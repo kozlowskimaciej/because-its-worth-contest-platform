@@ -9,27 +9,27 @@ TEST_IMAGES_PATH = Path(__file__).parent.parent / "test_images"
 
 @pytest.fixture(autouse=True)
 def mock_static_files_dir(monkeypatch, testdir):
+    from backend.api import app
     from backend.api.routers import static_files
+    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", str(testdir))
     monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", str(testdir))
 
 
 def test_upload_valid_file(client):
     file_path = TEST_IMAGES_PATH / 'valid_file.jpg'
+
     with open(file_path, 'rb') as file:
         files = {'file': ('valid_file.jpg', file, 'image/jpeg')}
-        file_size = os.path.getsize(file_path)
-        print(file_size)
         response = client.post('/uploads/', files=files)
 
     assert response.status_code == 200
 
     uploaded_file = response.json()
-    assert uploaded_file["size"] > 0
+    assert uploaded_file["size"] == os.path.getsize(file_path)
 
     # Access the uploaded file using the static path
     response = client.get(f"/static/{uploaded_file['filename']}")
 
-    # Assert the access response
     assert response.status_code == 200
     assert response.headers['content-type'] == 'image/jpeg'
     assert response.content == file_path.read_bytes()
