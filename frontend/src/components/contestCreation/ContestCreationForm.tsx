@@ -8,6 +8,7 @@ import {
 } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import ParticipantsCategory from "./ParticipantsCategory";
+import ContestFiles from "./ContestFiles";
 
 export default function ContestCreationForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -21,17 +22,6 @@ export default function ContestCreationForm() {
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height =
       textareaRef.current.scrollHeight + 10 + "px";
-  };
-
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-
-    const selectedFiles = Array.from(e.target.files);
-    setFiles((prev) => [...prev, ...selectedFiles]);
-  };
-
-  const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, id) => id !== index));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,10 +39,6 @@ export default function ContestCreationForm() {
 
     navigate("/contests");
   };
-
-  // const contestTypes = ["literacki", "muzyczny", "fotograficzny", "filmowy"];
-
-  // const participantsTypes = ["5 - 8", "8 - 10", "10 - 12", "12 - 14"];
 
   const allFilesFormats = AVAILABLE_IMAGE_FORMATS.concat(
     AVAILABLE_VIDEOS_FORMATS
@@ -90,7 +76,7 @@ export default function ContestCreationForm() {
             onChange={handleTextareaChange}
           ></textarea>
         </div>
-        <div style={{ marginBottom: "20px" }}>
+        <div style={{ marginBottom: "50px" }}>
           <label htmlFor="date-input" className={styles.label}>
             data zakończenia
           </label>
@@ -108,36 +94,8 @@ export default function ContestCreationForm() {
             }}
           />
         </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="file-input" className={styles.label}>
-            pliki
-          </label>
-          <br />
-          <input
-            type="file"
-            multiple
-            id="file-input"
-            accept=".docx, .pdf"
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-          />
-          <ul>
-            {files.map((file, index) => (
-              <li key={index} style={{ display: "flex" }}>
-                <span>{file.name}</span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    removeFile(index);
-                  }}
-                >
-                  x
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div style={{ marginBottom: "20px" }}>
+        <ContestFiles files={files} setFiles={setFiles} />
+        <div style={{ marginBottom: "50px" }}>
           <label className={styles.label}>kategoria konkursu</label>
           <br />
           {CONTEST_TYPES.map((type, index) => (

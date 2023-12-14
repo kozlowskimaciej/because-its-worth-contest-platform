@@ -40,7 +40,7 @@ export default function ParticipantsCategory({
   };
 
   return (
-    <div style={{ marginBottom: "20px" }}>
+    <div style={{ marginBottom: "50px" }}>
       <label className={styles2.label}>kategorie uczestników</label>
       <ul>
         {participants.map((type, index) => (
