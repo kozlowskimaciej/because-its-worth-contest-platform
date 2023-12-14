@@ -4,8 +4,10 @@ import {
   AVAILABLE_IMAGE_FORMATS,
   AVAILABLE_OTHER_FORMATS,
   AVAILABLE_VIDEOS_FORMATS,
+  CONTEST_TYPES,
 } from "../../constants";
 import { useNavigate } from "react-router-dom";
+import ParticipantsCategory from "./ParticipantsCategory";
 
 export default function ContestCreationForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -48,9 +50,9 @@ export default function ContestCreationForm() {
     navigate("/contests");
   };
 
-  const contestTypes = ["literacki", "muzyczny", "fotograficzny", "filmowy"];
+  // const contestTypes = ["literacki", "muzyczny", "fotograficzny", "filmowy"];
 
-  const participantsTypes = ["5 - 8", "8 - 10", "10 - 12", "12 - 14"];
+  // const participantsTypes = ["5 - 8", "8 - 10", "10 - 12", "12 - 14"];
 
   const allFilesFormats = AVAILABLE_IMAGE_FORMATS.concat(
     AVAILABLE_VIDEOS_FORMATS
@@ -136,38 +138,19 @@ export default function ContestCreationForm() {
           </ul>
         </div>
         <div style={{ marginBottom: "20px" }}>
-          <label className={styles.label}>kategoria</label>
+          <label className={styles.label}>kategoria konkursu</label>
           <br />
-          {contestTypes.map((type, index) => (
+          {CONTEST_TYPES.map((type, index) => (
             <React.Fragment key={index}>
               <input type="radio" value={type} name="type" /> {type}
               <br />
             </React.Fragment>
           ))}
         </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label className={styles.label}>kategoria wiekowa</label>
-          <br />
-          {participantsTypes.map((type, index) => (
-            <React.Fragment key={index}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={participants.includes(type)}
-                  onChange={() => {
-                    participants.includes(type)
-                      ? setParticipants((prev) =>
-                          prev.filter((part) => part !== type)
-                        )
-                      : setParticipants((prev) => [...prev, type]);
-                  }}
-                />
-                {type}
-              </label>
-              <br />
-            </React.Fragment>
-          ))}
-        </div>
+        <ParticipantsCategory
+          participants={participants}
+          setParticipants={setParticipants}
+        />
         <div style={{ marginBottom: "20px" }}>
           <label className={styles.label}>akceptowane formaty plików</label>
           <br />

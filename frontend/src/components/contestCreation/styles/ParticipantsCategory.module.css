@@ -1,0 +1,64 @@
+.li {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.remove {
+  all: unset;
+  padding: 0;
+  margin-right: 20px;
+}
+
+.remove:hover {
+  cursor: pointer;
+}
+
+.remove img {
+  height: 100%;
+}
+
+.li:hover .remove {
+  display: block;
+}
+
+.li:hover {
+  background-color: var(--primary-color);
+}
+
+.new {
+  all: unset;
+  display: flex;
+  background-color: var(--primary-color);
+  height: 30px;
+  border-radius: 10px;
+  align-items: center;
+  padding: 5px 10px;
+  gap: 20px;
+}
+
+.new:hover {
+  cursor: pointer;
+}
+
+.new img {
+  height: 80%;
+}
+
+.new span {
+  margin-top: -3px;
+}
+
+.adding {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+}
+
+.adding input {
+  width: 100%;
+  padding: 10px 5px;
+  border: none;
+}
