@@ -39,10 +39,11 @@ API response prototype for fetching contests
       "attributes": {
         "name": "bardzo warto",
         "description": "Zaprawdę zaprawdę powiadam wam, warto.",
-        "categories": ["filmowy", "literacki"],
+        "category": "filmowy",
+        "entryCategories": ["grupa wiekowa 7 - 10", "grupa wiekowa 10 - 13"],
         "published": true,
         "deadline": "2023-04-20T18:34:59.000Z",
-        "termsAndConditions": ["regulamin.pdf", "zgoda.docx"],
+        "termsAndConditions": ["http://foundation.com/regulamin.pdf", "http://foundation.com/zgoda.docx"],
         "acceptedFileFormats": ["mp3", "mp4", "pdf", "docx"],
         "background": "http://ydfItExists/image.png"
       }
@@ -53,10 +54,11 @@ API response prototype for fetching contests
       "attributes": {
         "name": "Chyba będzie warto",
         "description": "Czy warto czy nie warto, oto jest pytanie. Dziwne są te historie za przeproszeniem.",
-        "categories": ["fotograficzny"],
+        "categories": "fotograficzny",
+        "entryCategories": ["grupa wiekowa 7 - 10"],
         "published": false,
         "deadline": "2023-04-20T18:34:59.000Z",
-        "termsAndConditions": ["regulamin.docx"],
+        "termsAndConditions": ["http://foundation.com/regulamin.docx"],
         "acceptedFileFormats": ["png", "jpg", "jpeg"],
         "background": "http://justY/image.jpg"
       }
@@ -83,7 +85,6 @@ API response prototype for fetching competition entries
       "type": "entries",
       "attributes": {
         "author": {
-          "id": "5",
           "attributes": {
             "firstName": "Elon",
             "lastName": "Musk",
@@ -112,6 +113,14 @@ API response prototype for fetching competition entries
             "src": "http://foundation.com/contests/13/poem1.pdf"
           }
         ]
+      },
+      "relationships": {
+        "contest": {
+          "data": {
+            "id": "13",
+            "type": "contests"
+          }
+        }
       }
     },
     {
@@ -119,7 +128,6 @@ API response prototype for fetching competition entries
       "type": "entries",
       "attributes": {
         "author": {
-          "id": "5",
           "attributes": {
             "firstName": "Jan",
             "lastName": "Kowalski",
@@ -137,6 +145,14 @@ API response prototype for fetching competition entries
             "src": "http://foundation.com/contests/13/image1.jpg"
           }
         ]
+      },
+      "relationships": {
+        "contest": {
+          "data": {
+            "id": "13",
+            "type": "contests"
+          }
+        }
       }
     }
   ]
