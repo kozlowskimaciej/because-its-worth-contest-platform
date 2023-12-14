@@ -5,7 +5,6 @@ export const entries = {
       type: "entries",
       attributes: {
         author: {
-          id: "5",
           attributes: {
             firstName: "Elon",
             lastName: "Musk",
@@ -35,13 +34,20 @@ export const entries = {
           },
         ],
       },
+      relationships: {
+        contest: {
+          data: {
+            id: "71cd5578-13f1-41b0-bd5b-709fcdc40589",
+            type: "contests",
+          },
+        },
+      },
     },
     {
       id: "2",
       type: "entries",
       attributes: {
         author: {
-          id: "5",
           attributes: {
             firstName: "Jan",
             lastName: "Kowalski",
@@ -59,6 +65,14 @@ export const entries = {
             src: "https://www.creativefabrica.com/wp-content/uploads/2023/09/01/gothic-halloween-wallpaper-Graphics-78301352-1.jpg",
           },
         ],
+      },
+      relationships: {
+        contest: {
+          data: {
+            id: "620bf3e3-84f4-435c-8752-8cd18c5aaf3e",
+            type: "contests",
+          },
+        },
       },
     },
   ],

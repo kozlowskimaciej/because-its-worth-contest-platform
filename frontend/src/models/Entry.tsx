@@ -6,7 +6,6 @@ type Guardian = {
 export type Entry = {
   id: string;
   author: {
-    id: string;
     firstName: string;
     lastName: string;
     phone: string | null;
@@ -17,4 +16,5 @@ export type Entry = {
   place: string;
   submissionDate: Date;
   files: string[];
+  contestID: string;
 };

@@ -13,6 +13,8 @@ export const prepareEntries = (entries: any): Entry[] => {
 
     entry.files = entry.files.map((file: any) => file.src);
 
+    entry.contestID = single.relationships.contest.data.id;
+
     return entry;
   });
 };

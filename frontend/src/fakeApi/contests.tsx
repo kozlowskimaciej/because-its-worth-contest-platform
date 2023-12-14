@@ -7,7 +7,8 @@ export const contests = {
         name: `Konkurs "Melodie Marzeń"`,
         description:
           "Twórz magiczną muzykę, która przeniesie słuchaczy w krainę marzeń. Niech dźwięki budują emocje i tworzą niezapomniane chwile.",
-        categories: ["filmowy", "literacki"],
+        category: "filmowy",
+        entryCategories: ["grupa wiekowa 7 - 10", "grupa wiekowa 10 - 13"],
         published: true,
         deadline: "2023-04-20T18:34:59.000Z",
         termsAndConditions: [
@@ -24,7 +25,8 @@ export const contests = {
       attributes: {
         name: `Konkurs "Wzory Wyobraźni: Sztuka i Nauka Wspólnie"`,
         description: `W "Wzorach Wyobraźni" łączymy siły sztuki i nauki, aby odkryć nieznane obszary kreatywności. Zapraszamy artystów, naukowców i wszystkich, którzy pragną zanurzyć się w fascynującym świecie współpracy między sztuką a nauką. Twoim zadaniem jest stworzyć dzieło, które odzwierciedli inspirację, jaką czerpiesz z najnowszych osiągnięć naukowych. Przeżyj ekscytującą podróż, eksplorując granice wyobraźni i przyczyniając się do dialogu między dwoma dziedzinami, które na pozór są odległe, a jednak mogą razem otworzyć nowe horyzonty twórczości.`,
-        categories: ["fotograficzny"],
+        category: "literacki",
+        entryCategories: ["grupa wiekowa 7 - 10", "grupa wiekowa 10 - 13"],
         published: false,
         deadline: "2023-04-20T18:34:59.000Z",
         termsAndConditions: ["http://url/regulamin.docx"],
@@ -39,7 +41,8 @@ export const contests = {
         name: `Konkurs "Artystyczna Wizja"`,
         description:
           "Wyraź swoją artystyczną wizję poprzez dowolne medium. Odkryj piękno w kolorach i formach!",
-        categories: ["filmowy", "literacki"],
+        category: "filmowy",
+        entryCategories: ["grupa wiekowa 7 - 10", "grupa wiekowa 10 - 13"],
         published: true,
         deadline: "2023-12-15T18:34:59.000Z",
         termsAndConditions: [
@@ -56,7 +59,8 @@ export const contests = {
         name: `Konkurs "Podróże w Czasie Literackie"`,
         description:
           "Przenieś się w czasie poprzez literaturę! Stwórz opowieść, która zabierze czytelników w niezwykłą podróż przez epoki i światy wyobraźni.",
-        categories: ["fotograficzny"],
+        category: "fotograficzny",
+        entryCategories: ["grupa wiekowa 7 - 10"],
         published: false,
         deadline: "2024-04-20T18:34:59.000Z",
         termsAndConditions: ["http://url/regulamin.docx"],

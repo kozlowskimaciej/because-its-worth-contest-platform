@@ -7,7 +7,6 @@ describe("prepareEntries", () => {
     {
       id: "1",
       author: {
-        id: "5",
         firstName: "Elon",
         lastName: "Musk",
         phone: "123456789",
@@ -25,11 +24,11 @@ describe("prepareEntries", () => {
         "https://storage.googleapis.com/pod_public/1300/167870.jpg",
         "http://foundation.com/contests/13/poem1.pdf",
       ],
+      contestID: "71cd5578-13f1-41b0-bd5b-709fcdc40589",
     },
     {
       id: "2",
       author: {
-        id: "5",
         firstName: "Jan",
         lastName: "Kowalski",
         phone: null,
@@ -42,6 +41,7 @@ describe("prepareEntries", () => {
       files: [
         "https://www.creativefabrica.com/wp-content/uploads/2023/09/01/gothic-halloween-wallpaper-Graphics-78301352-1.jpg",
       ],
+      contestID: "620bf3e3-84f4-435c-8752-8cd18c5aaf3e",
     },
   ];
 

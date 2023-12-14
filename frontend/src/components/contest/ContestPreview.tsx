@@ -59,11 +59,9 @@ export default function ContestPreview({ contest }: IProps) {
           </ul>
         </div>
         <div>
-          <h3>kategorie</h3>
+          <h3>kategoria konkursu</h3>
           <ul>
-            {contest.categories.map((category, index) => (
-              <li key={index}>{category}</li>
-            ))}
+            <li>{contest.category}</li>
           </ul>
         </div>
         <div>

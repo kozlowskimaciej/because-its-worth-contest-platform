@@ -2,7 +2,8 @@ export type Contest = {
   id: string;
   name: string;
   description: string;
-  categories: string[];
+  category: string;
+  entryCategories: string[];
   published: boolean;
   deadline: Date;
   termsAndConditions: string[];
