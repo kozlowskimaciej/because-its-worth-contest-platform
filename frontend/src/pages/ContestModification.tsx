@@ -4,6 +4,7 @@ import ContestCreationForm from "../components/contestCreation/ContestCreationFo
 import { useParams } from "react-router-dom";
 import { prepareContests } from "../utils/prepareContests";
 import * as api from "../fakeApi/contests";
+import NotFoundInfo from "../components/notFound/NotFoundInfo";
 
 export default function ContestModification() {
   const { id } = useParams();
@@ -11,7 +12,13 @@ export default function ContestModification() {
   const contests = prepareContests(api.contests);
   const matchingContests = contests.filter((contest) => contest.id === id);
 
-  if (matchingContests.length === 0) return null;
+  if (matchingContests.length === 0)
+    return (
+      <>
+        <Navbar />
+        <NotFoundInfo />
+      </>
+    );
 
   const matchingContest = matchingContests[0];
 

@@ -69,7 +69,7 @@ export default function ContestCreationForm({ initialValues }: IProps) {
         />
       </div>
       <button type="submit" className={styles.button}>
-        utwórz
+        {id ? "zapisz zmiany" : "utwórz"}
       </button>
     </form>
   );
