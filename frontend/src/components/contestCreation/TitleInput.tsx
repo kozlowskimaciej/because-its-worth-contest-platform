@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 
-export default function TitleInput() {
+interface IProps {
+  initial: string;
+}
+
+export default function TitleInput({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "20px" }}>
       <label htmlFor="title-input" className={styles.label}>
@@ -13,6 +17,7 @@ export default function TitleInput() {
         required
         id="title-input"
         name="title"
+        defaultValue={initial}
         className={styles["title-input"]}
       />
     </div>

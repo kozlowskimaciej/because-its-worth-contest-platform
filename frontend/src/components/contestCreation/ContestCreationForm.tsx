@@ -9,10 +9,25 @@ import DeadlineInput from "./DeadlineInput";
 import ContestCategorySelector from "./ContestCategorySelector";
 import FileFormatsSelector from "./FileFormatsSelector";
 
-export default function ContestCreationForm() {
+interface IProps {
+  initialValues: {
+    title: string;
+    description: string;
+    deadline: Date;
+    contestCategory: string;
+    entryCategories: string[];
+    formats: string[];
+  };
+}
+
+export default function ContestCreationForm({ initialValues }: IProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [participants, setParticipants] = useState<string[]>([]);
-  const [fileFormats, setFileFormats] = useState<string[]>([]);
+  const [participants, setParticipants] = useState<string[]>(
+    initialValues.entryCategories
+  );
+  const [fileFormats, setFileFormats] = useState<string[]>(
+    initialValues.formats
+  );
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,11 +49,11 @@ export default function ContestCreationForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div style={{ textAlign: "left" }}>
-        <TitleInput />
-        <DescriptionInput />
-        <DeadlineInput />
+        <TitleInput initial={initialValues.title} />
+        <DescriptionInput initial={initialValues.description} />
+        <DeadlineInput initial={initialValues.deadline} />
         <ContestFilesInput files={files} setFiles={setFiles} />
-        <ContestCategorySelector />
+        <ContestCategorySelector initial={initialValues.contestCategory} />
         <ParticipantsCategory
           participants={participants}
           setParticipants={setParticipants}

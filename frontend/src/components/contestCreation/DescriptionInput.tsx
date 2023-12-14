@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 
-export default function DescriptionInput() {
+interface IProps {
+  initial: string;
+}
+
+export default function DescriptionInput({ initial }: IProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTextareaChange = () => {
@@ -20,6 +24,7 @@ export default function DescriptionInput() {
         required
         id="description-input"
         name="description"
+        defaultValue={initial}
         className={styles.textarea}
         ref={textareaRef}
         onChange={handleTextareaChange}

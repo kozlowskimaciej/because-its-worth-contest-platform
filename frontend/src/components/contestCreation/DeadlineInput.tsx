@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 
-export default function DeadlineInput() {
+interface IProps {
+  initial: Date;
+}
+
+export default function DeadlineInput({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "50px" }}>
       <label htmlFor="date-input" className={styles.label}>
@@ -13,6 +17,7 @@ export default function DeadlineInput() {
         required
         id="date-input"
         name="date"
+        defaultValue={initial.toDateString()}
         style={{
           borderRadius: "10px",
           border: "none",
