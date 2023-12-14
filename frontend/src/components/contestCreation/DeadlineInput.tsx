@@ -17,7 +17,7 @@ export default function DeadlineInput({ initial }: IProps) {
         required
         id="date-input"
         name="date"
-        defaultValue={initial.toDateString()}
+        defaultValue={initial.toISOString().split("T")[0]}
         style={{
           borderRadius: "10px",
           border: "none",

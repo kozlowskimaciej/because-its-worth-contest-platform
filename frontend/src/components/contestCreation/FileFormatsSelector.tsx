@@ -17,9 +17,7 @@ export default function FileFormatsSelector({
 }: IProps) {
   const allFilesFormats = AVAILABLE_IMAGE_FORMATS.concat(
     AVAILABLE_VIDEOS_FORMATS
-  )
-    .concat(AVAILABLE_OTHER_FORMATS)
-    .map((ext) => `.${ext}`);
+  ).concat(AVAILABLE_OTHER_FORMATS);
 
   return (
     <div style={{ marginBottom: "20px" }}>
@@ -30,7 +28,7 @@ export default function FileFormatsSelector({
           <label>
             <input
               type="checkbox"
-              checked={fileFormats.includes(type)}
+              defaultChecked={fileFormats.includes(type)}
               onChange={() => {
                 fileFormats.includes(type)
                   ? setFileFormats((prev) =>

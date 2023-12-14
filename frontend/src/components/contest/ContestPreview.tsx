@@ -31,6 +31,12 @@ export default function ContestPreview({ contest }: IProps) {
         >
           opublikuj
         </button>
+        <button
+          className={styles.publish}
+          onClick={() => navigate(`/contests/${contest.id}/modify`)}
+        >
+          modyfikuj
+        </button>
         <button className={styles.delete}>usuń konkurs</button>
       </div>
       <div className={styles.info}>

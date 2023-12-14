@@ -20,7 +20,7 @@ export default function ParticipantsCategory({
 
   const handleNewCategory = () => {
     const inputElement = newCategoryInputRef.current;
-    if (!inputElement) return;
+    if (!inputElement || inputElement.value === "") return;
 
     setParticipants((prev) => [...prev, inputElement.value]);
   };
