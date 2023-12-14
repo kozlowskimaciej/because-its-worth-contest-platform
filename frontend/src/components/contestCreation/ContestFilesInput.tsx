@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./styles/ParticipantsCategory.module.css";
+import styles from "./styles/MultipleElementsAdder.module.css";
 import styles2 from "./styles/ContestCreationForm.module.css";
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-export default function ContestFiles({ files, setFiles }: IProps) {
+export default function ContestFilesInput({ files, setFiles }: IProps) {
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 

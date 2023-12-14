@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./styles/ParticipantsCategory.module.css";
+import styles from "./styles/MultipleElementsAdder.module.css";
 import styles2 from "./styles/ContestCreationForm.module.css";
 
 interface IProps {
