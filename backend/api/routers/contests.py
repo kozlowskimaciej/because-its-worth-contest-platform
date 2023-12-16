@@ -32,7 +32,7 @@ async def post_contest(
     db = request.app.database
 
     entry_dict = data.model_dump(mode='json')
-    inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
+    inserted_id = (await db.contests.insert_one(entry_dict)).inserted_id
 
     return {'id': str(inserted_id)}
 
