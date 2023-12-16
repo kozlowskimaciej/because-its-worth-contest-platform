@@ -39,7 +39,10 @@ async def post_contest(
     return {'id': str(inserted_id)}
 
 
-@router.get('/', responses={404: {'description': 'Contest with given id not found'}})
+@router.get(
+    '/', 
+    responses={404: {'description': 'Contest with given id not found'}}
+)
 async def get_contests(
     request: Request,
     id: Optional[str] = None,
