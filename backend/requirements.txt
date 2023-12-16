@@ -3,3 +3,4 @@ pydantic
 uvicorn
 python-magic
 python-multipart
+motor
