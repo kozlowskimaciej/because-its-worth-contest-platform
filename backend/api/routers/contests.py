@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from bson import ObjectId
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
@@ -47,9 +48,9 @@ async def get_contests(
     if contestId is None:
         data = await db.contests.find().to_list(length=None)
     else:
-        data = await db.contests.find_one({'id': contestId})
+        data = await db.contests.find_one({'_id': ObjectId(contestId)})
 
     if not data:
-        raise HTTPException(status_code=404, detail="Contest not found")
+        raise HTTPException(status_code=404, detail=f"{contestId=} not found")
 
     return {'data': data}
