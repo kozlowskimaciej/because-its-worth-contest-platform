@@ -3,11 +3,19 @@ import ContestGroup from "./ContestGroup";
 import { useNavigate } from "react-router-dom";
 import { prepareContests } from "../../utils/prepareContests";
 import * as api from "../../fakeApi/contests";
+import useFetch from "../../hooks/useFetch";
 
 export default function Contests() {
   const navigate = useNavigate();
 
-  const contests = prepareContests(api.contests);
+  const { data, isLoading, error } = useFetch<any>(
+    `${process.env.REACT_APP_SERVER_URL}/contests`
+  );
+
+  if (isLoading) return <div>loading...</div>;
+  if (error) return <div>error</div>;
+
+  const contests = prepareContests(data);
 
   contests.forEach((contest) => {
     if (contest.description.length > 300) {
