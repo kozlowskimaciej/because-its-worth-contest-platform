@@ -14,16 +14,21 @@ def test_post_contest(client):
         'background': 'https://foo.bar/static/contest-background.jpg',
     }
 
-    response = client.post('/contests/')
+    response = client.post('/contests/', json=contest)
     assert response.status_code == 200
 
-    data = response.json()
-    assert 'id' in data
+    resp = response.json()
+    assert 'id' in resp
+    contest_id = resp['id']
 
-    contest_id = data['id']
     response = client.get(f'/contests/{contest_id}')
     assert response.status_code == 200
-    data = response.json()
+
+    resp = response.json()
+    assert 'data' in resp
+
+    data = resp['data']
+    assert data['_id'] == contest_id
     assert data['name'] == contest['name']
     assert data['description'] == contest['description']
     assert data['category'] == contest['category']
@@ -33,4 +38,3 @@ def test_post_contest(client):
     assert data['termsAndConditions'] == contest['termsAndConditions']
     assert data['acceptedFileFormats'] == contest['acceptedFileFormats']
     assert data['background'] == contest['background']
-

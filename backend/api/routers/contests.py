@@ -26,12 +26,12 @@ class Contest(BaseModel):
 
 @router.post('/')
 async def post_contest(
-    request: Request,
-    contest: Contest,
+    data: Contest,
+    request: Request
 ):
     db = request.app.database
 
-    entry_dict = contest.model_dump()
+    entry_dict = data.model_dump()
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
 
     return {'id': str(inserted_id)}

@@ -5,6 +5,9 @@ from testcontainers.mongodb import MongoDbContainer
 import pytest
 
 
+TEST_DIR = Path(__file__).parent
+
+
 @pytest.fixture(scope="session")
 def mongodb_container():
     with MongoDbContainer() as mongo:
@@ -25,9 +28,18 @@ def testdir(monkeypatch, tmpdir) -> Path:
 
 
 @pytest.fixture
-def client(request, monkeypatch, mongodb_container) -> TestClient:
+def client(request, monkeypatch, mongodb_container, testdir) -> TestClient:
+    from backend.api import app
     from backend.api.app import create_app, Database
+    from backend.api.routers import static_files
 
+    # setting static folder path to testdir
+    monkeypatch.setattr(
+        app, "STATIC_FOLDER_NAME", str(testdir))
+    monkeypatch.setattr(
+        static_files, "STATIC_FOLDER_NAME", str(testdir))
+
+    # setting database connection url
     monkeypatch.setenv(
         "DB_CONNECTION_URL", mongodb_container.get_connection_url()
     )
