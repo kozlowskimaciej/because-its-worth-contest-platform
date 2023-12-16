@@ -6,7 +6,7 @@ import os
 from fastapi import File, UploadFile, HTTPException, APIRouter
 
 
-ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'mp4'}
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'mp4', 'pdf', 'docx'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 STATIC_FOLDER_NAME = Path(__file__).parent.parent.parent / "uploads"
 

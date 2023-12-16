@@ -41,7 +41,7 @@ export default function ContestCreationForm({ initialValues }: IProps) {
 
       try {
         const response = await axios.post(
-          "http://localhost:8000/uploads",
+          `${process.env.REACT_APP_SERVER_URL}/uploads`,
           formData,
           {
             headers: {
