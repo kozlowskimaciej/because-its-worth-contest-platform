@@ -2,17 +2,25 @@ import React from "react";
 import Navbar from "../components/common/Navbar";
 import ContestCreationForm from "../components/contestCreation/ContestCreationForm";
 import { useParams } from "react-router-dom";
-import { prepareContests } from "../utils/prepareContests";
+import {
+  prepareContests,
+  prepareSingleContest,
+} from "../utils/prepareContests";
 import * as api from "../fakeApi/contests";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
+import useFetch from "../hooks/useFetch";
 
 export default function ContestModification() {
   const { id } = useParams();
 
-  const contests = prepareContests(api.contests);
-  const matchingContests = contests.filter((contest) => contest.id === id);
+  const { data, isLoading, error } = useFetch<any>(
+    `${process.env.REACT_APP_SERVER_URL}/contests?id=${id}`
+  );
 
-  if (matchingContests.length === 0)
+  if (isLoading) return <div>loading...</div>;
+  if (error) return <div>error</div>;
+
+  if (!data)
     return (
       <>
         <Navbar />
@@ -20,7 +28,7 @@ export default function ContestModification() {
       </>
     );
 
-  const matchingContest = matchingContests[0];
+  const matchingContest = prepareSingleContest(data.data);
 
   const contest = {
     title: matchingContest.name,
