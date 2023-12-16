@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, FileUrl
+from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
 
@@ -19,9 +19,9 @@ class Contest(BaseModel):
     entryCategories: list[str]
     published: bool
     deadline: datetime
-    termsAndConditions: list[FileUrl]
+    termsAndConditions: list[AnyHttpUrl]
     acceptedFileFormats: list[str]
-    background: FileUrl
+    background: AnyHttpUrl
 
 
 @router.post('/')
