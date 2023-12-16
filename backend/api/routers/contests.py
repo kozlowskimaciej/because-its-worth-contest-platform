@@ -1,7 +1,8 @@
+import json
 from datetime import datetime
 from typing import Optional
 
-from bson import ObjectId
+from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
@@ -38,19 +39,19 @@ async def post_contest(
     return {'id': str(inserted_id)}
 
 
-@router.get('/{contestId}')
+@router.get('/')
 async def get_contests(
     request: Request,
-    contestId: Optional[str] = None,
+    id: Optional[str] = None,
 ):
     db = request.app.database
 
-    if contestId is None:
+    if id is None:
         data = await db.contests.find().to_list(length=None)
     else:
-        data = await db.contests.find_one({'_id': ObjectId(contestId)})
+        data = await db.contests.find_one({'_id': ObjectId(id)})
 
-    if not data:
-        raise HTTPException(status_code=404, detail=f"{contestId=} not found")
+    if not data and id:
+        raise HTTPException(status_code=404, detail=f"{id=} not found")
 
-    return {'data': data}
+    return {'data': json.loads(json_util.dumps(data))}

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 def test_post_contest(client):
     contest = {
         'name': 'Test Contest',
@@ -5,7 +8,7 @@ def test_post_contest(client):
         'category': 'Test',
         'entryCategories': ['foo', 'boo', 'bar'],
         'published': True,
-        'deadline': '2021-09-01T00:00:00.000Z',
+        'deadline': datetime.now().isoformat(),
         'termsAndConditions': [
             'https://foo.bar/static/contest-terms1.jpg',
             'https://foo.bar/static/contest-terms2.jpg'
@@ -21,20 +24,28 @@ def test_post_contest(client):
     assert 'id' in post_resp
     contest_id = post_resp['id']
 
-    response = client.get(f'/contests/{contest_id}')
+    response = client.get(f'/contests?id={contest_id}')
     assert response.status_code == 200
 
     get_resp = response.json()
     assert 'data' in get_resp
 
-    data = get_resp['data']
-    assert data['_id'] == contest_id
-    assert data['name'] == contest['name']
-    assert data['description'] == contest['description']
-    assert data['category'] == contest['category']
-    assert data['entryCategories'] == contest['entryCategories']
-    assert data['published'] == contest['published']
-    assert data['deadline'] == contest['deadline']
-    assert data['termsAndConditions'] == contest['termsAndConditions']
-    assert data['acceptedFileFormats'] == contest['acceptedFileFormats']
-    assert data['background'] == contest['background']
+    resp_data = get_resp['data']
+    assert resp_data['_id']['$oid'] == contest_id
+    assert resp_data['name'] == contest['name']
+    assert resp_data['description'] == contest['description']
+    assert resp_data['category'] == contest['category']
+    assert resp_data['entryCategories'] == contest['entryCategories']
+    assert resp_data['published'] == contest['published']
+    assert resp_data['deadline'] == contest['deadline']
+    assert resp_data['termsAndConditions'] == contest['termsAndConditions']
+    assert resp_data['acceptedFileFormats'] == contest['acceptedFileFormats']
+    assert resp_data['background'] == contest['background']
+
+    response = client.get('/contests/')
+    assert response.status_code == 200
+
+    get_all_resp = response.json()
+    assert 'data' in get_all_resp
+    assert len(get_all_resp['data']) == 1
+    assert get_all_resp['data'][0] == resp_data
