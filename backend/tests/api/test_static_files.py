@@ -1,9 +1,8 @@
 import os
+from pathlib import Path
 
-from tests.conftest import TEST_DIR
 
-
-TEST_IMAGES_PATH = TEST_DIR / "test_images"
+TEST_IMAGES_PATH = Path(__file__).parent.parent / "test_images"
 
 
 def test_upload_valid_file(client):
