@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.api.routers.static_files import STATIC_FOLDER_NAME
 from backend.api.database.db import Database
-from backend.api.routers import hello, static_files
+from backend.api.routers import entries, hello, static_files
 
 
 @asynccontextmanager
@@ -23,6 +23,7 @@ def create_app():
     # including routers
     app.include_router(hello.router)
     app.include_router(static_files.router)
+    app.include_router(entries.router)
 
     # static files are available under /static_files path
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
