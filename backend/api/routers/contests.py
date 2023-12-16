@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, FileUrl
 from starlette.requests import Request
 
 
@@ -19,9 +19,9 @@ class Contest(BaseModel):
     entryCategories: list[str]
     published: bool
     deadline: datetime
-    termsAndConditions: list[HttpUrl]
+    termsAndConditions: list[FileUrl]
     acceptedFileFormats: list[str]
-    background: HttpUrl
+    background: FileUrl
 
 
 @router.post('/')
@@ -31,7 +31,7 @@ async def post_contest(
 ):
     db = request.app.database
 
-    entry_dict = data.model_dump()
+    entry_dict = data.model_dump(mode='json')
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
 
     return {'id': str(inserted_id)}
