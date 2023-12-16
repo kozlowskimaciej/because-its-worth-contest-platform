@@ -1,18 +1,8 @@
 import os
 from pathlib import Path
 
-import pytest
-
 
 TEST_IMAGES_PATH = Path(__file__).parent.parent / "test_images"
-
-
-@pytest.fixture(autouse=True)
-def mock_static_files_dir(monkeypatch, testdir):
-    from backend.api import app
-    from backend.api.routers import static_files
-    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", str(testdir))
-    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", str(testdir))
 
 
 def test_upload_valid_file(client):
