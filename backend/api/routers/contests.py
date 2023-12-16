@@ -37,10 +37,10 @@ async def post_contest(
     return {'id': str(inserted_id)}
 
 
-@router.get('/')
+@router.get('/{contestId}')
 async def get_contests(
     request: Request,
-    contestId: Optional[int] = None,
+    contestId: Optional[str] = None,
 ):
     db = request.app.database
 
