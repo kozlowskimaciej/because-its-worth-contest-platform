@@ -40,7 +40,7 @@ async def post_contest(
 
 
 @router.get(
-    '/', 
+    '/',
     responses={404: {'description': 'Contest with given id not found'}}
 )
 async def get_contests(
