@@ -17,17 +17,17 @@ def test_post_contest(client):
     response = client.post('/contests/', json=contest)
     assert response.status_code == 200
 
-    resp = response.json()
-    assert 'id' in resp
-    contest_id = resp['id']
+    post_resp = response.json()
+    assert 'id' in post_resp
+    contest_id = post_resp['id']
 
     response = client.get(f'/contests/{contest_id}')
     assert response.status_code == 200
 
-    resp = response.json()
-    assert 'data' in resp
+    get_resp = response.json()
+    assert 'data' in get_resp
 
-    data = resp['data']
+    data = get_resp['data']
     assert data['_id'] == contest_id
     assert data['name'] == contest['name']
     assert data['description'] == contest['description']
