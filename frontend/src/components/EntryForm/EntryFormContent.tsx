@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Contest } from "../../models/Contest";
 import axios from "axios";
+import styles from "./styles/EntryFormContent.module.css";
 
 interface IProps {
   contest: Contest;
@@ -72,51 +73,59 @@ export default function EntryFormContent({ contest }: IProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="entry-firstname">imie</label>
-        <input type="text" id="entry-firstname" name="firstname" required />
-      </div>
-      <div>
-        <label htmlFor="entry-lastname">nazwisko</label>
-        <input type="text" id="entry-lastname" name="lastname" required />
-      </div>
-      <div>
-        <label htmlFor="entry-birthdate">data urodzenia</label>
-        <input type="date" id="entry-birthdate" name="birthdate" required />
-      </div>
-      <div>
-        <label htmlFor="entry-place">placówka</label>
-        <input type="text" id="entry-place" name="place" />
-      </div>
-      <div>
-        <input
-          type="file"
-          multiple
-          id="entry-files"
-          name="files"
-          accept={formattedFileFormats}
-          style={{ display: "none" }}
-          onChange={handleFilesInput}
-        />
-        <label htmlFor="entry-files">załącz pliki</label>
-        <ul>
-          {files.map((file, index) => (
-            <li key={index}>{file.name}</li>
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
+      <div style={{ textAlign: "left" }}>
+        <div className={styles.entry}>
+          <label htmlFor="entry-firstname">imie</label>
+          <input type="text" id="entry-firstname" name="firstname" required />
+        </div>
+        <div className={styles.entry}>
+          <label htmlFor="entry-lastname">nazwisko</label>
+          <input type="text" id="entry-lastname" name="lastname" required />
+        </div>
+        <div className={styles.entry}>
+          <label htmlFor="entry-birthdate">data urodzenia</label>
+          <input type="date" id="entry-birthdate" name="birthdate" required />
+        </div>
+        <div className={styles.entry}>
+          <label htmlFor="entry-place">placówka</label>
+          <input type="text" id="entry-place" name="place" />
+        </div>
+        <div>
+          <input
+            type="file"
+            multiple
+            id="entry-files"
+            name="files"
+            accept={formattedFileFormats}
+            style={{ display: "none" }}
+            onChange={handleFilesInput}
+          />
+          <label className={styles.files} htmlFor="entry-files">
+            <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} />
+            <span>załącz pliki</span>
+          </label>
+          <ul>
+            {files.map((file, index) => (
+              <li key={index}>{file.name}</li>
+            ))}
+          </ul>
+        </div>
+        <div style={{ marginTop: "50px" }}>
+          <label>wybierz swoją kategorię</label>
+          <br />
+          {contest.entryCategories.map((category, index) => (
+            <React.Fragment key={index}>
+              <input type="radio" value={category} name="type" /> {category}
+              <br />
+            </React.Fragment>
           ))}
-        </ul>
+        </div>
       </div>
-      <div>
-        <label>wybierz swoją kategorię</label>
-        <br />
-        {contest.entryCategories.map((category, index) => (
-          <React.Fragment key={index}>
-            <input type="radio" value={category} name="type" /> {category}
-            <br />
-          </React.Fragment>
-        ))}
-      </div>
-      <button type="submit">wyślij</button>
+      <button className={styles.submit} type="submit">
+        wyślij
+      </button>
     </form>
   );
 }

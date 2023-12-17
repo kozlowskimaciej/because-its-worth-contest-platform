@@ -20,5 +20,10 @@ export default function EntryForm() {
     return <div>termin zgłaszania minął</div>;
   }
 
-  return <EntryFormContent contest={contest} />;
+  return (
+    <>
+      <button onClick={window.print}>drukuj</button>
+      <EntryFormContent contest={contest} />
+    </>
+  );
 }
