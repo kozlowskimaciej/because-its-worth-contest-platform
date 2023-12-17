@@ -2,13 +2,10 @@ import React from "react";
 import Navbar from "../components/common/Navbar";
 import ContestCreationForm from "../components/contestCreation/ContestCreationForm";
 import { useParams } from "react-router-dom";
-import {
-  prepareContests,
-  prepareSingleContest,
-} from "../utils/prepareContests";
-import * as api from "../fakeApi/contests";
+import { prepareSingleContest } from "../utils/prepareContests";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import useFetch from "../hooks/useFetch";
+import Loading from "../components/common/Loading";
 
 export default function ContestModification() {
   const { id } = useParams();
@@ -17,10 +14,15 @@ export default function ContestModification() {
     `${process.env.REACT_APP_SERVER_URL}/contests?id=${id}`
   );
 
-  if (isLoading) return <div>loading...</div>;
-  if (error) return <div>error</div>;
+  if (isLoading)
+    return (
+      <>
+        <Navbar />
+        <Loading text="" />
+      </>
+    );
 
-  if (!data)
+  if (!data || error)
     return (
       <>
         <Navbar />

@@ -5,8 +5,9 @@ import Entries from "../components/contest/Entries";
 import { useParams } from "react-router-dom";
 import { prepareSingleContest } from "../utils/prepareContests";
 import { prepareEntries } from "../utils/prepareEntries";
-import * as api2 from "../fakeApi/entries";
 import useFetch from "../hooks/useFetch";
+import Loading from "../components/common/Loading";
+import NotFoundInfo from "../components/notFound/NotFoundInfo";
 
 export default function Contest() {
   const { id } = useParams();
@@ -21,9 +22,21 @@ export default function Contest() {
     error: error2,
   } = useFetch<any>(`${process.env.REACT_APP_SERVER_URL}/entries/${id}`);
 
-  if (isLoading || isLoading2) return <div>loading...</div>;
-  if (error) return <div>error</div>;
-  if (!data) return <div>not found</div>;
+  if (isLoading || isLoading2)
+    return (
+      <>
+        <Navbar />
+        <Loading text="" />
+      </>
+    );
+
+  if (!data || error)
+    return (
+      <>
+        <Navbar />
+        <NotFoundInfo />
+      </>
+    );
 
   const contest = prepareSingleContest(data.data);
 
