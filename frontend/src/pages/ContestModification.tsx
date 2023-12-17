@@ -26,7 +26,7 @@ export default function ContestModification() {
     return (
       <>
         <Navbar />
-        <NotFoundInfo />
+        <NotFoundInfo text="Podany konkurs nie istnieje." />
       </>
     );
 

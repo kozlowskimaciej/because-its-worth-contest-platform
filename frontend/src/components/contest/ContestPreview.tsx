@@ -46,7 +46,9 @@ export default function ContestPreview({ contest }: IProps) {
         </div>
         <div>
           <h3>opis</h3>
-          <p className={styles.entry}>{contest.description}</p>
+          <p className={styles.entry} style={{ whiteSpace: "pre-wrap" }}>
+            {contest.description}
+          </p>
         </div>
         <div>
           <h3>data zakończenia</h3>

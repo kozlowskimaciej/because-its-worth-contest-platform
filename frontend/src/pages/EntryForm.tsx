@@ -14,12 +14,23 @@ export default function EntryForm() {
   );
 
   if (isLoading) return <Loading text="" />;
-  if (error) return <NotFoundInfo />;
+  if (error)
+    return (
+      <NotFoundInfo
+        text="Podany konkurs nie istnieje. Sprawdź czy wpisałeś poprawny link."
+        isDisplayingButton={false}
+      />
+    );
 
   const contest = prepareSingleContest(data.data);
 
   if (contest.deadline < new Date()) {
-    return <div>termin zgłaszania minął</div>;
+    return (
+      <NotFoundInfo
+        text="Termin zgłaszania upłynął. Nie możesz już wysłać swojej pracy."
+        isDisplayingButton={false}
+      />
+    );
   }
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles/PublishForm.module.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function PublishForm() {
   const navigate = useNavigate();
