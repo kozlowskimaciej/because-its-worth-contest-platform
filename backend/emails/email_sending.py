@@ -5,7 +5,7 @@ import os
 LOGIN = "contest.platform1@gmail.com"
 
 
-def send_email(receiver):
+def send_email(receiver, subject, body):
     password = os.getenv("PASSWORD", None)
     if not password:
         raise KeyError("Password not provided")
@@ -16,10 +16,9 @@ def send_email(receiver):
     server.login(LOGIN, password)
 
     msg = EmailMessage()
-    msg["Subject"] = "Nadchodzące konkursy"
+    msg["Subject"] = subject
     msg["From"] = LOGIN
     msg["To"] = receiver
-    body = "Powiadomienie o nachodzących konkursach:\n"
     msg.set_content(body)
 
     server.send_message(msg)
