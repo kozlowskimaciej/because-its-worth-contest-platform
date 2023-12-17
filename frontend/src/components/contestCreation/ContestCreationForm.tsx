@@ -52,7 +52,9 @@ export default function ContestCreationForm({ initialValues }: IProps) {
 
         if (response.status === 200) {
           const data = response.data;
-          urls.push(data.filename);
+          urls.push(
+            `${process.env.REACT_APP_SERVER_URL}/static/${data.filename}`
+          );
         } else {
           console.error(
             `Failed to upload file ${file.name}: ${response.statusText}`
@@ -68,6 +70,26 @@ export default function ContestCreationForm({ initialValues }: IProps) {
     return urls;
   };
 
+  const createPost = (formData: FormData, urls: string[]) => {
+    const body = {
+      name: formData.get("title"),
+      description: formData.get("description"),
+      category: formData.get("type"),
+      entryCategories: participants,
+      published: false,
+      deadline: formData.get("date") + "T00:00:00.000Z",
+      termsAndConditions: urls,
+      acceptedFileFormats: fileFormats,
+      background:
+        "https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg",
+    };
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body)
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -79,16 +101,9 @@ export default function ContestCreationForm({ initialValues }: IProps) {
     });
 
     const urls = await uploadFiles();
-    console.log("urls: ");
-
-    urls.forEach((url) => console.log(url));
 
     if (id) console.log(`Will modify contest of id: ${id}`);
-    else console.log("Will create new contest");
-
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
+    else createPost(formData, urls);
 
     navigate("/contests");
   };
