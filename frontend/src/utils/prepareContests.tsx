@@ -5,6 +5,8 @@ export const prepareSingleContest = (single: any): Contest => {
 
   const contest = { id, ...single };
 
+  delete contest._id;
+
   contest.deadline = new Date(contest.deadline);
 
   return contest;

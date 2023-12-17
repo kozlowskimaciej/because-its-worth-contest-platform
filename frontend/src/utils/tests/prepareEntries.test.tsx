@@ -5,43 +5,40 @@ import { prepareEntries } from "../prepareEntries";
 describe("prepareEntries", () => {
   const expected: Entry[] = [
     {
-      id: "1",
+      id: "657ef4a4c4d16a709a994e1f",
       author: {
         firstName: "Elon",
         lastName: "Musk",
-        phone: "123456789",
-        email: "elon.musk@gmail.com",
-        address: "Polna 2",
+        phone: "694202137",
+        email: "someemail@email.com",
+        address: "Starbase, Texas",
       },
       guardian: {
-        firstName: "Joe",
-        lastName: "Biden",
+        firstName: "Nie",
+        lastName: "istnieje",
       },
       place: "none",
-      submissionDate: new Date("2023-04-20T18:34:59.000Z"),
-      files: [
-        "https://img.freepik.com/darmowe-zdjecie/obraz-przedstawiajacy-gorskie-jezioro-z-gora-w-tle_188544-9126.jpg",
-        "https://storage.googleapis.com/pod_public/1300/167870.jpg",
-        "http://foundation.com/contests/13/poem1.pdf",
-      ],
-      contestID: "71cd5578-13f1-41b0-bd5b-709fcdc40589",
+      submissionDate: new Date("2023-12-17T13:16:20.107Z"),
+      files: [],
+      contestID: "657ed098a5ba96cfdd2b3d42",
     },
     {
-      id: "2",
+      id: "657ef4dbc4d16a709a994e20",
       author: {
-        firstName: "Jan",
-        lastName: "Kowalski",
-        phone: null,
-        email: null,
-        address: null,
+        firstName: "Elon",
+        lastName: "Musk",
+        phone: "694202137",
+        email: "someemail@email.com",
+        address: "Starbase, Texas",
       },
-      guardian: null,
-      place: "laureat",
-      submissionDate: new Date("2023-04-20T18:34:59.000Z"),
-      files: [
-        "https://www.creativefabrica.com/wp-content/uploads/2023/09/01/gothic-halloween-wallpaper-Graphics-78301352-1.jpg",
-      ],
-      contestID: "620bf3e3-84f4-435c-8752-8cd18c5aaf3e",
+      guardian: {
+        firstName: "Nie",
+        lastName: "istnieje",
+      },
+      place: "none",
+      submissionDate: new Date("2023-12-17T13:17:15.961Z"),
+      files: [],
+      contestID: "657ed098a5ba96cfdd2b3d42",
     },
   ];
 
