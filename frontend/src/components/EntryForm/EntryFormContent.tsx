@@ -114,7 +114,7 @@ export default function EntryFormContent({ contest }: IProps) {
             onChange={handleFilesInput}
           />
           <label className={styles.files} htmlFor="entry-files">
-            <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} />
+            <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="" />
             <span>załącz pliki</span>
           </label>
           <ul>

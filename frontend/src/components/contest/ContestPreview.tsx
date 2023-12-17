@@ -59,7 +59,7 @@ export default function ContestPreview({ contest }: IProps) {
           <ul>
             {contest.termsAndConditions.map((file, index) => (
               <li key={index}>
-                <a href={file} target="_blank">
+                <a href={file} target="_blank" rel="noreferrer">
                   {prepareFilename(file)}
                 </a>
               </li>
@@ -85,6 +85,7 @@ export default function ContestPreview({ contest }: IProps) {
           <a
             href={`${window.location.origin}/forms/${contest.id}`}
             target="_blank"
+            rel="noreferrer"
           >
             {`${window.location.origin}/forms/${contest.id}`}
           </a>
