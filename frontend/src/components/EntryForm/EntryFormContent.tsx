@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Contest } from "../../models/Contest";
+import axios from "axios";
 
 interface IProps {
   contest: Contest;
@@ -12,10 +13,51 @@ export default function EntryFormContent({ contest }: IProps) {
     .map((format) => `.${format}`)
     .join(", ");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const uploadFiles = async (): Promise<string[]> => {
+    const urls: string[] = [];
+
+    const uploadPromises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/uploads`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const data = response.data;
+          urls.push(
+            `${process.env.REACT_APP_SERVER_URL}/static/${data.filename}`
+          );
+        } else {
+          console.error(
+            `Failed to upload file ${file.name}: ${response.statusText}`
+          );
+        }
+      } catch (error) {
+        console.error(`Error during file upload for ${file.name}:`, error);
+      }
+    });
+
+    await Promise.all(uploadPromises);
+
+    return urls;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+
+    const urls = await uploadFiles();
+    console.log("urls:", urls);
 
     formData.forEach((val, key) => {
       console.log(key, val);
