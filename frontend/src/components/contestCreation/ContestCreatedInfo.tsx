@@ -18,6 +18,7 @@ export default function ContestCreatedInfo({ id }: IProps) {
           <a
             href={`${window.location.origin}/forms/${id}`}
             target="_blank"
+            rel="noreferrer"
           >{`${window.location.origin}/forms/${id}`}</a>
         </div>
       </div>
