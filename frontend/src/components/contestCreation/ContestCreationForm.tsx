@@ -127,7 +127,7 @@ export default function ContestCreationForm({
         />
       </div>
       <button type="submit" className={styles.button}>
-        {id ? "zapisz zmiany" : "utwórz"}
+        {id ? "Zapisz zmiany" : "Utwórz"}
       </button>
     </form>
   );

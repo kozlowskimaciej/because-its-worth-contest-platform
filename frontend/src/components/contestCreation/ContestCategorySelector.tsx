@@ -9,7 +9,7 @@ interface IProps {
 export default function ContestCategorySelector({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "50px" }}>
-      <label className={styles.label}>kategoria konkursu</label>
+      <label className={styles.label}>Kategoria konkursu</label>
       <br />
       {CONTEST_TYPES.map((type, index) => (
         <React.Fragment key={index}>

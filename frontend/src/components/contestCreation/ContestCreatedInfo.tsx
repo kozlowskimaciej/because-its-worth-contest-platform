@@ -11,9 +11,9 @@ export default function ContestCreatedInfo({ id }: IProps) {
 
   return (
     <div className={styles.wrapper}>
-      <h4 className={styles.h4}>konkurs stworzony pomyślnie</h4>
+      <h4 className={styles.h4}>Konkurs stworzony pomyślnie</h4>
       <div className={styles.links}>
-        <div>formularz zgłoszeniowy dostępny pod linkiem:</div>
+        <div>Formularz zgłoszeniowy dostępny pod linkiem:</div>
         <div>
           <a
             href={`${window.location.origin}/forms/${id}`}

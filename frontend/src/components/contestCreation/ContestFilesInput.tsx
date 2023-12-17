@@ -21,7 +21,7 @@ export default function ContestFilesInput({ files, setFiles }: IProps) {
 
   return (
     <div style={{ marginBottom: "50px" }}>
-      <label className={styles2.label}>pliki z regulaminem</label>
+      <label className={styles2.label}>Pliki z regulaminem</label>
       <br />
       <input
         type="file"
@@ -57,7 +57,7 @@ export default function ContestFilesInput({ files, setFiles }: IProps) {
         style={{ width: "fit-content" }}
       >
         <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="dodaj" />
-        <span>dodaj pliki</span>
+        <span>Dodaj pliki</span>
       </label>
     </div>
   );

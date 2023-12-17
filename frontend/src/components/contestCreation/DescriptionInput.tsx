@@ -20,7 +20,7 @@ export default function DescriptionInput({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "20px" }}>
       <label htmlFor="description-input" className={styles.label}>
-        opis
+        Opis
       </label>
       <br />
       <textarea

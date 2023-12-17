@@ -44,7 +44,7 @@ export default function ContestModification() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "700px", margin: "auto", paddingTop: "140px" }}>
+      <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
         <ContestCreationForm initialValues={contest} />
       </div>
     </>

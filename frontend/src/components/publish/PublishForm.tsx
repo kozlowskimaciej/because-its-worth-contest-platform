@@ -33,7 +33,7 @@ export default function PublishForm() {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <label htmlFor="publish-files" className={styles.label}>
-        wybierz pliki
+        Wybierz pliki
       </label>
       <input
         type="file"
@@ -60,7 +60,7 @@ export default function PublishForm() {
       </ul>
       <div style={{ width: "100%", textAlign: "center" }}>
         <button type="submit" className={styles.button}>
-          wyślij
+          Wyślij
         </button>
       </div>
     </form>

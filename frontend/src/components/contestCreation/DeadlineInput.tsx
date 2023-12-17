@@ -9,7 +9,7 @@ export default function DeadlineInput({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "50px" }}>
       <label htmlFor="date-input" className={styles.label}>
-        data zakończenia
+        Data zakończenia
       </label>
       <br />
       <input

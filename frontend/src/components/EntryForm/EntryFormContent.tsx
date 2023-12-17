@@ -92,15 +92,15 @@ export default function EntryFormContent({ contest }: IProps) {
       <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
       <div style={{ textAlign: "left" }}>
         <div className={styles.entry}>
-          <label htmlFor="entry-firstname">imie</label>
+          <label htmlFor="entry-firstname">Imie</label>
           <input type="text" id="entry-firstname" name="firstname" required />
         </div>
         <div className={styles.entry}>
-          <label htmlFor="entry-lastname">nazwisko</label>
+          <label htmlFor="entry-lastname">Nazwisko</label>
           <input type="text" id="entry-lastname" name="lastname" required />
         </div>
         <div className={styles.entry}>
-          <label htmlFor="entry-place">placówka</label>
+          <label htmlFor="entry-place">Placówka</label>
           <input type="text" id="entry-place" name="place" />
         </div>
         <div>
@@ -115,7 +115,7 @@ export default function EntryFormContent({ contest }: IProps) {
           />
           <label className={styles.files} htmlFor="entry-files">
             <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="" />
-            <span>załącz pliki</span>
+            <span>Załącz pliki</span>
           </label>
           <ul>
             {files.map((file, index) => (
@@ -124,7 +124,7 @@ export default function EntryFormContent({ contest }: IProps) {
           </ul>
         </div>
         <div style={{ marginTop: "50px" }}>
-          <label>wybierz swoją kategorię</label>
+          <label>Wybierz swoją kategorię</label>
           <br />
           {contest.entryCategories.map((category, index) => (
             <React.Fragment key={index}>
@@ -135,7 +135,7 @@ export default function EntryFormContent({ contest }: IProps) {
         </div>
       </div>
       <button className={styles.submit} type="submit">
-        wyślij
+        Wyślij
       </button>
     </form>
   );

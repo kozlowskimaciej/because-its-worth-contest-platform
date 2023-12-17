@@ -41,7 +41,7 @@ export default function ParticipantsCategory({
 
   return (
     <div style={{ marginBottom: "50px" }}>
-      <label className={styles2.label}>kategorie uczestników</label>
+      <label className={styles2.label}>Kategorie uczestników</label>
       <ul>
         {participants.map((type, index) => (
           <li key={index} className={styles.li}>
@@ -68,7 +68,7 @@ export default function ParticipantsCategory({
             type="text"
             ref={newCategoryInputRef}
             onKeyDown={handleKeyPress}
-            placeholder="wpisz nową kategorię uczestnika"
+            placeholder="Wpisz nową kategorię uczestnika"
           />
           <button
             onClick={(e) => {
@@ -76,7 +76,7 @@ export default function ParticipantsCategory({
               handleNewCategory();
             }}
           >
-            dodaj
+            Dodaj
           </button>
           <button
             onClick={(e) => {
@@ -84,7 +84,7 @@ export default function ParticipantsCategory({
               setIsAddingCategory(false);
             }}
           >
-            anuluj
+            Anuluj
           </button>
         </div>
       ) : (
@@ -93,7 +93,7 @@ export default function ParticipantsCategory({
           onClick={() => setIsAddingCategory(true)}
         >
           <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="dodaj" />
-          <span>dodaj kategorię</span>
+          <span>Dodaj kategorię</span>
         </button>
       )}
     </div>

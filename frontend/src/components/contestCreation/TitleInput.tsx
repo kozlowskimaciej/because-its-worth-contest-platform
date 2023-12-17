@@ -9,7 +9,7 @@ export default function TitleInput({ initial }: IProps) {
   return (
     <div style={{ marginBottom: "20px" }}>
       <label htmlFor="title-input" className={styles.label}>
-        tytuł
+        Tytuł
       </label>
       <br />
       <input

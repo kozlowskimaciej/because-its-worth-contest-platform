@@ -22,7 +22,7 @@ export default function ContestCreation() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "700px", margin: "auto", paddingTop: "140px" }}>
+      <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
         <ContestCreationForm
           initialValues={emptyContest}
           setCreatedContestID={setCreatedContestID}

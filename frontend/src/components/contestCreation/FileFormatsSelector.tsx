@@ -21,7 +21,7 @@ export default function FileFormatsSelector({
 
   return (
     <div style={{ marginBottom: "20px" }}>
-      <label className={styles.label}>akceptowane formaty plików</label>
+      <label className={styles.label}>Akceptowane formaty plików</label>
       <br />
       {allFilesFormats.map((type, index) => (
         <React.Fragment key={index}>

@@ -29,33 +29,33 @@ export default function ContestPreview({ contest }: IProps) {
           className={styles.publish}
           onClick={() => navigate(`/contests/${contest.id}/publish`)}
         >
-          opublikuj
+          Opublikuj
         </button>
         <button
           className={styles.publish}
           onClick={() => navigate(`/contests/${contest.id}/modify`)}
         >
-          modyfikuj
+          Modyfikuj
         </button>
-        <button className={styles.delete}>usuń konkurs</button>
+        <button className={styles.delete}>Usuń konkurs</button>
       </div>
       <div className={styles.info}>
         <div>
-          <h3>tytuł</h3>
+          <h3>Tytuł</h3>
           <p className={styles.entry}>{contest.name}</p>
         </div>
         <div>
-          <h3>opis</h3>
+          <h3>Opis</h3>
           <p className={styles.entry} style={{ whiteSpace: "pre-wrap" }}>
             {contest.description}
           </p>
         </div>
         <div>
-          <h3>data zakończenia</h3>
+          <h3>Data zakończenia</h3>
           <p className={styles.entry}>{formatDate(contest.deadline)}</p>
         </div>
         <div>
-          <h3>pliki z regulaminem</h3>
+          <h3>Pliki z regulaminem</h3>
           <ul>
             {contest.termsAndConditions.map((file, index) => (
               <li key={index}>
@@ -67,13 +67,13 @@ export default function ContestPreview({ contest }: IProps) {
           </ul>
         </div>
         <div>
-          <h3>kategoria konkursu</h3>
+          <h3>Kategoria konkursu</h3>
           <ul>
             <li>{contest.category}</li>
           </ul>
         </div>
         <div>
-          <h3>formaty plików</h3>
+          <h3>Formaty plików</h3>
           <ul>
             {contest.acceptedFileFormats.map((file, index) => (
               <li key={index}>{file}</li>
@@ -81,7 +81,7 @@ export default function ContestPreview({ contest }: IProps) {
           </ul>
         </div>
         <div>
-          <h3>formularz zgłoszeniowy</h3>
+          <h3>Formularz zgłoszeniowy</h3>
           <a
             href={`${window.location.origin}/forms/${contest.id}`}
             target="_blank"
