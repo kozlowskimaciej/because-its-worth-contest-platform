@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from starlette.requests import Request
-from pydantic import BaseModel
-from typing import List, Optional
-from bson import ObjectId
-
+from pydantic import BaseModel, AnyHttpUrl
+from typing import Optional
+from bson import ObjectId, json_util
+import json
 
 MAX_ENTRIES_NUM = 100
 
@@ -22,49 +22,13 @@ class Entry(BaseModel):
     email: str
     address: str
     submissionDate: str
-    attachments: List[str] = []
+    attachments: list[AnyHttpUrl]
     place: str
     contestId: str
 
 
-def deserialize_entry(entry):
-    # Assuming entry is a MongoDB object
-    entry_data = {
-        '_id': str(entry['_id']),
-        'firstName': entry['firstName'],
-        'lastName': entry['lastName'],
-        'guardianFirstName': entry['guardianFirstName'],
-        'guardianLastName': entry['guardianLastName'],
-        'phone': entry['phone'],
-        'email': entry['email'],
-        'address': entry['address'],
-        'submissionDate': entry['submissionDate'],
-        'attachments': entry['attachments'],
-        'place': entry['place'],
-        'contestId': entry['contestId']
-    }
-    return entry_data
-
-
-@router.get(
-    '/',
-    responses={404: {'description': 'Contest with given id not found'}})
-async def list_entries(request: Request, contestId: str):
-    db = request.app.database
-    entries = await db.entries.find({'contestId': contestId}) \
-        .to_list(length=MAX_ENTRIES_NUM)
-
-    # Convert ObjectId to string for JSON serialization
-    entries_data = [
-        {**entry, '_id': str(entry['_id'])} if isinstance(
-            entry.get('_id'), ObjectId) else entry
-        for entry in entries
-    ]
-    return entries_data
-
-
 @router.get('/{contestId}')
-async def get_entry(
+async def get_entries(
     request: Request,
     contestId: str,
     entryId: Optional[str] = None
@@ -75,24 +39,30 @@ async def get_entry(
         entry = await db.entries.find_one(
             {'_id': entry_id_obj, 'contestId': contestId}
         )
+
         if entry:
-            entry_data = deserialize_entry(entry)
-            return entry_data
+            return {'data': json.loads(json_util.dumps(entry))}
         else:
-            raise HTTPException(status_code=404,
-                                detail=f"Entry {entryId} not found")
+            raise HTTPException(
+                status_code=404,
+                detail=f"Entry {entryId} not found"
+            )
     else:
-        entries_data = await db.entries.find({'contestId': contestId}) \
+        entries = await db.entries.find({'contestId': contestId}) \
             .to_list(length=MAX_ENTRIES_NUM)
-        entries = [{**entry, '_id': str(entry['_id'])} if isinstance(
-            entry.get('_id'), ObjectId) else entry for entry in entries_data
-                    ]
-        return entries
+
+        if not entries:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No entries found for contest id {contestId}"
+            )
+
+        return {'data': json.loads(json_util.dumps(entries))}
 
 
 @router.post('/')
 async def create_entry(entry: Entry, request: Request):
     db = request.app.database
-    entry_dict = entry.model_dump()
+    entry_dict = entry.model_dump(mode='json')
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
-    return {'Entry id': str(inserted_id)}
+    return {'id': str(inserted_id)}
