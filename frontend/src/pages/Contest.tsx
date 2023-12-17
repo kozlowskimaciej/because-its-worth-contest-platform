@@ -15,14 +15,20 @@ export default function Contest() {
     `${process.env.REACT_APP_SERVER_URL}/contests?id=${id}`
   );
 
-  if (isLoading) return <div>loading...</div>;
-  if (error) return <div>error</div>;
-  if (!data) return <div>not found</div>;
+  const {
+    data: data2,
+    isLoading: isLoading2,
+    error: error2,
+  } = useFetch<any>(`${process.env.REACT_APP_SERVER_URL}/entries/${id}`);
+
+  if (isLoading || isLoading2) return <div>loading...</div>;
+  if (error || error2) return <div>error</div>;
+  if (!data || !data2) return <div>not found</div>;
 
   const contest = prepareSingleContest(data.data);
 
   // fetch based on id
-  const entries = prepareEntries(api2.entries);
+  const entries = prepareEntries(data2);
 
   return (
     <>

@@ -4,17 +4,56 @@ export const prepareEntries = (entries: any): Entry[] => {
   const data = entries.data;
 
   return data.map((single: any) => {
-    const id = single.id;
+    const id = single._id["$oid"];
 
-    const entry = { id, ...single.attributes };
+    const {
+      firstName,
+      lastName,
+      guardianFirstName,
+      guardianLastName,
+      phone,
+      email,
+      address,
+      submissionDate,
+      attachments,
+      place,
+      contestId,
+    } = single;
 
-    entry.author = { id: entry.author.id, ...entry.author.attributes };
-    entry.submissionDate = new Date(entry.submissionDate);
+    const author = {
+      firstName,
+      lastName,
+      phone,
+      email,
+      address,
+    };
 
-    entry.files = entry.files.map((file: any) => file.src);
+    const guardian = {
+      firstName: guardianFirstName,
+      lastName: guardianLastName,
+    };
 
-    entry.contestID = single.relationships.contest.data.id;
+    const entry: Entry = {
+      id,
+      author,
+      guardian,
+      place,
+      submissionDate: new Date(submissionDate),
+      files: attachments,
+      contestID: contestId,
+    };
 
     return entry;
+
+    // const entry = { id, ...single.attributes };
+
+    // entry.author = { id: entry.author.id, ...entry.author.attributes };
+    // entry.submissionDate = new Date(entry.submissionDate);
+
+    // entry.files = entry.files.map((file: any) => file.src);
+
+    // entry.contestID = single.relationships.contest.data.id;
+
+    // return entry;
   });
 };
