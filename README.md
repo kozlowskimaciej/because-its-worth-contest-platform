@@ -142,14 +142,13 @@ Api request prototype for publishing contest
 ### Api request for evaluating contestants
 ```json
 {
-  "data": {
-    "type": "evaluation",
-    "attributes": {
-      "value": "laureat",
-      "contestant": {
-        "id": "213"
-      }
-    }
-  }
+  "data": [{
+    "value": "laureat",
+    "entryId": "65773e12ab916aacd90d2cf5"
+  },
+  {
+    "type": "wyróżnienie",
+    "entryId": "1f7c3713cb9c68b7d98d2c63"
+  }]
 }
 ```
