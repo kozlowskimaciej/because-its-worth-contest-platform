@@ -22,13 +22,10 @@ export default function Contest() {
   } = useFetch<any>(`${process.env.REACT_APP_SERVER_URL}/entries/${id}`);
 
   if (isLoading || isLoading2) return <div>loading...</div>;
-  if (error || error2) return <div>error</div>;
-  if (!data || !data2) return <div>not found</div>;
+  if (error) return <div>error</div>;
+  if (!data) return <div>not found</div>;
 
   const contest = prepareSingleContest(data.data);
-
-  // fetch based on id
-  const entries = prepareEntries(data2);
 
   return (
     <>
@@ -36,7 +33,7 @@ export default function Contest() {
       <>
         <div style={{ height: "100px" }} />
         <ContestPreview contest={contest} />
-        <Entries entries={entries} />
+        {!error2 && data2 && <Entries entries={prepareEntries(data2)} />}
       </>
     </>
   );
