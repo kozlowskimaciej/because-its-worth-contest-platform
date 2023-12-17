@@ -88,7 +88,7 @@ export default function EntryFormContent({ contest }: IProps) {
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form id="entry-form" className={styles.form} onSubmit={handleSubmit}>
       <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
       <div style={{ textAlign: "left" }}>
         <div className={styles.entry}>

@@ -5,6 +5,7 @@ import { prepareSingleContest } from "../utils/prepareContests";
 import EntryFormContent from "../components/EntryForm/EntryFormContent";
 import Loading from "../components/common/Loading";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
+import PrintButton from "../components/EntryForm/PrintButton";
 
 export default function EntryForm() {
   const { id } = useParams();
@@ -34,9 +35,9 @@ export default function EntryForm() {
   }
 
   return (
-    <>
-      <button onClick={window.print}>drukuj</button>
+    <div style={{ textAlign: "center", marginTop: "100px" }}>
       <EntryFormContent contest={contest} />
-    </>
+      <PrintButton element={document.getElementById("entry-form")!} />
+    </div>
   );
 }
