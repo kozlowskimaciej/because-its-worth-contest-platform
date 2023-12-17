@@ -1,196 +1,133 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styles from "./styles/ContestCreationForm.module.css";
+import { useParams } from "react-router-dom";
+import ParticipantsCategory from "./ParticipantsCategory";
+import ContestFilesInput from "./ContestFilesInput";
+import TitleInput from "./TitleInput";
+import DescriptionInput from "./DescriptionInput";
+import DeadlineInput from "./DeadlineInput";
+import ContestCategorySelector from "./ContestCategorySelector";
+import FileFormatsSelector from "./FileFormatsSelector";
+import axios from "axios";
 
-export default function ContestCreationForm() {
+interface IProps {
+  initialValues: {
+    title: string;
+    description: string;
+    deadline: Date;
+    contestCategory: string;
+    entryCategories: string[];
+    formats: string[];
+  };
+  setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+export default function ContestCreationForm({
+  initialValues,
+  setCreatedContestID,
+}: IProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [participants, setParticipants] = useState<string[]>([]);
-  const [acceptableFiles, setAcceptableFiles] = useState<string[]>([]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [participants, setParticipants] = useState<string[]>(
+    initialValues.entryCategories
+  );
+  const [fileFormats, setFileFormats] = useState<string[]>(
+    initialValues.formats
+  );
+  const { id } = useParams();
 
-  const handleTextareaChange = () => {
-    if (!textareaRef.current) return;
-    textareaRef.current.style.height = "auto";
-    textareaRef.current.style.height =
-      textareaRef.current.scrollHeight + 10 + "px";
+  const uploadFiles = async (): Promise<string[]> => {
+    const urls: string[] = [];
+
+    const uploadPromises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/uploads`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const data = response.data;
+          urls.push(
+            `${process.env.REACT_APP_SERVER_URL}/static/${data.filename}`
+          );
+        } else {
+          console.error(
+            `Failed to upload file ${file.name}: ${response.statusText}`
+          );
+        }
+      } catch (error) {
+        console.error(`Error during file upload for ${file.name}:`, error);
+      }
+    });
+
+    await Promise.all(uploadPromises);
+
+    return urls;
   };
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+  const createPost = (formData: FormData, urls: string[]) => {
+    const body = {
+      name: formData.get("title"),
+      description: formData.get("description"),
+      category: formData.get("type"),
+      entryCategories: participants,
+      published: false,
+      deadline: formData.get("date") + "T00:00:00.000Z",
+      termsAndConditions: urls,
+      acceptedFileFormats: fileFormats,
+      background:
+        "https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg",
+    };
 
-    const selectedFiles = Array.from(e.target.files);
-    setFiles((prev) => [...prev, ...selectedFiles]);
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body)
+      .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
+      .catch((err) => console.error(err));
   };
 
-  const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, id) => id !== index));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     formData.append("participants", JSON.stringify(participants));
-    formData.append("formats", JSON.stringify(acceptableFiles));
+    formData.append("formats", JSON.stringify(fileFormats));
     files.forEach((file) => {
       formData.append("files", file);
     });
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
+
+    const urls = await uploadFiles();
+
+    if (id) console.log(`Will modify contest of id: ${id}`);
+    else createPost(formData, urls);
   };
-
-  const contestTypes = ["literacki", "muzyczny", "fotograficzny", "filmowy"];
-
-  const participantsTypes = ["5 - 8", "8 - 10", "10 - 12", "12 - 14"];
-
-  const allFilesFormats = [
-    ".jpg",
-    ".png",
-    ".svg",
-    ".pdf",
-    ".mp3",
-    ".mp4",
-    ".wav",
-    ".docx",
-  ];
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div style={{ textAlign: "left" }}>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="title-input" className={styles.label}>
-            tytuł
-          </label>
-          <br />
-          <input
-            type="text"
-            required
-            id="title-input"
-            name="title"
-            className={styles["title-input"]}
-          />
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="description-input" className={styles.label}>
-            opis
-          </label>
-          <br />
-          <textarea
-            required
-            id="description-input"
-            name="description"
-            className={styles.textarea}
-            ref={textareaRef}
-            onChange={handleTextareaChange}
-          ></textarea>
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="date-input" className={styles.label}>
-            data zakończenia
-          </label>
-          <br />
-          <input
-            type="date"
-            required
-            id="date-input"
-            name="date"
-            style={{
-              borderRadius: "10px",
-              border: "none",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          />
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="file-input" className={styles.label}>
-            pliki
-          </label>
-          <br />
-          <input
-            type="file"
-            multiple
-            required
-            id="file-input"
-            accept=".docx, .pdf"
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-          />
-          <ul>
-            {files.map((file, index) => (
-              <li key={index} style={{ display: "flex" }}>
-                <span>{file.name}</span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    removeFile(index);
-                  }}
-                >
-                  x
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label className={styles.label}>kategoria</label>
-          <br />
-          {contestTypes.map((type, index) => (
-            <React.Fragment key={index}>
-              <input type="radio" value={type} name="type" /> {type}
-              <br />
-            </React.Fragment>
-          ))}
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label className={styles.label}>kategoria wiekowa</label>
-          <br />
-          {participantsTypes.map((type, index) => (
-            <React.Fragment key={index}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={participants.includes(type)}
-                  onChange={() => {
-                    participants.includes(type)
-                      ? setParticipants((prev) =>
-                          prev.filter((part) => part !== type)
-                        )
-                      : setParticipants((prev) => [...prev, type]);
-                  }}
-                />
-                {type}
-              </label>
-              <br />
-            </React.Fragment>
-          ))}
-        </div>
-        <div style={{ marginBottom: "20px" }}>
-          <label className={styles.label}>akceptowane formaty plików</label>
-          <br />
-          {allFilesFormats.map((type, index) => (
-            <React.Fragment key={index}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={acceptableFiles.includes(type)}
-                  onChange={() => {
-                    acceptableFiles.includes(type)
-                      ? setAcceptableFiles((prev) =>
-                          prev.filter((part) => part !== type)
-                        )
-                      : setAcceptableFiles((prev) => [...prev, type]);
-                  }}
-                />
-                {type}
-              </label>
-              <br />
-            </React.Fragment>
-          ))}
-        </div>
+        <TitleInput initial={initialValues.title} />
+        <DescriptionInput initial={initialValues.description} />
+        <DeadlineInput initial={initialValues.deadline} />
+        <ContestFilesInput files={files} setFiles={setFiles} />
+        <ContestCategorySelector initial={initialValues.contestCategory} />
+        <ParticipantsCategory
+          participants={participants}
+          setParticipants={setParticipants}
+        />
+        <FileFormatsSelector
+          fileFormats={fileFormats}
+          setFileFormats={setFileFormats}
+        />
       </div>
       <button type="submit" className={styles.button}>
-        utwórz
+        {id ? "Zapisz zmiany" : "Utwórz"}
       </button>
     </form>
   );

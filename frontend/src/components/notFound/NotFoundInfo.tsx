@@ -2,7 +2,15 @@ import React from "react";
 import styles from "./styles/NotFoundInfo.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function NotFoundInfo() {
+interface IProps {
+  text?: string;
+  isDisplayingButton?: boolean;
+}
+
+export default function NotFoundInfo({
+  text = "Podana strona nie istnieje.",
+  isDisplayingButton = true,
+}: IProps) {
   const navigate = useNavigate();
 
   return (
@@ -12,10 +20,12 @@ export default function NotFoundInfo() {
         src={`${process.env.PUBLIC_URL}/images/logo.jpg`}
         alt="logo"
       />
-      <p className={styles.p}>Podana strona nie istnieje.</p>
-      <button className={styles.button} onClick={() => navigate("/")}>
-        wróć na stronę główną
-      </button>
+      <p className={styles.p}>{text}</p>
+      {isDisplayingButton && (
+        <button className={styles.button} onClick={() => navigate("/")}>
+          wróć na stronę główną
+        </button>
+      )}
     </div>
   );
 }

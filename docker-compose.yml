@@ -19,7 +19,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - DB_CONNECTION_URL=mongodb://mongodb:27017/
+      - DB_CONNECTION_URL=mongodb://mongodb:27017/mydatabase  # Change "mydatabase"
 
   mongodb:
     image: mongo

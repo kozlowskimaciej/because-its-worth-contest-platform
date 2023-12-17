@@ -1,0 +1,8 @@
+.wrapper {
+  width: calc(50% - 80px);
+  margin: auto;
+  background-color: var(--secondary-color);
+  padding: 20px 40px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}

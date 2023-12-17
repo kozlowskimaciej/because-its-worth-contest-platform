@@ -1,0 +1,12 @@
+.button {
+  all: unset;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 10px 50px;
+  border-radius: 20px;
+  margin: 20px 0;
+}
+
+.button:hover {
+  cursor: pointer;
+}

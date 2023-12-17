@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./styles/PublishForm.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function PublishForm() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState<File[]>([]);
 
   const handleNewFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,12 +26,14 @@ export default function PublishForm() {
     formData.forEach((val, key) => {
       console.log(key, val);
     });
+
+    navigate(`/contests`);
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <label htmlFor="publish-files" className={styles.label}>
-        wybierz pliki
+        Wybierz pliki
       </label>
       <input
         type="file"
@@ -56,7 +60,7 @@ export default function PublishForm() {
       </ul>
       <div style={{ width: "100%", textAlign: "center" }}>
         <button type="submit" className={styles.button}>
-          wyślij
+          Wyślij
         </button>
       </div>
     </form>

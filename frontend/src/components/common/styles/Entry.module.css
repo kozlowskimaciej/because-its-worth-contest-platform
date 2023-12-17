@@ -1,0 +1,15 @@
+.wrapper {
+  width: calc(100% - 40px);
+  background-color: var(--primary-color);
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: larger;
+}
+
+.file {
+  width: 20%;
+}

@@ -7,17 +7,17 @@ export default function Navbar() {
 
   const buttons = [
     {
-      text: "główna",
+      text: "GŁÓWNA",
       onclick: () => navigate("/"),
       isActive: window.location.pathname === "/",
     },
     {
-      text: "konkursy",
+      text: "KONKURSY",
       onclick: () => navigate("/contests"),
       isActive: window.location.pathname.startsWith("/contests"),
     },
     {
-      text: "stwórz",
+      text: "STWÓRZ",
       onclick: () => navigate("/contest/new"),
       isActive: window.location.pathname === "/contest/new",
     },
