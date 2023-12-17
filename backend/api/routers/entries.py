@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from starlette.requests import Request
-from pydantic import BaseModel, AnyHttpUrl
-from typing import Optional
-from bson import ObjectId, json_util
 import json
+from typing import Optional
+
+from bson import ObjectId, json_util
+from fastapi import APIRouter, HTTPException
+from pydantic import AnyHttpUrl, BaseModel
+from starlette.requests import Request
 
 MAX_ENTRIES_NUM = 100
 
