@@ -80,8 +80,11 @@ export default function ContestPreview({ contest }: IProps) {
         </div>
         <div>
           <h3>formularz zgłoszeniowy</h3>
-          <a href={`http://foundation.com/forms/${contest.id}`} target="_blank">
-            {`http://foundation.com/forms/${contest.id}`}
+          <a
+            href={`${window.location.origin}/forms/${contest.id}`}
+            target="_blank"
+          >
+            {`${window.location.origin}/forms/${contest.id}`}
           </a>
         </div>
       </div>

@@ -16,5 +16,9 @@ export default function EntryForm() {
 
   const contest = prepareSingleContest(data.data);
 
+  if (contest.deadline < new Date()) {
+    return <div>termin zgłaszania minął</div>;
+  }
+
   return <EntryFormContent contest={contest} />;
 }

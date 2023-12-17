@@ -14,6 +14,9 @@ export default function DescriptionInput({ initial }: IProps) {
     textareaRef.current.style.height =
       textareaRef.current.scrollHeight + 10 + "px";
   };
+
+  handleTextareaChange();
+
   return (
     <div style={{ marginBottom: "20px" }}>
       <label htmlFor="description-input" className={styles.label}>

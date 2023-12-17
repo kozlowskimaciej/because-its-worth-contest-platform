@@ -8,7 +8,7 @@ export default function Publish() {
       <Navbar />
       <div style={{ textAlign: "center" }}>
         <h2 style={{ paddingTop: "100px", paddingBottom: "60px" }}>
-          załącz pliki tekstowe z mailami uczestników
+          załącz pliki tekstowe z adresami email uczestników
         </h2>
         <PublishForm />
       </div>
