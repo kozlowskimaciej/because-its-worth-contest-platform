@@ -6,8 +6,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import AnyHttpUrl, BaseModel
 from starlette.requests import Request
 
-MAX_ENTRIES_NUM = 100
-
 router = APIRouter(
     prefix='/entries',
     tags=['Entries']
@@ -50,7 +48,7 @@ async def get_entries(
             )
     else:
         entries = await db.entries.find({'contestId': contestId}) \
-            .to_list(length=MAX_ENTRIES_NUM)
+            .to_list(length=None)
 
         if not entries:
             raise HTTPException(
