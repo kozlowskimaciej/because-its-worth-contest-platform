@@ -130,3 +130,23 @@ def test_delete_contest(client, contest):
 
     response = client.get(f'/contests?id={contest_id}')
     assert response.status_code == 404
+
+
+def test_update_contest(client, contest):
+    response = client.post('/contests/', json=contest)
+    assert response.status_code == 200
+
+    post_resp = response.json()
+    assert 'id' in post_resp
+    contest_id = post_resp['id']
+
+    contest['name'] = 'New name'
+    response = client.patch(f'/contests?id={contest_id}', json=contest)
+    assert response.status_code == 200
+
+    response = client.get(f'/contests?id={contest_id}')
+    assert response.status_code == 200
+
+    get_resp = response.json()
+    assert 'data' in get_resp
+    assert get_resp['data']['name'] == 'New name'

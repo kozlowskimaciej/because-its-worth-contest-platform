@@ -1,11 +1,11 @@
 import json
 from datetime import datetime
 from os.path import basename
-from typing import Optional
+from typing import Optional, Annotated
 from urllib.parse import urlparse
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body, Query
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
@@ -120,5 +120,28 @@ async def delete_contest(
             await delete_entry(request, entry['_id']['$oid'])
 
     await db.contests.delete_one({'_id': ObjectId(id)})
+
+    return {'id': id}
+
+
+@router.patch(
+    '/',
+    responses={404: {'description': 'Contest with given id not found'}}
+)
+async def update_contest(
+    request: Request,
+    id: Annotated[str, Query()],
+    data: Annotated[Contest, Body()]
+):
+    db = request.app.database
+
+    entry_dict = data.model_dump(mode='json')
+    data = db.contests.update_one(
+        {'_id': ObjectId(id)},
+        {'$set': entry_dict}
+    )
+
+    if not data:
+        raise HTTPException(status_code=404, detail=f"{id=} not found")
 
     return {'id': id}
