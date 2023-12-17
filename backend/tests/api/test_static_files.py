@@ -36,9 +36,9 @@ def test_upload_invalid_file_size(client):
 
 
 def test_upload_invalid_file_format(client):
-    file_path = TEST_IMAGES_PATH / 'invalid_format.pdf'
+    file_path = TEST_IMAGES_PATH / 'invalid_format.bmp'
     with open(file_path, 'rb') as file:
-        files = {'file': ('invalid_format.pdf', file, 'image/jpeg')}
+        files = {'file': ('invalid_format.bmp', file, 'image/jpeg')}
         response = client.post('/uploads/', files=files)
 
     assert response.status_code == 400
