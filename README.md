@@ -25,7 +25,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
 API request prototype for fetching contests
 
 ```plaintext
-http://foundation.com/contests
+http://localhost:8000/contests
 ```
 
 API response prototype for fetching contests
@@ -34,34 +34,38 @@ API response prototype for fetching contests
 {
   "data": [
     {
-      "id": "1",
-      "type": "contests",
-      "attributes": {
-        "name": "bardzo warto",
-        "description": "Zaprawdę zaprawdę powiadam wam, warto.",
-        "category": "filmowy",
-        "entryCategories": ["grupa wiekowa 7 - 10", "grupa wiekowa 10 - 13"],
-        "published": true,
-        "deadline": "2023-04-20T18:34:59.000Z",
-        "termsAndConditions": ["http://foundation.com/regulamin.pdf", "http://foundation.com/zgoda.docx"],
-        "acceptedFileFormats": ["mp3", "mp4", "pdf", "docx"],
-        "background": "http://ydfItExists/image.png"
-      }
+      "_id": {
+        "$oid": "657e1e85d9a591885cd7a032"
+      },
+      "name": "Test Contest",
+      "description": "This is a test contest.",
+      "category": "Test",
+      "entryCategories": ["foo", "boo", "bar"],
+      "published": true,
+      "deadline": "2021-09-01T00:00:00Z",
+      "termsAndConditions": [
+        "https://foo.bar/static/contest-terms1.jpg",
+        "https://foo.bar/static/contest-terms2.jpg"
+      ],
+      "acceptedFileFormats": ["jpg", "png"],
+      "background": "https://foo.bar/static/contest-background.jpg"
     },
     {
-      "id": "2",
-      "type": "contests",
-      "attributes": {
-        "name": "Chyba będzie warto",
-        "description": "Czy warto czy nie warto, oto jest pytanie. Dziwne są te historie za przeproszeniem.",
-        "categories": "fotograficzny",
-        "entryCategories": ["grupa wiekowa 7 - 10"],
-        "published": false,
-        "deadline": "2023-04-20T18:34:59.000Z",
-        "termsAndConditions": ["http://foundation.com/regulamin.docx"],
-        "acceptedFileFormats": ["png", "jpg", "jpeg"],
-        "background": "http://justY/image.jpg"
-      }
+      "_id": {
+        "$oid": "657e2152d9a591885cd7a033"
+      },
+      "name": "Test Contest",
+      "description": "This is a test contest.",
+      "category": "Test",
+      "entryCategories": ["foo", "boo", "bar"],
+      "published": true,
+      "deadline": "2021-09-01T00:00:00Z",
+      "termsAndConditions": [
+        "https://foo.bar/static/contest-terms1.jpg",
+        "https://foo.bar/static/contest-terms2.jpg"
+      ],
+      "acceptedFileFormats": ["jpg", "png"],
+      "background": "https://foo.bar/static/contest-background.jpg"
     }
   ]
 }
@@ -72,7 +76,7 @@ API response prototype for fetching contests
 API request prototype for fetching competition entries
 
 ```plaintext
-http://foundation.com/contest/entries/?id=1
+http://localhost:8000/entries/657e2152d9a591885cd7a033
 ```
 
 API response prototype for fetching competition entries
@@ -81,79 +85,36 @@ API response prototype for fetching competition entries
 {
   "data": [
     {
-      "id": "1",
-      "type": "entries",
-      "attributes": {
-        "author": {
-          "attributes": {
-            "firstName": "Elon",
-            "lastName": "Musk",
-            "phone": "123456789",
-            "email": "elon.musk@gmail.com",
-            "address": "Polna 2"
-          }
-        },
-        "guardian": {
-          "firstName": "Joe",
-          "lastName": "Biden"
-        },
-        "place": "none",
-        "submissionDate": "2023-04-20T18:34:59.000Z",
-        "files": [
-          {
-            "type": "image",
-            "src": "http://foundation.com/contests/13/image1.jpg"
-          },
-          {
-            "type": "video",
-            "src": "http://foundation.com/contests/13/movie1.mp4"
-          },
-          {
-            "type": "other",
-            "src": "http://foundation.com/contests/13/poem1.pdf"
-          }
-        ]
+      "_id": {
+        "$oid": "657ef4a4c4d16a709a994e1f"
       },
-      "relationships": {
-        "contest": {
-          "data": {
-            "id": "13",
-            "type": "contests"
-          }
-        }
-      }
+      "firstName": "Elon",
+      "lastName": "Musk",
+      "guardianFirstName": "Nie",
+      "guardianLastName": "istnieje",
+      "phone": "694202137",
+      "email": "someemail@email.com",
+      "address": "Starbase, Texas",
+      "submissionDate": "2023-12-17T13:16:20.107Z",
+      "attachments": [],
+      "place": "none",
+      "contestId": "657ed098a5ba96cfdd2b3d42"
     },
     {
-      "id": "2",
-      "type": "entries",
-      "attributes": {
-        "author": {
-          "attributes": {
-            "firstName": "Jan",
-            "lastName": "Kowalski",
-            "phone": null,
-            "email": null,
-            "address": null
-          }
-        },
-        "guardian": null,
-        "place": "laureat",
-        "submissionDate": "2023-04-20T18:34:59.000Z",
-        "files": [
-          {
-            "type": "image",
-            "src": "http://foundation.com/contests/13/image1.jpg"
-          }
-        ]
+      "_id": {
+        "$oid": "657ef4dbc4d16a709a994e20"
       },
-      "relationships": {
-        "contest": {
-          "data": {
-            "id": "13",
-            "type": "contests"
-          }
-        }
-      }
+      "firstName": "Elon",
+      "lastName": "Musk",
+      "guardianFirstName": "Nie",
+      "guardianLastName": "istnieje",
+      "phone": "694202137",
+      "email": "someemail@email.com",
+      "address": "Starbase, Texas",
+      "submissionDate": "2023-12-17T13:17:15.961Z",
+      "attachments": [],
+      "place": "none",
+      "contestId": "657ed098a5ba96cfdd2b3d42"
     }
   ]
 }
