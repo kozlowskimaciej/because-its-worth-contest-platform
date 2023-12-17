@@ -60,9 +60,24 @@ export default function EntryFormContent({ contest }: IProps) {
     const urls = await uploadFiles();
     console.log("urls:", urls);
 
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
+    const payload = {
+      firstName: formData.get("firstname"),
+      lastName: formData.get("lastname"),
+      guardianFirstName: "Nie",
+      guardianLastName: "istnieje",
+      phone: "694202137",
+      email: "someemail@email.com",
+      address: formData.get("place"),
+      submissionDate: new Date(),
+      attachments: urls,
+      place: "none",
+      contestId: contest.id,
+    };
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/entries`, payload)
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
   };
 
   const handleFilesInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,10 +98,6 @@ export default function EntryFormContent({ contest }: IProps) {
         <div className={styles.entry}>
           <label htmlFor="entry-lastname">nazwisko</label>
           <input type="text" id="entry-lastname" name="lastname" required />
-        </div>
-        <div className={styles.entry}>
-          <label htmlFor="entry-birthdate">data urodzenia</label>
-          <input type="date" id="entry-birthdate" name="birthdate" required />
         </div>
         <div className={styles.entry}>
           <label htmlFor="entry-place">placówka</label>
