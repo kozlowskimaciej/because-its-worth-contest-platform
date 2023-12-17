@@ -147,7 +147,7 @@ Api request prototype for publishing contest
     "entryId": "65773e12ab916aacd90d2cf5"
   },
   {
-    "type": "wyróżnienie",
+    "value": "wyróżnienie",
     "entryId": "1f7c3713cb9c68b7d98d2c63"
   }]
 }
