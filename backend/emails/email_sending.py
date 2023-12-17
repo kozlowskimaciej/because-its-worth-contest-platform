@@ -1,16 +1,16 @@
 from email.message import EmailMessage
-import smtplib
+from smtplib import SMTP
 import os
 
 LOGIN = "contest.platform1@gmail.com"
 
 
 def send_email(receiver, subject, body):
-    password = os.getenv("PASSWORD", None)
+    password = os.getenv("EMAIL_PASSWORD", None)
     if not password:
         raise KeyError("Password not provided")
 
-    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server = SMTP("smtp.gmail.com", 587)
     server.starttls()
     server.ehlo()
     server.login(LOGIN, password)
