@@ -103,7 +103,7 @@ export default function EntryFormContent({ contest }: IProps) {
           <label htmlFor="entry-place">Placówka</label>
           <input type="text" id="entry-place" name="place" />
         </div>
-        <div>
+        <div id="entry-form-file-input">
           <input
             type="file"
             multiple
@@ -134,7 +134,7 @@ export default function EntryFormContent({ contest }: IProps) {
           ))}
         </div>
       </div>
-      <button className={styles.submit} type="submit">
+      <button className={styles.submit} type="submit" id="entry-form-submit">
         Wyślij
       </button>
     </form>

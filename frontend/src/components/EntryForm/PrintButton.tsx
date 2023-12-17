@@ -8,6 +8,14 @@ interface IProps {
 
 export default function PrintButton({ element }: IProps) {
   const handlePrint = useReactToPrint({
+    onBeforeGetContent: () => {
+      document.getElementById("entry-form-file-input")!.style.display = "none";
+      document.getElementById("entry-form-submit")!.style.display = "none";
+    },
+    onAfterPrint: () => {
+      document.getElementById("entry-form-file-input")!.style.display = "block";
+      document.getElementById("entry-form-submit")!.style.display = "";
+    },
     content: () => element,
   });
 
