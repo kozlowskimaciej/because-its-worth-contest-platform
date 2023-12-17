@@ -1,0 +1,37 @@
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.h4 {
+  color: var(--accent-color);
+  margin-bottom: 5rem;
+  font-size: larger;
+}
+
+.links {
+  text-align: left;
+}
+
+.links div {
+  margin: 2rem;
+}
+
+.button {
+  all: unset;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  transition: scale 200ms ease;
+  width: 300px;
+  height: 60px;
+  border-radius: 20px;
+  margin: 1rem;
+}
+
+.button:hover {
+  cursor: pointer;
+  scale: 1.01;
+}

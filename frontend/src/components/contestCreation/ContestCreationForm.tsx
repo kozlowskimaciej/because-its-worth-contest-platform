@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles/ContestCreationForm.module.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ParticipantsCategory from "./ParticipantsCategory";
 import ContestFilesInput from "./ContestFilesInput";
 import TitleInput from "./TitleInput";
@@ -19,9 +19,13 @@ interface IProps {
     entryCategories: string[];
     formats: string[];
   };
+  setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function ContestCreationForm({ initialValues }: IProps) {
+export default function ContestCreationForm({
+  initialValues,
+  setCreatedContestID,
+}: IProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [participants, setParticipants] = useState<string[]>(
     initialValues.entryCategories
@@ -29,7 +33,6 @@ export default function ContestCreationForm({ initialValues }: IProps) {
   const [fileFormats, setFileFormats] = useState<string[]>(
     initialValues.formats
   );
-  const navigate = useNavigate();
   const { id } = useParams();
 
   const uploadFiles = async (): Promise<string[]> => {
@@ -86,7 +89,7 @@ export default function ContestCreationForm({ initialValues }: IProps) {
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body)
-      .then((data) => console.log(data))
+      .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));
   };
 
@@ -104,8 +107,6 @@ export default function ContestCreationForm({ initialValues }: IProps) {
 
     if (id) console.log(`Will modify contest of id: ${id}`);
     else createPost(formData, urls);
-
-    navigate("/contests");
   };
 
   return (
