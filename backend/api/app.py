@@ -31,13 +31,13 @@ def create_app():
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
     app.mount(
         "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
-    
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # You can replace "*" with specific origins if needed
+        allow_origins=["*"],
         allow_credentials=True,
-        allow_methods=["*"],  # You can replace "*" with specific HTTP methods
-        allow_headers=["*"],  # You can replace "*" with specific headers
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     return app
