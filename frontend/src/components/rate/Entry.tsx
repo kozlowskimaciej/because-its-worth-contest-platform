@@ -10,9 +10,10 @@ import styles from "./styles/Entry.module.css";
 interface IProps {
   entry: EntryType;
   close: Function;
+  changePlace: Function;
 }
 
-export default function Entry({ entry, close }: IProps) {
+export default function Entry({ entry, close, changePlace }: IProps) {
   const getExtension = (file: string): string => {
     const splitted = file.split(".");
     return splitted[splitted.length - 1];

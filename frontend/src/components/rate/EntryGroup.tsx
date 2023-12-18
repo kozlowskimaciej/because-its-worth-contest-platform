@@ -9,6 +9,7 @@ interface IProps {
   title: string;
   open: Function;
   close: Function;
+  changePlace: Function;
 }
 
 export default function EntryGroup({
@@ -16,18 +17,25 @@ export default function EntryGroup({
   title,
   open,
   close,
+  changePlace,
 }: IProps) {
   return (
     <div className={styles.wrapper}>
       <h2>{title}</h2>
       {expandableEntries.map((expEntry) => {
         return expEntry.isExpanded ? (
-          <Entry key={expEntry.entry.id} entry={expEntry.entry} close={close} />
+          <Entry
+            key={expEntry.entry.id}
+            entry={expEntry.entry}
+            close={close}
+            changePlace={changePlace}
+          />
         ) : (
           <CollapsedEntry
             key={expEntry.entry.id}
             entry={expEntry.entry}
             open={open}
+            changePlace={changePlace}
           />
         );
       })}

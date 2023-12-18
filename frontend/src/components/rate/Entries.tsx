@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Entry as EntryType, ExpandableEntry } from "../../models/Entry";
+import { Entry, Entry as EntryType, ExpandableEntry } from "../../models/Entry";
 import EntryGroup from "./EntryGroup";
 
 interface IProps {
@@ -35,6 +35,19 @@ export default function Entries({ entries }: IProps) {
         return {
           isExpanded: false,
           entry: expEntry.entry,
+        };
+      });
+    });
+  };
+
+  const changePlace = (id: string, newPlace: string | null) => {
+    setExpandableEntries((prev) => {
+      return prev.map((expEntry) => {
+        if (expEntry.entry.id !== id) return expEntry;
+
+        return {
+          isExpanded: expEntry.isExpanded,
+          entry: { ...expEntry.entry, place: newPlace } as Entry,
         };
       });
     });
@@ -84,6 +97,7 @@ export default function Entries({ entries }: IProps) {
           expandableEntries={group.expandableEntries}
           open={open}
           close={close}
+          changePlace={changePlace}
         />
       ))}
     </>
