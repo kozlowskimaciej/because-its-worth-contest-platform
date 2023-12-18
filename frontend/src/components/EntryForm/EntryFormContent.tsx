@@ -12,10 +12,6 @@ interface IProps {
 export default function EntryFormContent({ contest }: IProps) {
   const [files, setFiles] = useState<File[]>([]);
 
-  // const formattedFileFormats = contest.acceptedFileFormats
-  //   .map((format) => `.${format}`)
-  //   .join(", ");
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -43,13 +39,6 @@ export default function EntryFormContent({ contest }: IProps) {
       .then((data) => console.log(data))
       .catch((err) => console.error(err));
   };
-
-  // const handleFilesInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files) return;
-
-  //   const filesArray = Array.from(e.target.files);
-  //   setFiles((prev) => [...prev, ...filesArray]);
-  // };
 
   return (
     <form
@@ -79,26 +68,11 @@ export default function EntryFormContent({ contest }: IProps) {
           <label htmlFor="entry-place">Placówka</label>
           <input type="text" id="entry-place" name="place" />
         </div>
-        {/* <div id="entry-form-file-input">
-          <input
-            type="file"
-            multiple
-            id="entry-files"
-            name="files"
-            accept={formattedFileFormats}
-            style={{ display: "none" }}
-            onChange={handleFilesInput}
-          />
-          <label className={styles.files} htmlFor="entry-files">
-            <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="" />
-            <span>Załącz pliki</span>
-          </label> */}
         <EntryFiles
           acceptedFormats={contest.acceptedFileFormats}
           files={files}
           setFiles={setFiles}
         />
-        {/* </div> */}
         <div style={{ marginTop: "50px" }}>
           <label>Wybierz swoją kategorię</label>
           <br />
