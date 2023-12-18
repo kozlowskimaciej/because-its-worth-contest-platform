@@ -7,6 +7,10 @@ interface IProps {
   contest: Contest;
 }
 
+interface IProps {
+  contest: Contest;
+}
+
 export default function ContestPreview({ contest }: IProps) {
   const navigate = useNavigate();
 
