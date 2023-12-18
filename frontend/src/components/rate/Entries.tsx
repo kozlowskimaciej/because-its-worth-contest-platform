@@ -1,5 +1,5 @@
 import React from "react";
-import Entry from "../common/Entry";
+import Entry from "./Entry";
 import styles from "./styles/Entries.module.css";
 import { Entry as EntryType } from "../../models/Entry";
 import { useParams } from "react-router-dom";

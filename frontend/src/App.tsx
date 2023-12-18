@@ -6,6 +6,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));
 const Contest = lazy(() => import("./pages/Contest"));
 const Publish = lazy(() => import("./pages/Publish"));
+const Rate = lazy(() => import("./pages/Rate"));
 const ContestModification = lazy(() => import("./pages/ContestModification"));
 const EntryForm = lazy(() => import("./pages/EntryForm"));
 const ContestCreation = lazy(() => import("./pages/ContestCreation"));
@@ -48,6 +49,10 @@ function App() {
     {
       path: "/contests/:id/publish",
       component: Publish,
+    },
+    {
+      path: "/contests/:id/rate",
+      component: Rate,
     },
     {
       path: "/contests/:id/modify",
