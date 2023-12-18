@@ -1,6 +1,5 @@
 import json
 from typing import Optional
-
 from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import AnyHttpUrl, BaseModel
@@ -65,3 +64,17 @@ async def create_entry(entry: Entry, request: Request):
     entry_dict = entry.model_dump(mode='json')
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
     return {'id': str(inserted_id)}
+
+
+@router.delete('/')
+async def delete_entry(
+    request: Request,
+    entryId: str
+):
+    db = request.app.database
+    data = await db.entries.delete_one({'_id': ObjectId(entryId)})
+    if not data:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Entry {entryId} not found")
+    return {'id': entryId}
