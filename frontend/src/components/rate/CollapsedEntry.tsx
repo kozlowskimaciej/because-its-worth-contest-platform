@@ -1,23 +1,24 @@
 import React from "react";
 import { Entry } from "../../models/Entry";
 import styles from "./styles/CollapsedEntry.module.css";
+import { useRateContext } from "../../contexts/RateContext";
 
 interface IProps {
   entry: Entry;
-  open: Function;
-  changePlace: Function;
 }
 
-export default function CollapsedEntry({ entry, open, changePlace }: IProps) {
+export default function CollapsedEntry({ entry }: IProps) {
+  const { handleOpenEntry, handleChangePlace } = useRateContext();
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.text}>
         {entry.author.firstName} {entry.author.lastName}
       </div>
-      <button onClick={() => changePlace(entry.id, "laureat")}>
-        changePlace
+      <button onClick={() => handleChangePlace(entry.id, "laureat")}>
+        change to laureat
       </button>
-      <button onClick={() => open(entry.id)}>open</button>
+      <button onClick={() => handleOpenEntry(entry.id)}>open</button>
     </div>
   );
 }

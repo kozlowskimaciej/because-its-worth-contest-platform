@@ -6,14 +6,15 @@ import {
   AVAILABLE_VIDEOS_FORMATS,
 } from "../../constants";
 import styles from "./styles/Entry.module.css";
+import { useRateContext } from "../../contexts/RateContext";
 
 interface IProps {
   entry: EntryType;
-  close: Function;
-  changePlace: Function;
 }
 
-export default function Entry({ entry, close, changePlace }: IProps) {
+export default function Entry({ entry }: IProps) {
+  const { handleCloseEntry, handleChangePlace } = useRateContext();
+
   const getExtension = (file: string): string => {
     const splitted = file.split(".");
     return splitted[splitted.length - 1];
@@ -23,7 +24,10 @@ export default function Entry({ entry, close, changePlace }: IProps) {
     <div className={styles.wrapper}>
       <div className={styles.top}>
         <div className={styles.text}>imie: {entry.author.firstName}</div>
-        <button onClick={() => close(entry.id)}>close</button>
+        <button onClick={() => handleChangePlace(entry.id, "wyroznienie")}>
+          change to wyroznienie
+        </button>
+        <button onClick={() => handleCloseEntry(entry.id)}>close</button>
       </div>
       <div className={styles.text}>nazwisko: {entry.author.lastName}</div>
       {entry.author.phone && (

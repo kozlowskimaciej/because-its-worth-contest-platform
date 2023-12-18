@@ -7,36 +7,17 @@ import CollapsedEntry from "./CollapsedEntry";
 interface IProps {
   expandableEntries: ExpandableEntry[];
   title: string;
-  open: Function;
-  close: Function;
-  changePlace: Function;
 }
 
-export default function EntryGroup({
-  expandableEntries,
-  title,
-  open,
-  close,
-  changePlace,
-}: IProps) {
+export default function EntryGroup({ expandableEntries, title }: IProps) {
   return (
     <div className={styles.wrapper}>
       <h2>{title}</h2>
       {expandableEntries.map((expEntry) => {
         return expEntry.isExpanded ? (
-          <Entry
-            key={expEntry.entry.id}
-            entry={expEntry.entry}
-            close={close}
-            changePlace={changePlace}
-          />
+          <Entry key={expEntry.entry.id} entry={expEntry.entry} />
         ) : (
-          <CollapsedEntry
-            key={expEntry.entry.id}
-            entry={expEntry.entry}
-            open={open}
-            changePlace={changePlace}
-          />
+          <CollapsedEntry key={expEntry.entry.id} entry={expEntry.entry} />
         );
       })}
     </div>

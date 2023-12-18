@@ -6,6 +6,7 @@ import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import { prepareEntries } from "../utils/prepareEntries";
 import Navbar from "../components/common/Navbar";
 import Entries from "../components/rate/Entries";
+import RateContextProvider from "../contexts/RateContext";
 
 export default function Rate() {
   const { id } = useParams();
@@ -36,7 +37,9 @@ export default function Rate() {
     <>
       <Navbar />
       <div style={{ height: "100px" }} />
-      <Entries entries={entries} />
+      <RateContextProvider entries={entries}>
+        <Entries />
+      </RateContextProvider>
     </>
   );
 }
