@@ -16,8 +16,16 @@ export default function CollapsedEntry({ entry }: IProps) {
       <div className={styles.text}>
         {entry.author.firstName} {entry.author.lastName}
       </div>
-      <PlaceSelect entry={entry} />
-      <button onClick={() => handleOpenEntry(entry.id)}>open</button>
+      <div className={styles.controls}>
+        <PlaceSelect entry={entry} />
+        <button
+          className={styles.open}
+          onClick={() => handleOpenEntry(entry.id)}
+          title="pokaż szczegóły"
+        >
+          <img src={`${process.env.PUBLIC_URL}/icons/arrow.svg`} alt="" />
+        </button>
+      </div>
     </div>
   );
 }

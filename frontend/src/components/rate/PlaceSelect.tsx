@@ -11,10 +11,10 @@ export default function PlaceSelect({ entry }: IProps) {
   const { handleChangePlace } = useRateContext();
 
   const options = [
-    { value: "laureat", label: "laureat" },
-    { value: "wyroznienie", label: "wyróżnienie" },
-    { value: "none", label: "brak nagrody" },
-    { value: null, label: "nieoceniono" },
+    { value: "laureat", label: "Laureat" },
+    { value: "wyroznienie", label: "Wyróżnienie" },
+    { value: "none", label: "Brak nagrody" },
+    { value: null, label: "Nieocenione" },
   ];
 
   const handleSelectChange = (selectedOption: any | null) => {

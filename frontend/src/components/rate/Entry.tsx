@@ -23,10 +23,16 @@ export default function Entry({ entry }: IProps) {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.top}>
-        <div className={styles.text}>imie: {entry.author.firstName}</div>
+      <div className={styles.text}>imie: {entry.author.firstName}</div>
+      <div className={styles.controls}>
         <PlaceSelect entry={entry} />
-        <button onClick={() => handleCloseEntry(entry.id)}>close</button>
+        <button
+          className={styles.close}
+          onClick={() => handleCloseEntry(entry.id)}
+          title="zwiń"
+        >
+          <img src={`${process.env.PUBLIC_URL}/icons/arrow.svg`} />
+        </button>
       </div>
       <div className={styles.text}>nazwisko: {entry.author.lastName}</div>
       {entry.author.phone && (
