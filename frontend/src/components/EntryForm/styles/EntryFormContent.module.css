@@ -28,29 +28,6 @@
   padding: 10px 10px;
 }
 
-.files {
-  border-radius: 20px;
-  background-color: var(--primary-color);
-  padding: 10px 20px;
-  margin-top: 50px;
-  display: flex;
-  align-items: center;
-  width: 100px;
-  justify-content: space-between;
-}
-
-.files:hover {
-  cursor: pointer;
-}
-
-.files img {
-  height: 20px;
-}
-
-.files span {
-  margin-top: -2px;
-}
-
 .submit {
   all: unset;
   background-color: var(--accent-color);
