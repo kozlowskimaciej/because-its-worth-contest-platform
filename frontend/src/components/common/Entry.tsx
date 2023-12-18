@@ -52,7 +52,14 @@ export default function Entry({ entry }: IProps) {
           } else if (AVAILABLE_VIDEOS_FORMATS.includes(ext)) {
             return (
               <li key={index}>
-                <video src={file} autoPlay muted controls>
+                <video
+                  src={file}
+                  className={styles.file}
+                  autoPlay
+                  muted
+                  controls
+                  loop
+                >
                   Twoja przeglądarka nie umożliwia odtwarzania video
                 </video>
               </li>
