@@ -7,6 +7,10 @@ interface IProps {
   contest: Contest;
 }
 
+interface IProps {
+  contest: Contest;
+}
+
 export default function ContestPreview({ contest }: IProps) {
   const navigate = useNavigate();
 
@@ -56,7 +60,7 @@ export default function ContestPreview({ contest }: IProps) {
         </div>
         <div>
           <h3>Pliki z regulaminem</h3>
-          <ul>
+          <ul style={{ overflowX: "hidden" }}>
             {contest.termsAndConditions.map((file, index) => (
               <li key={index}>
                 <a href={file} target="_blank" rel="noreferrer">
@@ -80,7 +84,7 @@ export default function ContestPreview({ contest }: IProps) {
             ))}
           </ul>
         </div>
-        <div>
+        <div style={{ overflowX: "hidden" }}>
           <h3>Formularz zgłoszeniowy</h3>
           <a
             href={`${window.location.origin}/forms/${contest.id}`}

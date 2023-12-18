@@ -9,6 +9,8 @@ import DeadlineInput from "./DeadlineInput";
 import ContestCategorySelector from "./ContestCategorySelector";
 import FileFormatsSelector from "./FileFormatsSelector";
 import axios from "axios";
+import BackgroundSelector from "./BackgroundSelector";
+import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
 
 interface IProps {
   initialValues: {
@@ -27,6 +29,7 @@ export default function ContestCreationForm({
   setCreatedContestID,
 }: IProps) {
   const [files, setFiles] = useState<File[]>([]);
+  const [background, setBackground] = useState<File | null>(null);
   const [participants, setParticipants] = useState<string[]>(
     initialValues.entryCategories
   );
@@ -35,45 +38,11 @@ export default function ContestCreationForm({
   );
   const { id } = useParams();
 
-  const uploadFiles = async (): Promise<string[]> => {
-    const urls: string[] = [];
-
-    const uploadPromises = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/uploads`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          const data = response.data;
-          urls.push(
-            `${process.env.REACT_APP_SERVER_URL}/static/${data.filename}`
-          );
-        } else {
-          console.error(
-            `Failed to upload file ${file.name}: ${response.statusText}`
-          );
-        }
-      } catch (error) {
-        console.error(`Error during file upload for ${file.name}:`, error);
-      }
-    });
-
-    await Promise.all(uploadPromises);
-
-    return urls;
-  };
-
-  const createPost = (formData: FormData, urls: string[]) => {
+  const createContest = (
+    formData: FormData,
+    urls: string[],
+    backgroundURL: string | null
+  ) => {
     const body = {
       name: formData.get("title"),
       description: formData.get("description"),
@@ -83,8 +52,7 @@ export default function ContestCreationForm({
       deadline: formData.get("date") + "T00:00:00.000Z",
       termsAndConditions: urls,
       acceptedFileFormats: fileFormats,
-      background:
-        "https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg",
+      background: backgroundURL,
     };
 
     axios
@@ -103,10 +71,13 @@ export default function ContestCreationForm({
       formData.append("files", file);
     });
 
-    const urls = await uploadFiles();
+    const urls = await uploadMultipleFiles(files);
+    const backgroundURL = background
+      ? await uploadSingleFile(background)
+      : null;
 
     if (id) console.log(`Will modify contest of id: ${id}`);
-    else createPost(formData, urls);
+    else createContest(formData, urls, backgroundURL);
   };
 
   return (
@@ -124,6 +95,10 @@ export default function ContestCreationForm({
         <FileFormatsSelector
           fileFormats={fileFormats}
           setFileFormats={setFileFormats}
+        />
+        <BackgroundSelector
+          background={background}
+          setBackground={setBackground}
         />
       </div>
       <button type="submit" className={styles.button}>
