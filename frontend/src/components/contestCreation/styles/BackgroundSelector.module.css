@@ -1,0 +1,17 @@
+.button {
+  background-color: var(--primary-color);
+  color: black;
+  padding: 10px 50px;
+  border-radius: 10px;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.image {
+  height: 200px;
+  margin: 3rem 0;
+  max-width: 100%;
+  object-fit: cover;
+}
