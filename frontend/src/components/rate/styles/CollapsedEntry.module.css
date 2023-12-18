@@ -5,9 +5,6 @@
   border-radius: 20px;
   margin-bottom: 20px;
   overflow-x: hidden;
-}
-
-.top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,9 +12,4 @@
 
 .text {
   font-size: larger;
-}
-
-.file {
-  width: 20%;
-  min-width: 100px;
 }

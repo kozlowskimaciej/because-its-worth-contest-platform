@@ -18,3 +18,8 @@ export type Entry = {
   files: string[];
   contestID: string;
 };
+
+export type ExpandableEntry = {
+  entry: Entry;
+  isExpanded: boolean;
+};

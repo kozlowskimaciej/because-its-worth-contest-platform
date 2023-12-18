@@ -9,16 +9,21 @@ import styles from "./styles/Entry.module.css";
 
 interface IProps {
   entry: EntryType;
+  close: Function;
 }
 
-export default function Entry({ entry }: IProps) {
+export default function Entry({ entry, close }: IProps) {
   const getExtension = (file: string): string => {
     const splitted = file.split(".");
     return splitted[splitted.length - 1];
   };
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.text}>imie: {entry.author.firstName}</div>
+      <div className={styles.top}>
+        <div className={styles.text}>imie: {entry.author.firstName}</div>
+        <button onClick={() => close(entry.id)}>close</button>
+      </div>
       <div className={styles.text}>nazwisko: {entry.author.lastName}</div>
       {entry.author.phone && (
         <div className={styles.text}>numer telefonu: {entry.author.phone}</div>
