@@ -95,6 +95,9 @@ export default function EntryFormContent({ contest }: IProps) {
         background: contest.background
           ? `url(${contest.background})`
           : `var(--secondary-color)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
       onSubmit={handleSubmit}
     >
