@@ -7,13 +7,14 @@ import {
 } from "../../constants";
 import styles from "./styles/Entry.module.css";
 import { useRateContext } from "../../contexts/RateContext";
+import PlaceSelect from "./PlaceSelect";
 
 interface IProps {
   entry: EntryType;
 }
 
 export default function Entry({ entry }: IProps) {
-  const { handleCloseEntry, handleChangePlace } = useRateContext();
+  const { handleCloseEntry } = useRateContext();
 
   const getExtension = (file: string): string => {
     const splitted = file.split(".");
@@ -24,9 +25,7 @@ export default function Entry({ entry }: IProps) {
     <div className={styles.wrapper}>
       <div className={styles.top}>
         <div className={styles.text}>imie: {entry.author.firstName}</div>
-        <button onClick={() => handleChangePlace(entry.id, "wyroznienie")}>
-          change to wyroznienie
-        </button>
+        <PlaceSelect entry={entry} />
         <button onClick={() => handleCloseEntry(entry.id)}>close</button>
       </div>
       <div className={styles.text}>nazwisko: {entry.author.lastName}</div>
