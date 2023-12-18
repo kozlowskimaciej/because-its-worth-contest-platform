@@ -1,9 +1,9 @@
 .wrapper {
   width: calc(100% - 40px);
   background-color: var(--primary-color);
-  padding: 20px;
-  border-radius: 20px;
-  margin-bottom: 20px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  margin-bottom: 5px;
   overflow-x: hidden;
   display: flex;
   justify-content: space-between;
