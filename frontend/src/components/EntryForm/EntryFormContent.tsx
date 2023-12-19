@@ -24,19 +24,26 @@ export default function EntryFormContent({ contest }: IProps) {
     const urls = await uploadMultipleFiles(files);
     console.log("urls:", urls);
 
+    const guardian = formData.get("guardian") as string;
+    const [gurdianName, guardianLastname] = guardian.split(" ");
+
+    const isValidGuardian = gurdianName && guardianLastname;
+
     const payload = {
       firstName: formData.get("firstname"),
       lastName: formData.get("lastname"),
-      guardianFirstName: "Nie",
-      guardianLastName: "istnieje",
-      phone: "694202137",
-      email: "someemail@email.com",
-      address: formData.get("place"),
+      guardianFirstName: isValidGuardian ? gurdianName : null,
+      guardianLastName: isValidGuardian ? guardianLastname : null,
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      address: formData.get("place") || null,
       submissionDate: new Date(),
       attachments: urls,
       place: "none",
       contestId: contest.id,
     };
+
+    console.log(payload);
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/entries`, payload)
@@ -62,26 +69,32 @@ export default function EntryFormContent({ contest }: IProps) {
     >
       <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
       <div style={{ textAlign: "left" }}>
-        <SingleEntry
-          entryTitle="Imie"
-          name="firstname"
-          required
-          type="text"
-          placeholder="Podaj imię..."
-        />
+        <SingleEntry entryTitle="Imie" name="firstname" required type="text" />
         <SingleEntry
           entryTitle="Nazwisko"
           name="lastname"
           required
           type="text"
-          placeholder="Podaj nazwisko..."
         />
         <SingleEntry
-          entryTitle="Placówka"
+          entryTitle="Placówka  (opcjonalne)"
           name="place"
-          required
           type="text"
-          placeholder="Podaj placówkę..."
+        />
+        <SingleEntry
+          entryTitle="Opiekun  (opcjonalne)"
+          name="guardian"
+          type="text"
+        />
+        <SingleEntry
+          entryTitle="Nr telefonu  (opcjonalne)"
+          name="phone"
+          type="text"
+        />
+        <SingleEntry
+          entryTitle="Adres email (opcjonalne)"
+          name="email"
+          type="email"
         />
         <EntryFiles acceptedFormats={contest.acceptedFileFormats} />
         <CategorySelector categories={contest.entryCategories} />

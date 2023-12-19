@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, List
 
 from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
@@ -15,13 +15,13 @@ router = APIRouter(
 class Entry(BaseModel):
     firstName: str
     lastName: str
-    guardianFirstName: str
-    guardianLastName: str
-    phone: str
-    email: str
-    address: str
+    guardianFirstName: Optional[str]
+    guardianLastName: Optional[str]
+    phone: Optional[str]
+    email: Optional[str]
+    address: Optional[str]
     submissionDate: str
-    attachments: list[AnyHttpUrl]
+    attachments: List[AnyHttpUrl]
     place: str
     contestId: str
 

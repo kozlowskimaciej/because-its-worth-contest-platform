@@ -33,7 +33,7 @@ export default function Entry({ entry }: IProps) {
     } as any;
 
     for (const key in entry.author) {
-      if (entry.author.hasOwnProperty(key)) {
+      if (entry.author.hasOwnProperty(key) && (entry.author as any)[key]) {
         authorFields.push(
           <div className={styles.text} key={key}>
             <span className={styles.field}>{fieldsToNames[key]}: </span>
@@ -45,6 +45,8 @@ export default function Entry({ entry }: IProps) {
 
     return authorFields;
   };
+
+  console.log(entry);
 
   return (
     <div className={styles.wrapper}>
@@ -59,7 +61,7 @@ export default function Entry({ entry }: IProps) {
         </button>
       </div>
       {renderAuthorFields()}
-      {entry.guardian && (
+      {entry.guardian?.firstName && (
         <div className={styles.text}>
           <span className={styles.field}>opiekun: </span>
           {entry.guardian.firstName} {entry.guardian.lastName}
