@@ -49,4 +49,5 @@
   padding: 10px;
   border-radius: 20px;
   width: calc(100% - 20px);
+  white-space: pre-wrap;
 }
