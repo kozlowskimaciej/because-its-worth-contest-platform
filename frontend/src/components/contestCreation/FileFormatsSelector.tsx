@@ -5,19 +5,20 @@ import {
   AVAILABLE_VIDEOS_FORMATS,
   AVAILABLE_OTHER_FORMATS,
 } from "../../constants";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 
-interface IProps {
-  fileFormats: string[];
-  setFileFormats: React.Dispatch<React.SetStateAction<string[]>>;
-}
+export default function FileFormatsSelector() {
+  const { fileFormats, setFileFormats } = useContestCreationFormContext();
 
-export default function FileFormatsSelector({
-  fileFormats,
-  setFileFormats,
-}: IProps) {
   const allFilesFormats = AVAILABLE_IMAGE_FORMATS.concat(
     AVAILABLE_VIDEOS_FORMATS
   ).concat(AVAILABLE_OTHER_FORMATS);
+
+  const handleCheckBoxChange = (type: string) => {
+    if (fileFormats.includes(type))
+      setFileFormats((prev) => prev.filter((part) => part !== type));
+    else setFileFormats((prev) => [...prev, type]);
+  };
 
   return (
     <div style={{ marginBottom: "20px" }}>
@@ -29,13 +30,7 @@ export default function FileFormatsSelector({
             <input
               type="checkbox"
               defaultChecked={fileFormats.includes(type)}
-              onChange={() => {
-                fileFormats.includes(type)
-                  ? setFileFormats((prev) =>
-                      prev.filter((part) => part !== type)
-                    )
-                  : setFileFormats((prev) => [...prev, type]);
-              }}
+              onChange={() => handleCheckBoxChange(type)}
             />
             {type}
           </label>

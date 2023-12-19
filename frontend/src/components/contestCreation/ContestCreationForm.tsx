@@ -11,33 +11,18 @@ import FileFormatsSelector from "./FileFormatsSelector";
 import axios from "axios";
 import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 
 interface IProps {
-  initialValues: {
-    title: string;
-    description: string;
-    deadline: Date;
-    contestCategory: string;
-    entryCategories: string[];
-    formats: string[];
-  };
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function ContestCreationForm({
-  initialValues,
-  setCreatedContestID,
-}: IProps) {
-  const [files, setFiles] = useState<File[]>([]);
-  const [background, setBackground] = useState<File | null>(null);
-  const [participants, setParticipants] = useState<string[]>(
-    initialValues.entryCategories
-  );
-  const [fileFormats, setFileFormats] = useState<string[]>(
-    initialValues.formats
-  );
+export default function ContestCreationForm({ setCreatedContestID }: IProps) {
+  const { initialValues, participants, fileFormats, files, background } =
+    useContestCreationFormContext();
   const { id } = useParams();
 
+  // put this to custom hook - useCreateContest / useModifyContest
   const createContest = (
     formData: FormData,
     urls: string[],
@@ -86,20 +71,11 @@ export default function ContestCreationForm({
         <TitleInput initial={initialValues.title} />
         <DescriptionInput initial={initialValues.description} />
         <DeadlineInput initial={initialValues.deadline} />
-        <ContestFilesInput files={files} setFiles={setFiles} />
+        <ContestFilesInput />
         <ContestCategorySelector initial={initialValues.contestCategory} />
-        <ParticipantsCategory
-          participants={participants}
-          setParticipants={setParticipants}
-        />
-        <FileFormatsSelector
-          fileFormats={fileFormats}
-          setFileFormats={setFileFormats}
-        />
-        <BackgroundSelector
-          background={background}
-          setBackground={setBackground}
-        />
+        <ParticipantsCategory />
+        <FileFormatsSelector />
+        <BackgroundSelector />
       </div>
       <button type="submit" className={styles.button}>
         {id ? "Zapisz zmiany" : "Utwórz"}

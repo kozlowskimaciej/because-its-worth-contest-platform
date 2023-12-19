@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ContestCreationForm from "../components/contestCreation/ContestCreationForm";
 import Navbar from "../components/common/Navbar";
 import ContestCreatedInfo from "../components/contestCreation/ContestCreatedInfo";
+import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
 
 export default function ContestCreation() {
   const [createdContestID, setCreatedContestID] = useState<string | null>(null);
@@ -23,10 +24,9 @@ export default function ContestCreation() {
     <>
       <Navbar />
       <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
-        <ContestCreationForm
-          initialValues={emptyContest}
-          setCreatedContestID={setCreatedContestID}
-        />
+        <ContestCreationFormContextProvider initialValues={emptyContest}>
+          <ContestCreationForm setCreatedContestID={setCreatedContestID} />
+        </ContestCreationFormContextProvider>
       </div>
     </>
   );

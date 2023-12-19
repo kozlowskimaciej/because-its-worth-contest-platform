@@ -6,6 +6,7 @@ import { prepareSingleContest } from "../utils/prepareContests";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
+import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
 
 export default function ContestModification() {
   const { id } = useParams();
@@ -45,7 +46,9 @@ export default function ContestModification() {
     <>
       <Navbar />
       <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
-        <ContestCreationForm initialValues={contest} />
+        <ContestCreationFormContextProvider initialValues={contest}>
+          <ContestCreationForm />
+        </ContestCreationFormContextProvider>
       </div>
     </>
   );
