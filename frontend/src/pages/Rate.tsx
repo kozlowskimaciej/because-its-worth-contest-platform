@@ -27,7 +27,7 @@ export default function Rate() {
     return (
       <>
         <Navbar />
-        <NotFoundInfo text="Podany konkurs nie istnieje." />
+        <NotFoundInfo text="Podany konkurs nie istnieje lub nie zostały zgłoszone żadne prace." />
       </>
     );
 
