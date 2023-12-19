@@ -6,6 +6,7 @@ import EntryFormContent from "../components/EntryForm/EntryFormContent";
 import Loading from "../components/common/Loading";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import PrintButton from "../components/EntryForm/PrintButton";
+import EntryFormContextProvider from "../contexts/EntryFormContext";
 
 export default function EntryForm() {
   const { id } = useParams();
@@ -35,9 +36,11 @@ export default function EntryForm() {
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <EntryFormContent contest={contest} />
-      <PrintButton element={document.getElementById("entry-form")!} />
-    </div>
+    <EntryFormContextProvider>
+      <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <EntryFormContent contest={contest} />
+        <PrintButton />
+      </div>
+    </EntryFormContextProvider>
   );
 }

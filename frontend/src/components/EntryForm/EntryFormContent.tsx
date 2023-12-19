@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { CSSProperties } from "react";
 import { Contest } from "../../models/Contest";
 import axios from "axios";
 import styles from "./styles/EntryFormContent.module.css";
 import EntryFiles from "./EntryFiles";
 import { uploadMultipleFiles } from "../../utils/uploadFiles";
+import SingleEntry from "./SingleEntry";
+import { useEntryFormContext } from "../../contexts/EntryFormContext";
+import CategorySelector from "./CategorySelector";
 
 interface IProps {
   contest: Contest;
 }
 
 export default function EntryFormContent({ contest }: IProps) {
-  const [files, setFiles] = useState<File[]>([]);
+  const { files, entryFormRef, submitButtonRef } = useEntryFormContext();
 
+  // some hook for this
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -40,51 +44,49 @@ export default function EntryFormContent({ contest }: IProps) {
       .catch((err) => console.error(err));
   };
 
+  const formStyles: CSSProperties = {
+    background: contest.background
+      ? `url(${contest.background})`
+      : `var(--secondary-color)`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  };
+
   return (
     <form
-      id="entry-form"
       className={styles.form}
-      style={{
-        background: contest.background
-          ? `url(${contest.background})`
-          : `var(--secondary-color)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      style={formStyles}
       onSubmit={handleSubmit}
+      ref={entryFormRef}
     >
       <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
       <div style={{ textAlign: "left" }}>
-        <div className={styles.entry}>
-          <label htmlFor="entry-firstname">Imie</label>
-          <input type="text" id="entry-firstname" name="firstname" required />
-        </div>
-        <div className={styles.entry}>
-          <label htmlFor="entry-lastname">Nazwisko</label>
-          <input type="text" id="entry-lastname" name="lastname" required />
-        </div>
-        <div className={styles.entry}>
-          <label htmlFor="entry-place">Placówka</label>
-          <input type="text" id="entry-place" name="place" />
-        </div>
-        <EntryFiles
-          acceptedFormats={contest.acceptedFileFormats}
-          files={files}
-          setFiles={setFiles}
+        <SingleEntry
+          entryTitle="Imie"
+          name="firstname"
+          required
+          type="text"
+          placeholder="Podaj imię..."
         />
-        <div style={{ marginTop: "50px" }}>
-          <label>Wybierz swoją kategorię</label>
-          <br />
-          {contest.entryCategories.map((category, index) => (
-            <React.Fragment key={index}>
-              <input type="radio" value={category} name="type" /> {category}
-              <br />
-            </React.Fragment>
-          ))}
-        </div>
+        <SingleEntry
+          entryTitle="Nazwisko"
+          name="lastname"
+          required
+          type="text"
+          placeholder="Podaj nazwisko..."
+        />
+        <SingleEntry
+          entryTitle="Placówka"
+          name="place"
+          required
+          type="text"
+          placeholder="Podaj placówkę..."
+        />
+        <EntryFiles acceptedFormats={contest.acceptedFileFormats} />
+        <CategorySelector categories={contest.entryCategories} />
       </div>
-      <button className={styles.submit} type="submit" id="entry-form-submit">
+      <button className={styles.submit} type="submit" ref={submitButtonRef}>
         Wyślij
       </button>
     </form>
