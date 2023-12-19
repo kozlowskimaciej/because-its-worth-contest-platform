@@ -72,3 +72,17 @@ async def upload_file(file: UploadFile = File(...)):
         f.write(file.file.read())
 
     return {"filename": generated_filename, "size": file.size}
+
+
+@router.delete('/{filename}')
+async def delete_file(filename: str):
+    filepath = f"{STATIC_FOLDER_NAME}/{filename}"
+
+    if os.path.exists(filepath):
+        os.remove(filepath)
+        return {"message": "File deleted successfully"}
+    else:
+        raise HTTPException(
+            status_code=404,
+            detail=f"File {filepath} not found"
+        )
