@@ -13,6 +13,10 @@
   border-radius: 20px;
 }
 
+.label:hover {
+  cursor: pointer;
+}
+
 .button {
   all: unset;
   background-color: var(--accent-color);

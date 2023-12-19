@@ -1,18 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles/PublishForm.module.css";
 import { useNavigate } from "react-router-dom";
+import FileInput from "./FileInput";
+import FilesDisplayer from "./FilesDisplayer";
+import { usePublishContext } from "../../contexts/PublishContext";
 
 export default function PublishForm() {
+  const { files } = usePublishContext();
   const navigate = useNavigate();
-  const [files, setFiles] = useState<File[]>([]);
-
-  const handleNewFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles((prev) => [...prev, ...e.target.files!]);
-  };
-
-  const handleRemove = (index: number) => {
-    setFiles((prev) => prev.filter((_, id) => id !== index));
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,32 +27,8 @@ export default function PublishForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <label htmlFor="publish-files" className={styles.label}>
-        Wybierz pliki
-      </label>
-      <input
-        type="file"
-        multiple
-        style={{ display: "none" }}
-        id="publish-files"
-        accept=".txt"
-        onChange={handleNewFiles}
-      />
-      <ul>
-        {files.map((file, index) => (
-          <li key={index}>
-            <span>{file.name}</span>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleRemove(index);
-              }}
-            >
-              x
-            </button>
-          </li>
-        ))}
-      </ul>
+      <FileInput />
+      <FilesDisplayer />
       <div style={{ width: "100%", textAlign: "center" }}>
         <button type="submit" className={styles.button}>
           Wyślij
