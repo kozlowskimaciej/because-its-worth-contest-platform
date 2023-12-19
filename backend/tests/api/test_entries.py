@@ -1,4 +1,5 @@
 from datetime import datetime
+from test_static_files import TEST_IMAGES_PATH
 import pytest
 
 contest_id = "657da8091c043e6cb099e3a8"
@@ -16,8 +17,7 @@ def entry():
         "address": "jiosajd, 9023",
         "submissionDate": datetime.now().isoformat(),
         "attachments": [
-            "https://foo.bar/static/entry-picture1.jpg",
-            "https://foo.bar/static/entry-picture2.jpg"
+            "https://localhost:8000/static/delete_file.png",
         ],
         "place": "Warsaw",
         "contestId": contest_id
@@ -61,14 +61,29 @@ def test_create_entry(client, entry):
 
 
 def test_delete_entry(client, entry):
+    file_path = TEST_IMAGES_PATH / 'delete_file.png'
+    with open(file_path, 'rb') as file:
+        files = {'file': ('delete_file.png', file, 'image/png')}
+        upload_response = client.post('/uploads/', files=files)
+
+    assert upload_response.status_code == 200
+    uploaded_filename = upload_response.json()["filename"]
+    entry["attachments"] = [
+        f"https://localhost:8000/static/{uploaded_filename}"
+    ]
+
     response = client.post("/entries/", json=entry)
     assert response.status_code == 200
     post_resp = response.json()
 
     assert 'id' in post_resp
     entry_id = post_resp['id']
-    response = client.delete(f'/entries?entryId={entry_id}')
+
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
     assert response.status_code == 200
+
+    del_response = client.delete(f'/entries/{entry_id}')
+    assert del_response.status_code == 200
 
     response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
     assert response.status_code == 404
