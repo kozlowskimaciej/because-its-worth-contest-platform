@@ -119,3 +119,17 @@ API response prototype for fetching competition entries
   ]
 }
 ```
+
+### Publishing contest
+
+```plaintext
+http://localhost:8000/contests/657ef4a4c4d16a709a994e1f/publish
+```
+
+Api request prototype for publishing contest
+
+```json
+{
+  "form_url": "https://foo.bar/forms/657ed098a5ba96cfdd2b3d42",
+}
+```

@@ -8,10 +8,7 @@ from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
 
-router = APIRouter(
-    prefix='/contests',
-    tags=['Contests']
-)
+router = APIRouter(prefix="/contests", tags=["Contests"])
 
 
 class Contest(BaseModel):
@@ -26,22 +23,18 @@ class Contest(BaseModel):
     background: AnyHttpUrl
 
 
-@router.post('/')
-async def post_contest(
-    data: Contest,
-    request: Request
-):
+@router.post("/")
+async def post_contest(data: Contest, request: Request):
     db = request.app.database
 
-    entry_dict = data.model_dump(mode='json')
+    entry_dict = data.model_dump(mode="json")
     inserted_id = (await db.contests.insert_one(entry_dict)).inserted_id
 
-    return {'id': str(inserted_id)}
+    return {"id": str(inserted_id)}
 
 
 @router.get(
-    '/',
-    responses={404: {'description': 'Contest with given id not found'}}
+    "/", responses={404: {"description": "Contest with given id not found"}}
 )
 async def get_contests(
     request: Request,
@@ -52,9 +45,21 @@ async def get_contests(
     if id is None:
         data = await db.contests.find().to_list(length=None)
     else:
-        data = await db.contests.find_one({'_id': ObjectId(id)})
+        data = await db.contests.find_one({"_id": ObjectId(id)})
 
     if not data and id:
         raise HTTPException(status_code=404, detail=f"{id=} not found")
 
-    return {'data': json.loads(json_util.dumps(data))}
+    return {"data": json.loads(json_util.dumps(data))}
+
+
+class Publication(BaseModel):
+    form_url: AnyHttpUrl
+
+
+@router.post("/{id}/publish")
+async def publish_contest(request: Request, id: str = None):
+    db = request.app.database
+    await db.contests.update_one(
+        {"_id": ObjectId(id)}, {"$set": {"published": True}}
+    )
