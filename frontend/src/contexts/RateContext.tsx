@@ -60,7 +60,7 @@ export const RateContextProvider = ({
         if (expEntry.entry.id !== id) return expEntry;
 
         return {
-          isExpanded: expEntry.isExpanded,
+          isExpanded: false,
           entry: { ...expEntry.entry, place: newPlace } as Entry,
         };
       });
