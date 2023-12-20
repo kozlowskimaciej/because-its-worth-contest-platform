@@ -52,10 +52,12 @@ def test_post_contest(client):
     assert get_all_resp["data"][0] == resp_data
 
 
-def test_publish_contest(client):
+def test_publish_contest(client, mock_smtp):
     response = client.post("/contests/", json=contest)
     assert response.status_code == 200
     contest_id = response.json()["id"]
+
+    assert len(mock_smtp) == 0
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
@@ -64,6 +66,8 @@ def test_publish_contest(client):
     publishing = {"form_url": "xdxd.pl"}
     response = client.post(f"/contests/{contest_id}/publish", json=publishing)
     assert response.status_code == 200
+
+    assert len(mock_smtp) == 1
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200

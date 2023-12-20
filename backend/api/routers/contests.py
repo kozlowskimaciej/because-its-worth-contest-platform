@@ -6,6 +6,7 @@ from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
+from backend.emails.email_sending import send_email
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -59,6 +60,8 @@ class Publication(BaseModel):
 
 @router.post("/{id}/publish")
 async def publish_contest(request: Request, id: str = None):
+    send_email("maciej@kozlo.pb.bi.bmw", "Subject", "Body")
+
     db = request.app.database
     await db.contests.update_one(
         {"_id": ObjectId(id)}, {"$set": {"published": True}}
