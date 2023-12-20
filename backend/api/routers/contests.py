@@ -7,7 +7,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 from backend.emails.email_sending import send_email
-from backend.api.routers.static_files import STATIC_FOLDER_NAME
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -63,8 +62,8 @@ class Publication(BaseModel):
 @router.post("/{id}/publish")
 async def publish_contest(request: Request, data: Publication, id: str = None):
     with open(data.receivers, "r") as file:
-        for line in file:
-            send_email(line, "Subject", "Body")
+        receivers = [line.rstrip() for line in file]
+        send_email(receivers, "Subject", "Body")
 
     db = request.app.database
     await db.contests.update_one(

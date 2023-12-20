@@ -66,9 +66,8 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
     assert not response.json()["data"]["published"]
 
     file_path = TEST_IMAGES_PATH / "emails.txt"
-
     with open(file_path, "rb") as file:
-        files = {"file": ("valid_file.jpg", file, "image/jpeg")}
+        files = {"file": ("emails.txt", file, "image/jpeg")}
         response = client.post("/uploads/", files=files)
         file_name = response.json()["filename"]
 
@@ -76,10 +75,8 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
     response = client.post(f"/contests/{contest_id}/publish", json=publishing)
     assert response.status_code == 200
 
-    assert [m.get_all("To")[0] for m in mock_smtp] == [
-        "maciej@bmw.pb.bi",
-        "kolega@macieja.uwb.bi",
-    ]
+    assert len(mock_smtp) == 1
+    assert mock_smtp[0]["To"] == "maciej@bmw.pb.bi, kolega@macieja.uwb.bi"
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
