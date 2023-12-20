@@ -1,10 +1,12 @@
 import json
 from typing import Optional
-
 from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import AnyHttpUrl, BaseModel
 from starlette.requests import Request
+from urllib.parse import urlparse
+from .static_files import delete_file
+import os
 
 router = APIRouter(
     prefix='/entries',
@@ -65,3 +67,34 @@ async def create_entry(entry: Entry, request: Request):
     entry_dict = entry.model_dump(mode='json')
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
     return {'id': str(inserted_id)}
+
+
+@router.delete('/{entryId}')
+async def delete_entry(
+    request: Request,
+    entryId: str
+):
+    db = request.app.database
+
+    entry = await db.entries.find_one({'_id': ObjectId(entryId)})
+    if not entry:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Entry {entryId} not found")
+
+    _ = await db.entries.delete_one({'_id': ObjectId(entryId)})
+
+    if not _:
+        raise HTTPException(
+            status_code=404,
+            detail="Something is wrong")
+
+    attachments = entry.get("attachments", [])
+    if attachments:
+        for attachment_url in attachments:
+            attachment_filename = os.path.basename(
+                urlparse(attachment_url).path
+            )
+            await delete_file(attachment_filename)
+
+    return {'id': entryId}

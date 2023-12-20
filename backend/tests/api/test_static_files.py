@@ -43,3 +43,22 @@ def test_upload_invalid_file_format(client):
 
     assert response.status_code == 400
     assert 'Invalid file format' in response.json()['detail']
+
+
+def test_delete_file(client):
+    file_path = TEST_IMAGES_PATH / 'delete_file.png'
+    with open(file_path, 'rb') as file:
+        files = {'file': ('delete_file.png', file, 'image/png')}
+        upload_response = client.post('/uploads/', files=files)
+
+    assert upload_response.status_code == 200
+
+    uploaded_file = upload_response.json()
+    assert 'filename' in uploaded_file
+
+    delete_response = client.delete(f'/uploads/{uploaded_file["filename"]}')
+    assert delete_response.status_code == 200
+    assert delete_response.json() == {"message": "File deleted successfully"}
+
+    access_response = client.get(f'/static/{uploaded_file["filename"]}')
+    assert access_response.status_code == 404
