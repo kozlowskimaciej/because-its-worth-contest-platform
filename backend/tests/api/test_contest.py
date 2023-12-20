@@ -1,4 +1,6 @@
 from datetime import datetime
+from backend.tests.api.test_static_files import TEST_IMAGES_PATH
+from email.message import EmailMessage
 
 
 contest = {
@@ -52,7 +54,7 @@ def test_post_contest(client):
     assert get_all_resp["data"][0] == resp_data
 
 
-def test_publish_contest(client, mock_smtp):
+def test_publish_contest(client, mock_smtp: list[EmailMessage]):
     response = client.post("/contests/", json=contest)
     assert response.status_code == 200
     contest_id = response.json()["id"]
@@ -63,11 +65,21 @@ def test_publish_contest(client, mock_smtp):
     assert response.status_code == 200
     assert not response.json()["data"]["published"]
 
-    publishing = {"form_url": "xdxd.pl"}
+    file_path = TEST_IMAGES_PATH / "emails.txt"
+
+    with open(file_path, "rb") as file:
+        files = {"file": ("valid_file.jpg", file, "image/jpeg")}
+        response = client.post("/uploads/", files=files)
+        file_name = response.json()["filename"]
+
+    publishing = {"receivers": file_name, "form_url": "xdxd.pl"}
     response = client.post(f"/contests/{contest_id}/publish", json=publishing)
     assert response.status_code == 200
 
-    assert len(mock_smtp) == 1
+    assert [m.get_all("To")[0] for m in mock_smtp] == [
+        "maciej@bmw.pb.bi",
+        "kolega@macieja.uwb.bi",
+    ]
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
