@@ -12,7 +12,6 @@ from backend.api.routers import (
     static_files,
     contests,
     entries,
-    evaluation,
 )
 
 
@@ -32,7 +31,6 @@ def create_app():
     app.include_router(static_files.router)
     app.include_router(contests.router)
     app.include_router(entries.router)
-    app.include_router(evaluation.router)
 
     # static files are available under /static_files path
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
