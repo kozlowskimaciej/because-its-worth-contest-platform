@@ -41,7 +41,9 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
     };
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body)
+      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body, {
+        withCredentials: true,
+      })
       .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));
   };

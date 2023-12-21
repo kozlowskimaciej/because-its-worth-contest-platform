@@ -3,9 +3,10 @@ from datetime import datetime
 from typing import Optional
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
+from backend.api.routers.auth import get_current_user
 
 
 router = APIRouter(
@@ -29,7 +30,8 @@ class Contest(BaseModel):
 @router.post('/')
 async def post_contest(
     data: Contest,
-    request: Request
+    request: Request,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 
@@ -45,7 +47,7 @@ async def post_contest(
 )
 async def get_contests(
     request: Request,
-    id: Optional[str] = None,
+    id: Optional[str] = None
 ):
     db = request.app.database
 

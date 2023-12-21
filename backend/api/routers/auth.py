@@ -24,7 +24,7 @@ ALGORITHM = "HS256"
 
 def create_jwt_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=6)
+    expire = datetime.utcnow() + timedelta(seconds=6)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt

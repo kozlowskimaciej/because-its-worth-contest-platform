@@ -123,7 +123,6 @@ function App() {
       path: "/forms/:id/",
       component: EntryForm,
     },
-
     {
       path: "*",
       component: NotFound,
