@@ -8,6 +8,7 @@ import {
 import styles from "./styles/Entry.module.css";
 import { useRateContext } from "../../contexts/RateContext";
 import PlaceSelect from "./PlaceSelect";
+import DeleteEntryButton from "./DeleteEntryButton";
 
 interface IProps {
   entry: EntryType;
@@ -46,8 +47,6 @@ export default function Entry({ entry }: IProps) {
     return authorFields;
   };
 
-  console.log(entry);
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.controls}>
@@ -59,6 +58,7 @@ export default function Entry({ entry }: IProps) {
         >
           <img src={`${process.env.PUBLIC_URL}/icons/arrow.svg`} />
         </button>
+        <DeleteEntryButton entry={entry} />
       </div>
       {renderAuthorFields()}
       {entry.guardian?.firstName && (

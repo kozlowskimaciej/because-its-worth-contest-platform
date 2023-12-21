@@ -12,7 +12,10 @@ export default function Rate() {
   const { id } = useParams();
 
   const { data, error, isLoading } = useFetch(
-    `${process.env.REACT_APP_SERVER_URL}/entries/${id}`
+    `${process.env.REACT_APP_SERVER_URL}/entries/${id}`,
+    {
+      withCredentials: true,
+    }
   );
 
   if (isLoading)

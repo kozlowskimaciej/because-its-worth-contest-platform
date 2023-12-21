@@ -2,12 +2,13 @@ import json
 from typing import Optional, List
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import AnyHttpUrl, BaseModel
 from starlette.requests import Request
 from urllib.parse import urlparse
 from .static_files import delete_file
 import os
+from backend.api.routers.auth import get_current_user
 
 router = APIRouter(
     prefix='/entries',
@@ -33,7 +34,8 @@ class Entry(BaseModel):
 async def get_entries(
     request: Request,
     contestId: str,
-    entryId: Optional[str] = None
+    entryId: Optional[str] = None,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
     if entryId:
@@ -73,7 +75,8 @@ async def create_entry(entry: Entry, request: Request):
 @router.delete('/{entryId}')
 async def delete_entry(
     request: Request,
-    entryId: str
+    entryId: str,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 

@@ -3,6 +3,7 @@ import { Entry } from "../../models/Entry";
 import styles from "./styles/CollapsedEntry.module.css";
 import { useRateContext } from "../../contexts/RateContext";
 import PlaceSelect from "./PlaceSelect";
+import DeleteEntryButton from "./DeleteEntryButton";
 
 interface IProps {
   entry: Entry;
@@ -25,6 +26,7 @@ export default function CollapsedEntry({ entry }: IProps) {
         >
           <img src={`${process.env.PUBLIC_URL}/icons/arrow.svg`} alt="" />
         </button>
+        <DeleteEntryButton entry={entry} />
       </div>
     </div>
   );

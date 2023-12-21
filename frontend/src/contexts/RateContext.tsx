@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { Entry, ExpandableEntry } from "../models/Entry";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 interface RateContextProps {
   children: React.ReactNode;
@@ -11,6 +13,7 @@ interface RateContextValue {
   handleOpenEntry: Function;
   handleCloseEntry: Function;
   handleChangePlace: Function;
+  handleDeleteEntry: Function;
 }
 
 const RateContext = createContext<RateContextValue>({} as RateContextValue);
@@ -67,6 +70,20 @@ export const RateContextProvider = ({
     });
   };
 
+  const handleDeleteEntry = (entryID: string) => {
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/entries/${entryID}`, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        if (data.status !== 200) return;
+
+        setExpandableEntries((prev) =>
+          prev.filter((expEntry) => expEntry.entry.id !== entryID)
+        );
+      });
+  };
+
   return (
     <RateContext.Provider
       value={{
@@ -74,6 +91,7 @@ export const RateContextProvider = ({
         handleOpenEntry,
         handleCloseEntry,
         handleChangePlace,
+        handleDeleteEntry,
       }}
     >
       {children}
