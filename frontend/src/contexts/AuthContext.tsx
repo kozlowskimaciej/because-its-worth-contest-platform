@@ -44,7 +44,7 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
 
     refreshToken();
 
-    refreshTokenIntervalRef.current = setInterval(refreshToken, 3 * 1 * 1000);
+    refreshTokenIntervalRef.current = setInterval(refreshToken, 3 * 60 * 1000);
 
     return () => {
       if (refreshTokenIntervalRef.current !== null) {
