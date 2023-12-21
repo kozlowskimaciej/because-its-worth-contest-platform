@@ -56,7 +56,10 @@ def test_create_entry(client, entry):
     assert resp_data['place'] == entry['place']
     assert resp_data['contestId'] == contest_id
 
-    response = client.get(f"/entries/{contest_id}")
+    response = client.get(
+        f"/entries/{contest_id}",
+        cookies={"token": token}
+    )
     assert response.status_code == 200
     assert "data" in response.json()
     entries_data = response.json()["data"]
