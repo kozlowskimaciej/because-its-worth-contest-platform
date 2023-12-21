@@ -114,7 +114,7 @@ def test_evaluation(client):
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "Warsaw"
 
-    evaluation = [{"value": "laureat"}]
+    evaluation = {"value": "laureat"}
     response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation)
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}

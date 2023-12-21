@@ -58,21 +58,25 @@ async def get_entries(
         return {"data": json.loads(json_util.dumps(entries))}
 
 
+class Evaluation(BaseModel):
+    value: str
+
+
 @router.post("/{entry_id}/evaluation")
-async def evaluation(request: Request, entry_id: str):
+async def evaluation(request: Request, entry_id: str, evaluation: Evaluation):
     db: AsyncIOMotorDatabase = request.app.database
-    evaluations = await request.json()
+    evaluation_dict = evaluation.model_dump(mode="json")
 
-    modified_count = 0
-    for e in evaluations:
-        result = await db.entries.update_one(
-            {"_id": ObjectId(entry_id)}, {"$set": {"place": e["value"]}}
-        )
-        modified_count += result.modified_count
+    result = await db.entries.update_one(
+        {"_id": ObjectId(entry_id)},
+        {"$set": {"place": evaluation_dict["value"]}},
+    )
+    modified_count = result.modified_count
 
-    if len(evaluations) != modified_count:
+    if modified_count != 1:
         raise HTTPException(
-            status_code=500, detail=f"Updated {modified_count} entries only"
+            status_code=500,
+            detail=f"Invalid number of updated entries: {modified_count}",
         )
     return {"modifiedCount": modified_count}
 

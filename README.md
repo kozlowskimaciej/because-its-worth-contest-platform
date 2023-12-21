@@ -140,15 +140,12 @@ Api request prototype for publishing contest
 ```
 
 ### Api request for evaluating contestants
+```plaintext
+http://localhost:8000/entries/657e2152d9a591885cd7a033/evaluation
+```
+
 ```json
 {
-  "data": [{
-    "value": "laureat",
-    "entryId": "65773e12ab916aacd90d2cf5"
-  },
-  {
-    "value": "wyróżnienie",
-    "entryId": "1f7c3713cb9c68b7d98d2c63"
-  }]
+  "value": "laureat",
 }
 ```
