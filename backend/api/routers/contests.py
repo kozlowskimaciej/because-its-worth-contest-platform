@@ -6,7 +6,7 @@ from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
-from backend.emails.email_sending import send_email
+from backend.emails import email_sending
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -55,17 +55,32 @@ async def get_contests(
 
 
 class Publication(BaseModel):
-    receivers: str
+    receiver_files: list[str]
     form_url: str
 
 
-@router.post("/{id}/publish")
-async def publish_contest(request: Request, data: Publication, id: str = None):
-    with open(data.receivers, "r") as file:
-        receivers = [line.rstrip() for line in file]
-        send_email(receivers, "Subject", "Body")
+def get_all_receivers(receiver_files: list[str]):
+    receivers = []
+    for file_name in receiver_files:
+        with open(file_name, "r") as file:
+            receivers.extend([line.rstrip() for line in file])
+    return receivers
 
-    db = request.app.database
+
+def send_emails(data: Publication):
+    receivers = get_all_receivers(data.receiver_files)
+    email_body = f"{data.form_url}"
+    email_sending.send_email(receivers, "Subject", email_body)
+
+
+async def update_contest(db, id):
     await db.contests.update_one(
         {"_id": ObjectId(id)}, {"$set": {"published": True}}
     )
+
+
+@router.post("/{id}/publish")
+async def publish_contest(request: Request, data: Publication, id: str):
+    send_emails(data)
+    db = request.app.database
+    await update_contest(db, id)

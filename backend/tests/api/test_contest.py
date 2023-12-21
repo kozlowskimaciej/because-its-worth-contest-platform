@@ -71,12 +71,18 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
         response = client.post("/uploads/", files=files)
         file_name = response.json()["filename"]
 
-    publishing = {"receivers": file_name, "form_url": "xdxd.pl"}
+    publishing = {
+        "receiver_files": [file_name, file_name],
+        "form_url": "link_to_form",
+    }
     response = client.post(f"/contests/{contest_id}/publish", json=publishing)
     assert response.status_code == 200
 
     assert len(mock_smtp) == 1
-    assert mock_smtp[0]["To"] == "maciej@bmw.pb.bi, kolega@macieja.uwb.bi"
+    assert mock_smtp[0]["To"] == ", ".join(
+        ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"] * 2
+    )
+    assert mock_smtp[0].get_content().rstrip() == "link_to_form"
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200

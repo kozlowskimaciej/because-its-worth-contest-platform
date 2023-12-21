@@ -130,6 +130,11 @@ Api request prototype for publishing contest
 
 ```json
 {
+  "receiver_files": [
+    "emails.txt",
+    "receivers.txt",
+    "contestants.txt"
+  ],
   "form_url": "https://foo.bar/forms/657ed098a5ba96cfdd2b3d42",
 }
 ```
