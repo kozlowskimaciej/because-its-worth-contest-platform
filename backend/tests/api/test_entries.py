@@ -99,7 +99,7 @@ def test_delete_entry(client, entry):
     assert del_response.status_code == 200
 
     response = client.get(
-        "/entries/{contest_id}?entryId={entry_id}",
+        f"/entries/{contest_id}?entryId={entry_id}",
         cookies={"token": token}
     )
     assert response.status_code == 404
