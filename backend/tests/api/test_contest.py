@@ -1,7 +1,10 @@
 from datetime import datetime
+from backend.api.routers.auth import create_jwt_token
 
 
 def test_post_contest(client):
+    token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+
     contest = {
         'name': 'Test Contest',
         'description': 'This is a test contest.',
@@ -17,7 +20,11 @@ def test_post_contest(client):
         'background': 'https://foo.bar/static/contest-background.jpg',
     }
 
-    response = client.post('/contests/', json=contest)
+    response = client.post(
+        '/contests/',
+        json=contest,
+        cookies={"token": token}
+    )
     assert response.status_code == 200
 
     post_resp = response.json()
