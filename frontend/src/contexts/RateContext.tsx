@@ -25,7 +25,6 @@ export const RateContextProvider = ({
   children,
   entries,
 }: RateContextProps) => {
-  const toastRef = useRef<Id | null>(null);
   const [expandableEntries, setExpandableEntries] = useState<ExpandableEntry[]>(
     entries.map((entry) => ({
       entry,
@@ -73,7 +72,7 @@ export const RateContextProvider = ({
   };
 
   const handleDeleteEntry = (entryID: string) => {
-    toastRef.current = toast.loading("Proszę czekać...", loadingConfig());
+    const id = toast.loading("Proszę czekać...", loadingConfig());
 
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/entries/${entryID}`, {
@@ -86,14 +85,11 @@ export const RateContextProvider = ({
           prev.filter((expEntry) => expEntry.entry.id !== entryID)
         );
 
-        toast.update(
-          toastRef.current!,
-          successConfig("Zgłoszenie usunięte pomyślnie.")
-        );
+        toast.update(id, successConfig("Zgłoszenie usunięte pomyślnie."));
       })
       .catch((err) => {
         toast.update(
-          toastRef.current!,
+          id,
           errorConfig("Wystąpił błąd podczas usuwania zgłoszenia.")
         );
       });

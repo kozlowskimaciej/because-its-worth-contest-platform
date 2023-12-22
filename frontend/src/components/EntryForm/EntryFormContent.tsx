@@ -7,6 +7,8 @@ import { uploadMultipleFiles } from "../../utils/uploadFiles";
 import SingleEntry from "./SingleEntry";
 import { useEntryFormContext } from "../../contexts/EntryFormContext";
 import CategorySelector from "./CategorySelector";
+import { toast } from "react-toastify";
+import { errorConfig, loadingConfig, successConfig } from "../../config/toasts";
 
 interface IProps {
   contest: Contest;
@@ -22,7 +24,22 @@ export default function EntryFormContent({ contest }: IProps) {
     const formData = new FormData(e.currentTarget);
 
     const urls = await uploadMultipleFiles(files);
-    console.log("urls:", urls);
+
+    let isAnyError = false;
+
+    if (urls.length === 0) {
+      toast.warning("Załącz przynajmniej jeden plik.");
+      isAnyError = true;
+    }
+
+    if (!formData.get("type")) {
+      toast.warning("Wybierz swoją kategorię.");
+      isAnyError = true;
+    }
+
+    if (isAnyError) return;
+
+    const toastID = toast.loading("Proszę czekać...", loadingConfig());
 
     const guardian = formData.get("guardian") as string;
     const [gurdianName, guardianLastname] = guardian.split(" ");
@@ -43,12 +60,18 @@ export default function EntryFormContent({ contest }: IProps) {
       contestId: contest.id,
     };
 
-    console.log(payload);
-
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/entries`, payload)
-      .then((data) => console.log(data))
-      .catch((err) => console.error(err));
+      .then((data) => {
+        if (data.status !== 200) throw new Error();
+        toast.update(toastID, successConfig("Praca zgłoszona pomyślnie."));
+      })
+      .catch((err) => {
+        toast.update(
+          toastID,
+          errorConfig("Wystąpił błąd podczas zgłaszania pracy.")
+        );
+      });
   };
 
   const formStyles: CSSProperties = {
