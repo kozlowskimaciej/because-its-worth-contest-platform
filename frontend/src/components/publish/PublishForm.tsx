@@ -1,28 +1,34 @@
 import React from "react";
 import styles from "./styles/PublishForm.module.css";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FileInput from "./FileInput";
 import FilesDisplayer from "./FilesDisplayer";
 import { usePublishContext } from "../../contexts/PublishContext";
+import { uploadMultipleFiles } from "../../utils/uploadFiles";
+import { toast } from "react-toastify";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function PublishForm() {
   const { files } = usePublishContext();
-  const navigate = useNavigate();
+  const { id } = useParams();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    const toastID = toast.loading("Proszę czekać...");
 
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
+    try {
+      const urls = await uploadMultipleFiles(files);
+      const formLink = `${window.origin}/forms/${id}`;
 
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
-
-    navigate(`/contests`);
+      console.log(urls, formLink);
+      toast.update(toastID, successConfig("Konkurs opublikowany pomyślnie."));
+    } catch (e) {
+      toast.update(
+        toastID,
+        errorConfig("Wystąpił błąd podczas publikownia konkursu.")
+      );
+    }
   };
 
   return (
