@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import { Entry, ExpandableEntry } from "../models/Entry";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Id, toast } from "react-toastify";
+import { errorConfig, loadingConfig, successConfig } from "../config/toasts";
 
 interface RateContextProps {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ export const RateContextProvider = ({
   children,
   entries,
 }: RateContextProps) => {
+  const toastRef = useRef<Id | null>(null);
   const [expandableEntries, setExpandableEntries] = useState<ExpandableEntry[]>(
     entries.map((entry) => ({
       entry,
@@ -71,15 +73,28 @@ export const RateContextProvider = ({
   };
 
   const handleDeleteEntry = (entryID: string) => {
+    toastRef.current = toast.loading("Proszę czekać...", loadingConfig());
+
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/entries/${entryID}`, {
         withCredentials: true,
       })
       .then((data) => {
-        if (data.status !== 200) return;
+        if (data.status !== 200) throw new Error();
 
         setExpandableEntries((prev) =>
           prev.filter((expEntry) => expEntry.entry.id !== entryID)
+        );
+
+        toast.update(
+          toastRef.current!,
+          successConfig("Zgłoszenie usunięte pomyślnie.")
+        );
+      })
+      .catch((err) => {
+        toast.update(
+          toastRef.current!,
+          errorConfig("Wystąpił błąd podczas usuwania zgłoszenia.")
         );
       });
   };

@@ -2,6 +2,8 @@ import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 import AuthContextProvider from "./contexts/AuthContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));
@@ -130,24 +132,39 @@ function App() {
   ];
 
   return (
-    <Router>
-      <Routes>
-        {protectedRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={authorize(route.component)}
-          />
-        ))}
-        {publicRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<SuspenseWrapper lazyComponent={route.component} />}
-          />
-        ))}
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          {protectedRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={authorize(route.component)}
+            />
+          ))}
+          {publicRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<SuspenseWrapper lazyComponent={route.component} />}
+            />
+          ))}
+        </Routes>
+      </Router>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 
