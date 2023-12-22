@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { Entry, ExpandableEntry } from "../models/Entry";
 import axios from "axios";
-import { Id, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { errorConfig, loadingConfig, successConfig } from "../config/toasts";
 
 interface RateContextProps {

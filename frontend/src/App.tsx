@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
+import React, { lazy, Suspense, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 import AuthContextProvider from "./contexts/AuthContext";
@@ -17,26 +17,6 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
 
 function App() {
-  // const suspensify = (Component: ComponentType) => {
-  //   const suspenseStyles: CSSProperties = {
-  //     width: "100%",
-  //     height: "100vh",
-  //     backgroundColor: "var(--primary-color)",
-  //   };
-
-  //   return (
-  //     <Suspense
-  //       fallback={
-  //         <div style={suspenseStyles}>
-  //           <Loading text="" />
-  //         </div>
-  //       }
-  //     >
-  //       <Component />
-  //     </Suspense>
-  //   );
-  // };
-
   const SuspenseWrapper = ({
     lazyComponent,
   }: {

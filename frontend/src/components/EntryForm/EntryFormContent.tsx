@@ -15,7 +15,8 @@ interface IProps {
 }
 
 export default function EntryFormContent({ contest }: IProps) {
-  const { files, entryFormRef, submitButtonRef } = useEntryFormContext();
+  const { files, entryFormRef, submitButtonRef, handleSuccessfulSubmit } =
+    useEntryFormContext();
 
   // some hook for this
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,6 +66,7 @@ export default function EntryFormContent({ contest }: IProps) {
       .then((data) => {
         if (data.status !== 200) throw new Error();
         toast.update(toastID, successConfig("Praca zgłoszona pomyślnie."));
+        handleSuccessfulSubmit();
       })
       .catch((err) => {
         toast.update(

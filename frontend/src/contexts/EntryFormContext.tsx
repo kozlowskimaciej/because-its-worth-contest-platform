@@ -10,6 +10,8 @@ interface EntryFormContextValue {
   entryFormRef: React.RefObject<HTMLFormElement>;
   entryFilesRef: React.RefObject<HTMLDivElement>;
   submitButtonRef: React.RefObject<HTMLButtonElement>;
+  hasSuccessfullySubmitted: boolean;
+  handleSuccessfulSubmit: Function;
 }
 
 const EntryFormContext = createContext<EntryFormContextValue>(
@@ -21,10 +23,16 @@ export const useEntryFormContext = () => useContext(EntryFormContext);
 export const EntryFormContextProvider = ({
   children,
 }: EntryFormContextProps) => {
+  const [hasSuccessfullySubmitted, setHasSuccessfullySubmitted] =
+    useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const entryFormRef = useRef<HTMLFormElement>(null);
   const entryFilesRef = useRef<HTMLDivElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleSuccessfulSubmit = () => {
+    setHasSuccessfullySubmitted(true);
+  };
 
   return (
     <EntryFormContext.Provider
@@ -34,6 +42,8 @@ export const EntryFormContextProvider = ({
         entryFormRef,
         entryFilesRef,
         submitButtonRef,
+        hasSuccessfullySubmitted,
+        handleSuccessfulSubmit,
       }}
     >
       {children}
