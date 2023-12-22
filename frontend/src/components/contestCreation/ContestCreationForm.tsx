@@ -12,6 +12,7 @@ import axios from "axios";
 import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
 import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
+import { validateContestForm } from "./utils/validate";
 
 interface IProps {
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
@@ -62,6 +63,12 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
     const backgroundURL = background
       ? await uploadSingleFile(background)
       : null;
+
+    formData.append("urls", JSON.stringify(urls));
+    formData.append("backgroundURL", String(backgroundURL));
+
+    const isValid = validateContestForm(formData, { withToasts: true });
+    if (!isValid) return;
 
     if (id) console.log(`Will modify contest of id: ${id}`);
     else createContest(formData, urls, backgroundURL);
