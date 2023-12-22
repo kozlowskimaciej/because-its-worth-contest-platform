@@ -94,33 +94,23 @@ export default function EntryFormContent({ contest }: IProps) {
     >
       <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
       <div style={{ textAlign: "left" }}>
-        <SingleEntry entryTitle="Imie" name="firstname" required type="text" />
+        <div>* pole obowiązkowe</div>
         <SingleEntry
-          entryTitle="Nazwisko"
-          name="lastname"
+          entryTitle="Imie *"
+          name="firstname"
           required
           type="text"
         />
         <SingleEntry
-          entryTitle="Placówka  (opcjonalne)"
-          name="place"
+          entryTitle="Nazwisko *"
+          name="lastname"
+          required
           type="text"
         />
-        <SingleEntry
-          entryTitle="Opiekun  (opcjonalne)"
-          name="guardian"
-          type="text"
-        />
-        <SingleEntry
-          entryTitle="Nr telefonu  (opcjonalne)"
-          name="phone"
-          type="text"
-        />
-        <SingleEntry
-          entryTitle="Adres email (opcjonalne)"
-          name="email"
-          type="email"
-        />
+        <SingleEntry entryTitle="Placówka" name="place" type="text" />
+        <SingleEntry entryTitle="Opiekun" name="guardian" type="text" />
+        <SingleEntry entryTitle="Nr telefonu" name="phone" type="text" />
+        <SingleEntry entryTitle="Adres email" name="email" type="email" />
         <EntryFiles acceptedFormats={contest.acceptedFileFormats} />
         <CategorySelector categories={contest.entryCategories} />
       </div>
