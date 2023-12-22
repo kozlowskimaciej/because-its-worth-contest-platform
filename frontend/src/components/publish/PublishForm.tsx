@@ -15,6 +15,11 @@ export default function PublishForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (files.length === 0) {
+      toast.warning("Wybierz co najmniej jeden plik.");
+      return;
+    }
+
     const toastID = toast.loading("Proszę czekać...");
 
     try {
