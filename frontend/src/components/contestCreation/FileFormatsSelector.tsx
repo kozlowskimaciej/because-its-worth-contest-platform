@@ -32,7 +32,7 @@ export default function FileFormatsSelector() {
               defaultChecked={fileFormats.includes(type)}
               onChange={() => handleCheckBoxChange(type)}
             />
-            {type}
+            <span style={{ paddingLeft: "5px" }}>{type}</span>
           </label>
           <br />
         </React.Fragment>
