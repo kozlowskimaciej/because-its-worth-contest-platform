@@ -37,7 +37,7 @@ export default function PublishForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={`container ${styles.form}`}>
       <FileInput />
       <FilesDisplayer />
       <div style={{ width: "100%", textAlign: "center" }}>
