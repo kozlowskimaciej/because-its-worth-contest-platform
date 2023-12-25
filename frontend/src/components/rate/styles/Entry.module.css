@@ -1,5 +1,5 @@
 .wrapper {
-  width: calc(100% - 40px);
+  width: 100%;
   background-color: var(--primary-color);
   padding: 20px;
   border-radius: 20px;

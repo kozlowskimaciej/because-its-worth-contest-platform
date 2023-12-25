@@ -11,7 +11,7 @@ interface IProps {
 
 export default function EntryGroup({ expandableEntries, title }: IProps) {
   return (
-    <div className={styles.wrapper}>
+    <div className={`container ${styles.wrapper}`}>
       <h2>{title}</h2>
       {expandableEntries.map((expEntry) => {
         return expEntry.isExpanded ? (
