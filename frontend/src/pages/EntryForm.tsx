@@ -42,10 +42,6 @@ export default function EntryForm() {
   return (
     <EntryFormContextProvider>
       <EntryFormPageInner contest={contest} />
-      {/* <div style={{ textAlign: "center", marginTop: "100px" }}>
-        <EntryFormContent contest={contest} />
-        <PrintButton />
-      </div> */}
     </EntryFormContextProvider>
   );
 }
