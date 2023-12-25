@@ -5,9 +5,15 @@
   height: 70px;
   top: 0;
   background-color: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
 }
 
-.button {
+.buttons {
+  height: 100%;
+}
+
+.button, .logout {
   all: unset;
   height: 100%;
   width: 208px;
@@ -27,5 +33,11 @@
 
 .active {
   background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.logout:hover {
+  cursor: pointer;
+  background-color: #dc3545;
   color: var(--primary-color);
 }
