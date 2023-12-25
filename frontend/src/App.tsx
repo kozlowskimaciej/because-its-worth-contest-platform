@@ -4,6 +4,8 @@ import Loading from "./components/common/Loading";
 import AuthContextProvider from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));

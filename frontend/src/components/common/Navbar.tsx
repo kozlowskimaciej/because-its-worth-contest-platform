@@ -49,23 +49,44 @@ export default function Navbar() {
   };
 
   return (
-    <header className={styles.header}>
-      <div className={styles.buttons}>
-        {buttons.map((button, index) => (
-          <button
-            key={index}
-            onClick={button.isActive ? () => {} : button.onclick}
-            className={`${styles.button} ${
-              button.isActive ? styles.active : ""
-            }`}
-          >
-            {button.text}
-          </button>
-        ))}
+    <nav className="navbar navbar-expand-lg navbar-light bg-light p-0 fixed-top">
+      <div className="container-fluid p-0">
+        <button
+          className="navbar-toggler m-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerDemo03"
+          aria-controls="navbarTogglerDemo03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {buttons.map((button, index) => (
+              <li key={index} className="nav-item">
+                <button
+                  className={`${styles.button} ${
+                    button.isActive ? styles.active : null
+                  }`}
+                  onClick={button.onclick}
+                >
+                  {button.text}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <form className="d-flex">
+            <button
+              onClick={handleLogout}
+              className={`navbar-brand ${styles.logout}`}
+            >
+              WYLOGUJ SIĘ
+            </button>
+          </form>
+        </div>
       </div>
-      <button className={styles.logout} onClick={handleLogout}>
-        WYLOGUJ SIĘ
-      </button>
-    </header>
+    </nav>
   );
 }
