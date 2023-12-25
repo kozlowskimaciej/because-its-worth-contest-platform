@@ -1,5 +1,6 @@
 .form {
-  width: 50%;
+  max-width: 1000px;
+  /* width: 50%; */
   margin: auto;
   border-radius: 20px;
   padding: 20px;

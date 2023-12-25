@@ -5,12 +5,15 @@
   transform: translate(-50%, -50%);
   background-color: var(--primary-color);
   text-align: center;
+  padding: 20px;
+  border-radius: 20px;
 }
 
 .image {
   width: 400px;
+  max-width: 100%;
+  aspect-ratio: 2;
   border-radius: 20px;
-  height: 250px;
   object-fit: cover;
 }
 

@@ -85,7 +85,7 @@ export default function EntryFiles({ acceptedFormats }: IProps) {
       />
       <label className={styles.files} onClick={handleLabelClick}>
         <img src={`${process.env.PUBLIC_URL}/icons/plus.svg`} alt="" />
-        <span>Załącz pliki</span>
+        <span className={styles.span}>Załącz pliki</span>
       </label>
       <ul>
         {files.map((file, index) => (

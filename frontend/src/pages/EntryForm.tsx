@@ -52,7 +52,7 @@ const EntryFormPageInner = ({ contest }: { contest: Contest }) => {
   if (hasSuccessfullySubmitted) return <SuccessfulSubmission />;
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
+    <div style={{ textAlign: "center", paddingTop: "100px" }}>
       <EntryFormContent contest={contest} />
       <PrintButton />
     </div>
