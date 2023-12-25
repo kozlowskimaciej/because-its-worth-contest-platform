@@ -5,30 +5,26 @@
 
 .btn-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 50px;
 }
 
-.publish {
+.publish, .delete {
   all: unset;
-  width: 250px;
+  width: 30%;
   height: 50px;
   text-align: center;
-  background-color: var(--accent-color);
   border-radius: 20px;
   color: var(--primary-color);
   transition: scale 400ms ease;
 }
 
+.publish {
+  background-color: var(--accent-color);
+}
+
 .delete {
-  all: unset;
-  width: 250px;
-  height: 50px;
-  text-align: center;
   background-color: #dc3545;
-  border-radius: 20px;
-  color: var(--primary-color);
-  transition: scale 400ms ease;
 }
 
 .publish:hover, .delete:hover {
