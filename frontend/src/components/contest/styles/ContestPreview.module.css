@@ -1,6 +1,5 @@
 .wrapper {
-  width: 50%;
-  margin: auto;
+  max-width: 800px;
 }
 
 .btn-wrapper {
@@ -40,10 +39,27 @@
   text-align: left;
 }
 
+@media (max-width: 992px) {
+  .info {
+    padding: 20px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .btn-wrapper {
+    flex-direction: column;
+  }
+
+  .publish, .delete {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
 .entry {
   background-color: var(--primary-color);
   padding: 10px;
   border-radius: 20px;
-  width: calc(100% - 20px);
+  width: 100%;
   white-space: pre-wrap;
 }

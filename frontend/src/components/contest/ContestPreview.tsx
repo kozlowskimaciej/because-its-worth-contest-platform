@@ -35,7 +35,7 @@ export default function ContestPreview({ contest }: IProps) {
   ];
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`container ${styles.wrapper}`}>
       <ControlButtons controlButtons={controlButtons} />
       <div className={styles.info}>
         <InfoSection

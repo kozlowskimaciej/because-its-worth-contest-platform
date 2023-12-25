@@ -23,7 +23,10 @@ export default function ContestCreation() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
+      <div
+        className="container"
+        style={{ maxWidth: "800px", paddingTop: "140px" }}
+      >
         <ContestCreationFormContextProvider initialValues={emptyContest}>
           <ContestCreationForm setCreatedContestID={setCreatedContestID} />
         </ContestCreationFormContextProvider>
