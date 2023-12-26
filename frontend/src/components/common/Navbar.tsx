@@ -26,7 +26,9 @@ export default function Navbar() {
     },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
     if (!window.confirm("Czy na pewno chcesz się wylogować?")) return;
 
     const id = toast.loading("Proszę czekać...");
@@ -78,10 +80,7 @@ export default function Navbar() {
             ))}
           </ul>
           <form className="d-flex">
-            <button
-              onClick={handleLogout}
-              className={`navbar-brand ${styles.logout}`}
-            >
+            <button onClick={handleLogout} className={`${styles.logout}`}>
               WYLOGUJ SIĘ
             </button>
           </form>

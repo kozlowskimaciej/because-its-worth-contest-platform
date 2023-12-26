@@ -17,8 +17,8 @@ export default function LoginForm() {
 
     if (!loginInput || !passwordInput) return;
 
-    axios
-      .post(
+    const login = (): Promise<any> => {
+      return axios.post(
         `${process.env.REACT_APP_SERVER_URL}/auth/login`,
         {
           login: loginInput.value,
@@ -27,13 +27,22 @@ export default function LoginForm() {
         {
           withCredentials: true,
         }
-      )
+      );
+    };
+
+    login()
       .then((data) => {
         if (data.status !== 200) throw new Error();
         navigate("/");
       })
       .catch((err) => {
-        toast.error("Logowanie nie powiodło się.");
+        // origin header is now set
+        login()
+          .then((data) => {
+            if (data.status !== 200) throw new Error();
+            navigate("/");
+          })
+          .catch((err) => toast.error("Logowanie nie powiodło się."));
       });
   };
 

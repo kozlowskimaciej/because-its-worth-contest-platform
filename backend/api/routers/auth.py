@@ -62,8 +62,9 @@ async def login(request: Request):
     access_token = create_jwt_token(token_data)
 
     response = JSONResponse(content={"token": access_token})
-    response.set_cookie(key="token", value=access_token, httponly=True,
-                        samesite=None)
+    response.set_cookie(key="token", value=access_token, secure=True,
+                        httponly=True, samesite="none")
+    response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
 
     return response
 
@@ -88,6 +89,7 @@ def get_current_user(request: Request):
 
 @router.post("/refresh")
 async def refresh(
+    request: Request,
     response: JSONResponse,
     user_id: str = Depends(get_current_user)
 ):
@@ -97,18 +99,22 @@ async def refresh(
     access_token = create_jwt_token(token_data)
 
     response = JSONResponse(content={"token": access_token})
-    response.set_cookie(key="token", value=access_token, httponly=True,
-                        samesite=None)
+    response.set_cookie(key="token", value=access_token, secure=True,
+                        httponly=True, samesite="none")
+    response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
 
     return response
 
 
 @router.post("/logout")
 async def logout(
+    request: Request,
     response: JSONResponse,
     user_id: str = Depends(get_current_user)
   ):
-    response.delete_cookie("token", path="/", secure=True, samesite="None")
+    response.delete_cookie(key="token", secure=True, httponly=True,
+                           samesite="none")
+    response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
     return {
         "message": "successful logout"
     }

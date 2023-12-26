@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import axios from "axios";
+import useFetch from "./hooks/useFetch";
 
 const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));
