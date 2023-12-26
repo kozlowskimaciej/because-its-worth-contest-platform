@@ -36,7 +36,7 @@ export default function LoginForm() {
         navigate("/");
       })
       .catch((err) => {
-        // origin header is now set
+        // Access-Control-Allow-Origin header is now set
         login()
           .then((data) => {
             if (data.status !== 200) throw new Error();
