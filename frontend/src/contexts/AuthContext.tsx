@@ -35,7 +35,7 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
         }
 
         const data = await response.json();
-        console.log("Token refreshed successfully.", data);
+        console.log("Token refreshed successfully.");
       } catch (error) {
         navigate("/login");
         console.error("Error refreshing token:", error);

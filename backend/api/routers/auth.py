@@ -98,7 +98,7 @@ async def refresh(
     }
     access_token = create_jwt_token(token_data)
 
-    response = JSONResponse(content={"token": access_token})
+    response = JSONResponse(content={})
     response.set_cookie(key="token", value=access_token, secure=True,
                         httponly=True, samesite="none")
     response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
