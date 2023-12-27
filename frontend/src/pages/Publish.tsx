@@ -6,8 +6,10 @@ import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import PublishContextProvider from "../contexts/PublishContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function Publish() {
+  useCheckToken();
   const { id } = useParams();
 
   const { isLoading, error } = useFetch(

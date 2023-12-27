@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles/Navbar.module.css";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../contexts/AppContext";
+import axios from "axios";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -31,11 +33,29 @@ export default function Navbar() {
 
     if (!window.confirm("Czy na pewno chcesz się wylogować?")) return;
 
-    tokenRef.current = null;
+    const id = toast.loading("Proszę czekać...");
 
-    toast.success("Wylogowanie powiodło się.");
-
-    navigate("/login");
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${tokenRef.current}`,
+          },
+        }
+      )
+      .then((data) => {
+        if (data.status !== 200) throw new Error();
+        toast.update(id, successConfig("Wylogowanie powiodło się."));
+      })
+      .catch(() =>
+        toast.update(id, errorConfig("Wystąpił błąd podczas wylogowywania."))
+      )
+      .finally(() => {
+        tokenRef.current = null;
+        navigate("/login");
+      });
   };
 
   return (

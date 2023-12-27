@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 import useFetch from "./hooks/useFetch";
-import AppContextProvider from "./contexts/AppContext";
+import AppContextProvider, { useAppContext } from "./contexts/AppContext";
 
 const Home = lazy(() => import("./pages/Home"));
 const Contests = lazy(() => import("./pages/Contests"));
@@ -22,6 +22,12 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
 
 function App() {
+  const { isLoading } = useAppContext();
+
+  if (isLoading) {
+    return <Loading text="" />;
+  }
+
   const SuspenseWrapper = ({
     lazyComponent,
   }: {
@@ -117,7 +123,7 @@ function App() {
   ];
 
   return (
-    <AppContextProvider>
+    <>
       <Router>
         <Routes>
           {protectedRoutes.map((route, index) => (
@@ -149,7 +155,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-    </AppContextProvider>
+    </>
   );
 }
 

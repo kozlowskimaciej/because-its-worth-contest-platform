@@ -30,6 +30,8 @@ ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+ip_token_storage = {}
+
 
 def create_jwt_token(data: dict):
     to_encode = data.copy()
@@ -87,6 +89,9 @@ async def login(request: Request):
     }
     access_token = create_jwt_token(token_data)
 
+    ip_address = request.client.host
+    ip_token_storage[ip_address] = access_token
+
     response = JSONResponse(content={"token": access_token})
 
     return response
@@ -103,6 +108,38 @@ async def refresh(
     }
     access_token = create_jwt_token(token_data)
 
+    ip_address = request.client.host
+    try:
+        ip_token_storage[ip_address] = access_token
+    except KeyError:
+        raise HTTPException(status_code=401, detail="No saved token.")
+
     response = JSONResponse(content={"token": access_token})
+
+    return response
+
+
+@router.get("/init")
+async def init(request: Request):
+    ip_address = request.client.host
+    try:
+        access_token = ip_token_storage[ip_address]
+    except KeyError:
+        raise HTTPException(status_code=401, detail="No saved token.")
+
+    response = JSONResponse(content={"token": access_token})
+
+    return response
+
+
+@router.post("/logout")
+async def logout(request: Request, user_id: str = Depends(get_current_user)):
+    ip_address = request.client.host
+    try:
+        del ip_token_storage[ip_address]
+    except KeyError:
+        raise HTTPException(status_code=401, detail="No saved token.")
+
+    response = JSONResponse(content={"message": "Logged out successfully."})
 
     return response

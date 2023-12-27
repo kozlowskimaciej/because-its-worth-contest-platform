@@ -19,6 +19,8 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
   const refreshTokenIntervalRef = useRef<any | null>(null);
 
   useEffect(() => {
+    if (!tokenRef.current) return;
+
     const refreshToken = async () => {
       try {
         console.log("Trying to refresh the token...");

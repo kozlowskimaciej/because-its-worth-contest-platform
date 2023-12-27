@@ -3,8 +3,10 @@ import ContestCreationForm from "../components/contestCreation/ContestCreationFo
 import Navbar from "../components/common/Navbar";
 import ContestCreatedInfo from "../components/contestCreation/ContestCreatedInfo";
 import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function ContestCreation() {
+  useCheckToken();
   const [createdContestID, setCreatedContestID] = useState<string | null>(null);
 
   const emptyContest = {
