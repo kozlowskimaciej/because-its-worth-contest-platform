@@ -3,6 +3,7 @@ import { Entry, ExpandableEntry } from "../models/Entry";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { errorConfig, loadingConfig, successConfig } from "../config/toasts";
+import { useAppContext } from "./AppContext";
 
 interface RateContextProps {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ export const RateContextProvider = ({
   children,
   entries,
 }: RateContextProps) => {
+  const { tokenRef } = useAppContext();
   const [expandableEntries, setExpandableEntries] = useState<ExpandableEntry[]>(
     entries.map((entry) => ({
       entry,
@@ -76,7 +78,9 @@ export const RateContextProvider = ({
 
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/entries/${entryID}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+        },
       })
       .then((data) => {
         if (data.status !== 200) throw new Error();

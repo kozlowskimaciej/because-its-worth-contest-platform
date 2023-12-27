@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 import { useParams } from "react-router-dom";
 import ParticipantsCategory from "./ParticipantsCategory";
@@ -13,12 +13,14 @@ import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
 import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 import { validateContestForm } from "./utils/validate";
+import { useAppContext } from "../../contexts/AppContext";
 
 interface IProps {
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export default function ContestCreationForm({ setCreatedContestID }: IProps) {
+  const { tokenRef } = useAppContext();
   const { initialValues, participants, fileFormats, files, background } =
     useContestCreationFormContext();
   const { id } = useParams();
@@ -43,7 +45,9 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+        },
       })
       .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));

@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Request, HTTPException, Depends
 
 from fastapi.responses import JSONResponse
-from jose import jwt
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
 from datetime import datetime, timedelta
+import os
+from dotenv import load_dotenv
 
 users = [
     {
@@ -17,9 +20,15 @@ users = [
     },
 ]
 
-SECRET_KEY = "iudgsfuyguyerwhgyw"
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET", None)
+if not SECRET_KEY:
+    raise JWTError("JWT secret has to be given.")
 
 ALGORITHM = "HS256"
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def create_jwt_token(data: dict):
@@ -28,6 +37,23 @@ def create_jwt_token(data: dict):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        id: str = payload.get("id")
+        if id is None:
+            raise credentials_exception
+    except Exception:
+        raise credentials_exception
+    return id
 
 
 router = APIRouter(
@@ -62,30 +88,8 @@ async def login(request: Request):
     access_token = create_jwt_token(token_data)
 
     response = JSONResponse(content={"token": access_token})
-    header = "Access-Control-Allow-Origin"
-    response.headers[header] = request.headers.get("Origin", "*")
-    response.set_cookie(key="token", value=access_token, secure=True,
-                        httponly=True, samesite="none")
 
     return response
-
-
-def get_current_user(request: Request):
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-
-    try:
-        token = request.cookies.get("token")
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        id: str = payload.get("id")
-        if id is None:
-            raise credentials_exception
-    except Exception:
-        raise credentials_exception
-    return id
 
 
 @router.post("/refresh")
@@ -99,60 +103,6 @@ async def refresh(
     }
     access_token = create_jwt_token(token_data)
 
-    response = JSONResponse(content={})
-    header = "Access-Control-Allow-Origin"
-    response.headers[header] = request.headers.get("Origin", "*")
-    response.set_cookie(key="token", value=access_token, secure=True,
-                        httponly=True, samesite="none")
-
-    return response
-
-
-@router.post("/logout")
-async def logout(
-    request: Request,
-    response: JSONResponse,
-    user_id: str = Depends(get_current_user)
-  ):
-    header = "Access-Control-Allow-Origin"
-    response.headers[header] = request.headers.get("Origin", "*")
-    response.delete_cookie(key="token", secure=True, httponly=True,
-                           samesite="none")
-    return {
-        "message": "successful logout"
-    }
-
-
-@router.post("/signup")
-async def signup(request: Request):
-    data = await request.form()
-
-    login = data.get("login")
-    password = data.get("password")
-
-    if not login or not password:
-        raise HTTPException(status_code=400,
-                            detail="Login and password are required")
-
-    from random import randint
-
-    id = str(randint(10 ** 5, 10 ** 6))
-    created_user = {
-        "id": id,
-        "name": login,
-        "login": login,
-        "password": password
-    }
-
-    users.append(created_user)
-
-    token_data = {
-        "id": id
-    }
-    access_token = create_jwt_token(token_data)
-
-    response = JSONResponse(content={"id": id})
-    response.set_cookie(key="token", value=access_token, httponly=True,
-                        samesite=None)
+    response = JSONResponse(content={"token": access_token})
 
     return response

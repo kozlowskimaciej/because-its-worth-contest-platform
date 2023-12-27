@@ -7,14 +7,18 @@ import { prepareEntries } from "../utils/prepareEntries";
 import Navbar from "../components/common/Navbar";
 import Entries from "../components/rate/Entries";
 import RateContextProvider from "../contexts/RateContext";
+import { useAppContext } from "../contexts/AppContext";
 
 export default function Rate() {
+  const { tokenRef } = useAppContext();
   const { id } = useParams();
 
   const { data, error, isLoading } = useFetch(
     `${process.env.REACT_APP_SERVER_URL}/entries/${id}`,
     {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${tokenRef.current}`,
+      },
     }
   );
 

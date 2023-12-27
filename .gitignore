@@ -8,3 +8,4 @@ venv
 /backend/**/.pytest_cache
 /backend/**/__pycache__
 /backend/build/
+/backend/.env

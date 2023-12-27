@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "./AppContext";
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: AuthContextProps) => {
+  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const refreshTokenIntervalRef = useRef<any | null>(null);
@@ -25,7 +27,9 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
           `${process.env.REACT_APP_SERVER_URL}/auth/refresh`,
           {
             method: "POST",
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${tokenRef.current}`,
+            },
           }
         );
 
