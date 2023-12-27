@@ -11,6 +11,12 @@
   transition: background-color 400ms ease, color 200ms ease;
 }
 
+@media (max-width: 991px) {
+  .button, .logout {
+    width: 100%;
+  }
+}
+
 .button:hover {
   cursor: pointer;
   background-color: var(--accent-color);
