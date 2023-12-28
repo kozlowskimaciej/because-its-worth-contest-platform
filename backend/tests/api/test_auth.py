@@ -1,35 +1,4 @@
-from backend.api.routers.auth import users, ip_token_storage, create_jwt_token
-import secrets
-import pytest
-import hashlib
-
-
-@pytest.fixture
-def setup_users():
-    new_id = secrets.token_hex(16)
-    new_login = "fake_login"
-    new_password = secrets.token_hex(16)
-
-    new_user = {
-        "id": new_id,
-        "login": new_login,
-        "password": hashlib.sha256(new_password.encode()).hexdigest()
-    }
-
-    correct_user = {
-        "login": new_login,
-        "password": new_password
-    }
-
-    users.append(new_user)
-
-    token = create_jwt_token({"id": new_id})
-
-    auth_header = {
-        "Authorization": f"Bearer {token}"
-    }
-
-    return correct_user, auth_header
+from backend.api.routers.auth import ip_token_storage
 
 
 def test_login(client, setup_users):
