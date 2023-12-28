@@ -2,10 +2,11 @@ from fastapi import APIRouter, Request, HTTPException, Depends
 
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import jwt
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
+import secrets
 
 users = [
     {
@@ -24,7 +25,8 @@ load_dotenv()
 
 SECRET_KEY = os.getenv("JWT_SECRET", None)
 if not SECRET_KEY:
-    raise JWTError("JWT secret has to be given.")
+    print("No secret key given. Generating random...")
+    SECRET_KEY = secrets.token_hex(16)
 
 ALGORITHM = "HS256"
 
