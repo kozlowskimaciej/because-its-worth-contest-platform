@@ -1,23 +1,34 @@
 from backend.api.routers.auth import users, ip_token_storage, create_jwt_token
 import secrets
+import pytest
 
-new_id = secrets.token_hex(16)
-new_login = "fake_login"
-new_password = secrets.token_hex(16)
 
-new_user = {
-  "id": new_id,
-  "login": new_login,
-  "password": new_password
-}
+@pytest.fixture
+def setup_users():
+    new_id = secrets.token_hex(16)
+    new_login = "fake_login"
+    new_password = secrets.token_hex(16)
 
-users.append(new_user)
+    new_user = {
+        "id": new_id,
+        "login": new_login,
+        "password": new_password
+    }
 
-token = create_jwt_token({"id": new_id})
+    correct_user = {
+        "login": new_login,
+        "password": new_password
+    }
 
-auth_header = {
-    "Authorization": f"Bearer {token}"
-}
+    users.append(new_user)
+
+    token = create_jwt_token({"id": new_id})
+
+    auth_header = {
+        "Authorization": f"Bearer {token}"
+    }
+
+    return correct_user, auth_header
 
 
 def test_login(client):
@@ -26,13 +37,10 @@ def test_login(client):
         "password": "incorrect_password"
     }
 
+    correct_user, _ = setup_users
+
     response = client.post("/auth/login", json=incorrect_user)
     assert response.status_code == 401
-
-    correct_user = {
-        "login": new_login,
-        "password": new_password
-    }
 
     assert len(ip_token_storage) == 0
 
@@ -43,16 +51,15 @@ def test_login(client):
 
 
 def test_refresh(client):
+    _, auth_header = setup_users
+
     response = client.post("/auth/refresh", headers=auth_header)
     assert response.status_code == 200
     assert "token" in response.json()
 
 
 def test_logout(client):
-    correct_user = {
-        "login": new_login,
-        "password": new_password
-    }
+    correct_user, auth_header = setup_users
 
     response = client.post("/auth/login", json=correct_user)
     assert response.status_code == 200
@@ -64,10 +71,7 @@ def test_logout(client):
 
 
 def test_init(client):
-    correct_user = {
-        "login": new_login,
-        "password": new_password
-    }
+    correct_user, auth_header = setup_users
 
     response = client.post("/auth/login", json=correct_user)
     assert response.status_code == 200
