@@ -37,7 +37,7 @@ def test_login(client):
         "password": "incorrect_password"
     }
 
-    correct_user, _ = setup_users
+    correct_user, _ = setup_users()
 
     response = client.post("/auth/login", json=incorrect_user)
     assert response.status_code == 401
@@ -51,7 +51,7 @@ def test_login(client):
 
 
 def test_refresh(client):
-    _, auth_header = setup_users
+    _, auth_header = setup_users()
 
     response = client.post("/auth/refresh", headers=auth_header)
     assert response.status_code == 200
@@ -59,7 +59,7 @@ def test_refresh(client):
 
 
 def test_logout(client):
-    correct_user, auth_header = setup_users
+    correct_user, auth_header = setup_users()
 
     response = client.post("/auth/login", json=correct_user)
     assert response.status_code == 200
@@ -71,7 +71,7 @@ def test_logout(client):
 
 
 def test_init(client):
-    correct_user, auth_header = setup_users
+    correct_user, auth_header = setup_users()
 
     response = client.post("/auth/login", json=correct_user)
     assert response.status_code == 200
