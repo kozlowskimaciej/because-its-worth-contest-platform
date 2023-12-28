@@ -7,17 +7,23 @@ from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
 import secrets
+import hashlib
+
+passwords = [
+    "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349",
+    "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9"
+]
 
 users = [
     {
         "id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22",
         "login": "login1",
-        "password": "pass1",
+        "password": passwords[0],
     },
     {
         "id": "048358e2-42bf-4c1b-9569-7301902c11c7",
         "login": "login2",
-        "password": "pass2",
+        "password": passwords[1],
     },
 ]
 
@@ -79,7 +85,8 @@ async def login(request: Request):
 
     found_user = None
     for user in users:
-        if login == user["login"] and password == user["password"]:
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        if login == user["login"] and hashed_password == user["password"]:
             found_user = user
             break
 
