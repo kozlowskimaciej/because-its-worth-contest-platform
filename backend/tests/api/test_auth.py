@@ -8,12 +8,12 @@ import hashlib
 def setup_users():
     new_id = secrets.token_hex(16)
     new_login = "fake_login"
-    new_password = hashlib.sha256(secrets.token_hex(16).encode()).hexdigest()
+    new_password = secrets.token_hex(16)
 
     new_user = {
         "id": new_id,
         "login": new_login,
-        "password": new_password
+        "password": hashlib.sha256(new_password.encode()).hexdigest()
     }
 
     correct_user = {
