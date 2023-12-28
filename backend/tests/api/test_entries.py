@@ -62,7 +62,7 @@ def test_create_entry(client, entry):
 
     response = client.get(
         f"/entries/{contest_id}",
-        cookies={"token": token}
+        headers=auth_header
     )
     assert response.status_code == 200
     assert "data" in response.json()
