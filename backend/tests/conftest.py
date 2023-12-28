@@ -4,6 +4,10 @@ from fastapi.testclient import TestClient
 from testcontainers.mongodb import MongoDbContainer
 import pytest
 
+from backend.emails import email_sending
+from smtplib import SMTP
+from pytest import MonkeyPatch
+
 
 TEST_DIR = Path(__file__).parent
 
@@ -34,10 +38,8 @@ def client(request, monkeypatch, mongodb_container, testdir) -> TestClient:
     from backend.api.routers import static_files
 
     # setting static folder path to testdir
-    monkeypatch.setattr(
-        app, "STATIC_FOLDER_NAME", str(testdir))
-    monkeypatch.setattr(
-        static_files, "STATIC_FOLDER_NAME", str(testdir))
+    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", str(testdir))
+    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", str(testdir))
 
     # setting database connection url
     monkeypatch.setenv(
@@ -50,3 +52,19 @@ def client(request, monkeypatch, mongodb_container, testdir) -> TestClient:
     app = create_app()
     with TestClient(app) as testclient:
         yield testclient
+
+
+@pytest.fixture
+def mock_smtp(monkeypatch: MonkeyPatch):
+    mail_registry = []
+
+    class FakeSMTP(SMTP):
+        def login(self, user, password):
+            pass
+
+        def send_message(self, msg):
+            mail_registry.append(msg)
+
+    monkeypatch.setattr(email_sending, "SMTP", FakeSMTP)
+    monkeypatch.setenv("EMAIL_PASSWORD", "PASSWORD")
+    return mail_registry
