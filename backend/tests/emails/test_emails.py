@@ -1,44 +1,16 @@
 from backend.emails import email_sending
-import pytest
-from pytest import MonkeyPatch
-
-
-@pytest.fixture
-def mock_smtp(monkeypatch: MonkeyPatch):
-    mail_registry = []
-
-    class FakeSMTP:
-        def __init__(self, host, port) -> None:
-            pass
-
-        def starttls(self):
-            pass
-
-        def ehlo(self):
-            pass
-
-        def login(self, login, password):
-            pass
-
-        def send_message(self, msg):
-            mail_registry.append(msg)
-
-        def quit(self):
-            pass
-
-    monkeypatch.setattr(email_sending, "SMTP", FakeSMTP)
-    monkeypatch.setenv("EMAIL_PASSWORD", "PASSWORD")
-    return mail_registry
 
 
 def test_send_email(mock_smtp):
     from email.message import EmailMessage
 
     assert len(mock_smtp) == 0
-    email_sending.send_email("maciej@kozlowski.pb.bi", "Henlo", "Email body")
+    receivers = ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"]
+    email_sending.send_email(receivers, "Subject", "Body")
 
     assert len(mock_smtp) == 1
+
     msg: EmailMessage = mock_smtp[0]
-    assert msg.get_content().strip() == "Email body"
-    assert msg["Subject"] == "Henlo"
-    assert msg["To"] == "maciej@kozlowski.pb.bi"
+    assert msg.get_content().strip() == "Body"
+    assert msg["Subject"] == "Subject"
+    assert msg["To"] == "maciej@bmw.pb.bi, kolega@macieja.uwb.bi"

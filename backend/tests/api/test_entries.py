@@ -7,6 +7,10 @@ contest_id = "657da8091c043e6cb099e3a8"
 
 token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
 
+auth_header = {
+    "Authorization": f"Bearer {token}"
+}
+
 
 @pytest.fixture
 def entry():
@@ -36,7 +40,7 @@ def test_create_entry(client, entry):
     entry_id = post_resp['id']
     response = client.get(
         f"/entries/{contest_id}?entryId={entry_id}",
-        cookies={"token": token}
+        headers=auth_header
     )
     assert response.status_code == 200
     get_resp = response.json()
@@ -88,18 +92,18 @@ def test_delete_entry(client, entry):
 
     response = client.get(
         f"/entries/{contest_id}?entryId={entry_id}",
-        cookies={"token": token}
+        headers=auth_header
     )
     assert response.status_code == 200
 
     del_response = client.delete(
         f'/entries/{entry_id}',
-        cookies={"token": token}
+        headers=auth_header
     )
     assert del_response.status_code == 200
 
     response = client.get(
         f"/entries/{contest_id}?entryId={entry_id}",
-        cookies={"token": token}
+        headers=auth_header
     )
     assert response.status_code == 404
