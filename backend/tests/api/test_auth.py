@@ -1,13 +1,14 @@
 from backend.api.routers.auth import users, ip_token_storage, create_jwt_token
 import secrets
 import pytest
+import hashlib
 
 
 @pytest.fixture
 def setup_users():
     new_id = secrets.token_hex(16)
     new_login = "fake_login"
-    new_password = secrets.token_hex(16)
+    new_password = hashlib.sha256(secrets.token_hex(16).encode()).hexdigest()
 
     new_user = {
         "id": new_id,
