@@ -27,7 +27,7 @@ def test_login(client):
     }
 
     response = client.post("/auth/login", json=incorrect_user)
-    assert response.status == 401
+    assert response.status_code == 401
 
     correct_user = {
         "login": new_login,
@@ -37,14 +37,14 @@ def test_login(client):
     assert len(ip_token_storage) == 0
 
     response = client.post("/auth/login", json=correct_user)
-    assert response.status == 200
+    assert response.status_code == 200
     assert "token" in response.json()
     assert len(ip_token_storage) == 1
 
 
 def test_refresh(client):
     response = client.post("/auth/refresh", headers=auth_header)
-    assert response.status == 200
+    assert response.status_code == 200
     assert "token" in response.json()
 
 
@@ -55,7 +55,7 @@ def test_logout(client):
     }
 
     response = client.post("/auth/login", json=correct_user)
-    assert response.status == 200
+    assert response.status_code == 200
 
     ips_stored = len(ip_token_storage)
 
@@ -70,14 +70,14 @@ def test_init(client):
     }
 
     response = client.post("/auth/login", json=correct_user)
-    assert response.status == 200
+    assert response.status_code == 200
 
     response = client.get("/auth/init")
-    assert response.status == 200
+    assert response.status_code == 200
     assert "token" in response.json()
 
     response = client.post("/auth/logout", headers=auth_header)
-    assert response.status == 200
+    assert response.status_code == 200
 
     response = client.get("/auth/init")
-    assert response.status == 401
+    assert response.status_code == 401
