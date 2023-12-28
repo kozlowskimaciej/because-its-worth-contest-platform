@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "./AppContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: AuthContextProps) => {
+  useCheckToken();
   const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 

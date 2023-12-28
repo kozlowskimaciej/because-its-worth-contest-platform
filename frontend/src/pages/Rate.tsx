@@ -8,10 +8,8 @@ import Navbar from "../components/common/Navbar";
 import Entries from "../components/rate/Entries";
 import RateContextProvider from "../contexts/RateContext";
 import { useAppContext } from "../contexts/AppContext";
-import useCheckToken from "../hooks/useCheckToken";
 
 export default function Rate() {
-  useCheckToken();
   const { tokenRef } = useAppContext();
   const { id } = useParams();
 
