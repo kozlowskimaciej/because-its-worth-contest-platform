@@ -85,7 +85,8 @@ async def update_contest(db, id):
 
 
 @router.post("/{id}/publish")
-async def publish_contest(request: Request, data: Publication, id: str):
+async def publish_contest(request: Request, data: Publication, id: str,
+                          user_id: str = Depends(get_current_user)):
     send_emails(data)
     db = request.app.database
     await update_contest(db, id)
