@@ -20,7 +20,7 @@ def entry():
             "https://localhost:8000/static/delete_file.png",
         ],
         "place": "Warsaw",
-        "contestId": contest_id
+        "contestId": contest_id,
     }
 
 
@@ -30,10 +30,8 @@ def test_create_entry(client, entry):
     post_resp = response.json()
 
     assert "id" in post_resp
-    entry_id = post_resp['id']
-    response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}"
-    )
+    entry_id = post_resp["id"]
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
     assert response.status_code == 200
     get_resp = response.json()
     assert 'data' in get_resp
@@ -87,3 +85,40 @@ def test_delete_entry(client, entry):
 
     response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
     assert response.status_code == 404
+
+
+def test_evaluation(client):
+    contest_id = "657da8091c043e6cb099e3a8"
+    entry_data = {
+        "firstName": "Janusz",
+        "lastName": "Kowal",
+        "guardianFirstName": "Jan",
+        "guardianLastName": "Janowy",
+        "phone": "32423432",
+        "email": "@email.com",
+        "address": "jiosajd, 9023",
+        "submissionDate": datetime.now().isoformat(),
+        "attachments": [
+            "https://foo.bar/static/entry-picture1.jpg",
+            "https://foo.bar/static/entry-picture2.jpg",
+        ],
+        "place": "Warsaw",
+        "contestId": contest_id,
+    }
+
+    response = client.post("/entries/", json=entry_data)
+    assert response.status_code == 200
+    entry_id = response.json()["id"]
+
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    assert response.status_code == 200
+    assert response.json()["data"]["place"] == "Warsaw"
+
+    evaluation = {"value": "laureat"}
+    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation)
+    assert response.status_code == 200
+    assert response.json() == {"modifiedCount": 1}
+
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    assert response.status_code == 200
+    assert response.json()["data"]["place"] == "laureat"

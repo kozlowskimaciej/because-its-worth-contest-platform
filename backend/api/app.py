@@ -7,7 +7,12 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.api.routers.static_files import STATIC_FOLDER_NAME
 from backend.api.database.db import Database
-from backend.api.routers import hello, static_files, contests, entries
+from backend.api.routers import (
+    hello,
+    static_files,
+    contests,
+    entries,
+)
 
 
 @asynccontextmanager
@@ -30,7 +35,8 @@ def create_app():
     # static files are available under /static_files path
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
     app.mount(
-        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
+        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading"
+    )
 
     app.add_middleware(
         CORSMiddleware,

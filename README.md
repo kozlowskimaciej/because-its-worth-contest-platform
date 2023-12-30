@@ -138,3 +138,14 @@ Api request prototype for publishing contest
   "form_url": "https://foo.bar/forms/657ed098a5ba96cfdd2b3d42",
 }
 ```
+
+### Api request for evaluating contestants
+```plaintext
+http://localhost:8000/entries/657e2152d9a591885cd7a033/evaluation
+```
+
+```json
+{
+  "value": "laureat",
+}
+```
