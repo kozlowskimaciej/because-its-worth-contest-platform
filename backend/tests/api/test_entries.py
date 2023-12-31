@@ -132,7 +132,8 @@ def test_evaluation(client):
     assert response.status_code == 200
     entry_id = response.json()["id"]
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "Warsaw"
 
@@ -141,6 +142,7 @@ def test_evaluation(client):
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "laureat"
