@@ -1,12 +1,17 @@
 import json
 from datetime import datetime
+from os.path import basename
 from typing import Optional
+from urllib.parse import urlparse
 
 from bson import ObjectId, json_util
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
+
+from api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending
+from backend.api.routers.static_files import delete_file
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -19,9 +24,9 @@ class Contest(BaseModel):
     entryCategories: list[str]
     published: bool
     deadline: datetime
-    termsAndConditions: list[AnyHttpUrl]
+    termsAndConditions: Optional[list[AnyHttpUrl]]
     acceptedFileFormats: list[str]
-    background: AnyHttpUrl
+    background: Optional[AnyHttpUrl]
 
 
 @router.post("/")
@@ -96,9 +101,24 @@ async def delete_contest(
 ):
     db = request.app.database
 
-    data = await db.contests.delete_one({'_id': ObjectId(id)})
-
-    if not data:
+    contest = await db.contests.find_one({'_id': ObjectId(id)})
+    if not contest:
         raise HTTPException(status_code=404, detail=f"{id=} not found")
+
+    if contest['termsAndConditions']:
+        for url in contest['termsAndConditions']:
+            filename = basename(urlparse(url).path)
+            await delete_file(filename)
+
+    if contest['background']:
+        filename = basename(urlparse(contest['background']).path)
+        await delete_file(filename)
+
+    entries = await get_entries(request, id)
+    if entries:
+        for entry in entries['data']:
+            await delete_entry(request, entry['_id']['$oid'])
+
+    await db.contests.delete_one({'_id': ObjectId(id)})
 
     return {'id': id}

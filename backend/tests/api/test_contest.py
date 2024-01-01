@@ -94,6 +94,9 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
 
 
 def test_delete_contest(client, contest):
+    contest['termsAndConditions'] = None
+    contest['background'] = None
+
     response = client.post('/contests/', json=contest)
     assert response.status_code == 200
 
@@ -101,8 +104,29 @@ def test_delete_contest(client, contest):
     assert 'id' in post_resp
     contest_id = post_resp['id']
 
+    # adding sample entry
+    client.post('/entries/', json={
+        "firstName": "Janusz",
+        "lastName": "Kowal",
+        "guardianFirstName": "Jan",
+        "guardianLastName": "Janowy",
+        "phone": "32423432",
+        "email": "@email.com",
+        "address": "jiosajd, 9023",
+        "submissionDate": datetime.now().isoformat(),
+        "attachments": [],
+        "place": "Warsaw",
+        "contestId": contest_id,
+    })
+
+    response = client.get(f'/entries/{contest_id}')
+    assert response.status_code == 200
+
     response = client.delete(f'/contests?id={contest_id}')
     assert response.status_code == 200
+
+    response = client.get(f'/entries/{contest_id}')
+    assert response.status_code == 404
 
     response = client.get(f'/contests?id={contest_id}')
     assert response.status_code == 404
