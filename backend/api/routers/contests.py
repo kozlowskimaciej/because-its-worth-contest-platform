@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Body, Query
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
-from api.routers.entries import get_entries, delete_entry
+from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending
 from backend.api.routers.static_files import delete_file
 
