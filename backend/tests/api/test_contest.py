@@ -2,25 +2,29 @@ from datetime import datetime
 from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
 
-
-contest = {
-    "name": "Test Contest",
-    "description": "This is a test contest.",
-    "category": "Test",
-    "entryCategories": ["foo", "boo", "bar"],
-    "published": False,
-    "deadline": datetime.now().isoformat(),
-    "termsAndConditions": [
-        "https://foo.bar/static/contest-terms1.jpg",
-        "https://foo.bar/static/contest-terms2.jpg",
-    ],
-    "acceptedFileFormats": ["jpg", "png"],
-    "background": "https://foo.bar/static/contest-background.jpg",
-}
+import pytest
 
 
-def test_post_contest(client):
-    response = client.post("/contests/", json=contest)
+@pytest.fixture
+def contest():
+    return {
+        'name': 'Test Contest',
+        'description': 'This is a test contest.',
+        'category': 'Test',
+        'entryCategories': ['foo', 'boo', 'bar'],
+        'published': True,
+        'deadline': datetime.now().isoformat(),
+        'termsAndConditions': [
+            'https://foo.bar/static/contest-terms1.jpg',
+            'https://foo.bar/static/contest-terms2.jpg'
+        ],
+        'acceptedFileFormats': ['jpg', 'png'],
+        'background': 'https://foo.bar/static/contest-background.jpg',
+    }
+
+
+def test_post_contest(client, contest):
+    response = client.post('/contests/', json=contest)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -87,3 +91,18 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
     assert response.json()["data"]["published"]
+
+
+def test_delete_contest(client, contest):
+    response = client.post('/contests/', json=contest)
+    assert response.status_code == 200
+
+    post_resp = response.json()
+    assert 'id' in post_resp
+    contest_id = post_resp['id']
+
+    response = client.delete(f'/contests?id={contest_id}')
+    assert response.status_code == 200
+
+    response = client.get(f'/contests?id={contest_id}')
+    assert response.status_code == 404

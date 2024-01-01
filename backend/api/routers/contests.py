@@ -84,3 +84,21 @@ async def publish_contest(request: Request, data: Publication, id: str):
     send_emails(data)
     db = request.app.database
     await update_contest(db, id)
+
+
+@router.delete(
+    '/',
+    responses={404: {'description': 'Contest with given id not found'}}
+)
+async def delete_contest(
+    request: Request,
+    id: str
+):
+    db = request.app.database
+
+    data = await db.contests.delete_one({'_id': ObjectId(id)})
+
+    if not data:
+        raise HTTPException(status_code=404, detail=f"{id=} not found")
+
+    return {'id': id}
