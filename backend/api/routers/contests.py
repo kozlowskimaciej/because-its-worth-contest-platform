@@ -78,17 +78,24 @@ def send_emails(data: Publication):
     email_sending.send_email(receivers, "Subject", email_body)
 
 
-async def update_contest(db, id):
+@router.post("/{id}/publish")
+async def publish_contest(request: Request, data: Publication, id: str):
+    send_emails(data)
+    db = request.app.database
     await db.contests.update_one(
         {"_id": ObjectId(id)}, {"$set": {"published": True}}
     )
 
 
-@router.post("/{id}/publish")
-async def publish_contest(request: Request, data: Publication, id: str):
-    send_emails(data)
-    db = request.app.database
-    await update_contest(db, id)
+async def delete_contest_files(contest: dict):
+    if contest['termsAndConditions']:
+        for url in contest['termsAndConditions']:
+            filename = basename(urlparse(url).path)
+            await delete_file(filename)
+
+    if contest['background']:
+        filename = basename(urlparse(contest['background']).path)
+        await delete_file(filename)
 
 
 @router.delete(
@@ -105,14 +112,7 @@ async def delete_contest(
     if not contest:
         raise HTTPException(status_code=404, detail=f"{id=} not found")
 
-    if contest['termsAndConditions']:
-        for url in contest['termsAndConditions']:
-            filename = basename(urlparse(url).path)
-            await delete_file(filename)
-
-    if contest['background']:
-        filename = basename(urlparse(contest['background']).path)
-        await delete_file(filename)
+    await delete_contest_files(contest)
 
     entries = await get_entries(request, id)
     if entries:
@@ -134,6 +134,10 @@ async def update_contest(
     data: Annotated[Contest, Body()]
 ):
     db = request.app.database
+
+    contest = (await get_contests(request, id))['data']
+
+    await delete_contest_files(contest)
 
     entry_dict = data.model_dump(mode='json')
     data = db.contests.update_one(

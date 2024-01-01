@@ -133,6 +133,9 @@ def test_delete_contest(client, contest):
 
 
 def test_update_contest(client, contest):
+    contest['termsAndConditions'] = None
+    contest['background'] = None
+
     response = client.post('/contests/', json=contest)
     assert response.status_code == 200
 
