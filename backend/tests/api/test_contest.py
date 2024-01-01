@@ -12,7 +12,7 @@ def contest():
         'description': 'This is a test contest.',
         'category': 'Test',
         'entryCategories': ['foo', 'boo', 'bar'],
-        'published': True,
+        'published': False,
         'deadline': datetime.now().isoformat(),
         'termsAndConditions': [
             'https://foo.bar/static/contest-terms1.jpg',
@@ -58,7 +58,7 @@ def test_post_contest(client, contest):
     assert get_all_resp["data"][0] == resp_data
 
 
-def test_publish_contest(client, mock_smtp: list[EmailMessage]):
+def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
     response = client.post("/contests/", json=contest)
     assert response.status_code == 200
     contest_id = response.json()["id"]
