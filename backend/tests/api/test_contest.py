@@ -3,29 +3,35 @@ from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
 from backend.api.routers.auth import create_jwt_token
 
+import pytest
+
+
 token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
 
 auth_header = {
     "Authorization": f"Bearer {token}"
 }
 
-contest = {
-    "name": "Test Contest",
-    "description": "This is a test contest.",
-    "category": "Test",
-    "entryCategories": ["foo", "boo", "bar"],
-    "published": False,
-    "deadline": datetime.now().isoformat(),
-    "termsAndConditions": [
-        "https://foo.bar/static/contest-terms1.jpg",
-        "https://foo.bar/static/contest-terms2.jpg",
-    ],
-    "acceptedFileFormats": ["jpg", "png"],
-    "background": "https://foo.bar/static/contest-background.jpg",
-}
+
+@pytest.fixture
+def contest():
+    return {
+        'name': 'Test Contest',
+        'description': 'This is a test contest.',
+        'category': 'Test',
+        'entryCategories': ['foo', 'boo', 'bar'],
+        'published': False,
+        'deadline': datetime.now().isoformat(),
+        'termsAndConditions': [
+            'https://foo.bar/static/contest-terms1.jpg',
+            'https://foo.bar/static/contest-terms2.jpg'
+        ],
+        'acceptedFileFormats': ['jpg', 'png'],
+        'background': 'https://foo.bar/static/contest-background.jpg',
+    }
 
 
-def test_post_contest(client):
+def test_post_contest(client, contest):
     response = client.post("/contests/", json=contest, headers=auth_header)
     assert response.status_code == 200
 
@@ -60,7 +66,7 @@ def test_post_contest(client):
     assert get_all_resp["data"][0] == resp_data
 
 
-def test_publish_contest(client, mock_smtp: list[EmailMessage]):
+def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
     response = client.post("/contests/", json=contest, headers=auth_header)
     assert response.status_code == 200
     contest_id = response.json()["id"]
@@ -94,3 +100,65 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage]):
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
     assert response.json()["data"]["published"]
+
+
+def test_delete_contest(client, contest):
+    contest['termsAndConditions'] = None
+    contest['background'] = None
+
+    response = client.post('/contests/', json=contest)
+    assert response.status_code == 200
+
+    post_resp = response.json()
+    assert 'id' in post_resp
+    contest_id = post_resp['id']
+
+    # adding sample entry
+    client.post('/entries/', json={
+        "firstName": "Janusz",
+        "lastName": "Kowal",
+        "guardianFirstName": "Jan",
+        "guardianLastName": "Janowy",
+        "phone": "32423432",
+        "email": "@email.com",
+        "address": "jiosajd, 9023",
+        "submissionDate": datetime.now().isoformat(),
+        "attachments": [],
+        "place": "Warsaw",
+        "contestId": contest_id,
+    })
+
+    response = client.get(f'/entries/{contest_id}')
+    assert response.status_code == 200
+
+    response = client.delete(f'/contests?id={contest_id}')
+    assert response.status_code == 200
+
+    response = client.get(f'/entries/{contest_id}')
+    assert response.status_code == 404
+
+    response = client.get(f'/contests?id={contest_id}')
+    assert response.status_code == 404
+
+
+def test_update_contest(client, contest):
+    contest['termsAndConditions'] = None
+    contest['background'] = None
+
+    response = client.post('/contests/', json=contest)
+    assert response.status_code == 200
+
+    post_resp = response.json()
+    assert 'id' in post_resp
+    contest_id = post_resp['id']
+
+    contest['name'] = 'New name'
+    response = client.patch(f'/contests?id={contest_id}', json=contest)
+    assert response.status_code == 200
+
+    response = client.get(f'/contests?id={contest_id}')
+    assert response.status_code == 200
+
+    get_resp = response.json()
+    assert 'data' in get_resp
+    assert get_resp['data']['name'] == 'New name'
