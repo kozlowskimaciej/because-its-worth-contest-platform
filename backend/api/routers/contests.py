@@ -1,12 +1,17 @@
 import json
 from datetime import datetime
-from typing import Optional
+from os.path import basename
+from typing import Optional, Annotated
+from urllib.parse import urlparse
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body, Query
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
+
+from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending
+from backend.api.routers.static_files import delete_file
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -19,9 +24,9 @@ class Contest(BaseModel):
     entryCategories: list[str]
     published: bool
     deadline: datetime
-    termsAndConditions: list[AnyHttpUrl]
+    termsAndConditions: Optional[list[AnyHttpUrl]]
     acceptedFileFormats: list[str]
-    background: AnyHttpUrl
+    background: Optional[AnyHttpUrl]
 
 
 @router.post("/")
@@ -73,14 +78,74 @@ def send_emails(data: Publication):
     email_sending.send_email(receivers, "Subject", email_body)
 
 
-async def update_contest(db, id):
+@router.post("/{id}/publish")
+async def publish_contest(request: Request, data: Publication, id: str):
+    send_emails(data)
+    db = request.app.database
     await db.contests.update_one(
         {"_id": ObjectId(id)}, {"$set": {"published": True}}
     )
 
 
-@router.post("/{id}/publish")
-async def publish_contest(request: Request, data: Publication, id: str):
-    send_emails(data)
+async def delete_contest_files(contest: dict):
+    if contest['termsAndConditions']:
+        for url in contest['termsAndConditions']:
+            filename = basename(urlparse(url).path)
+            await delete_file(filename)
+
+    if contest['background']:
+        filename = basename(urlparse(contest['background']).path)
+        await delete_file(filename)
+
+
+@router.delete(
+    '/',
+    responses={404: {'description': 'Contest with given id not found'}}
+)
+async def delete_contest(
+    request: Request,
+    id: str
+):
     db = request.app.database
-    await update_contest(db, id)
+
+    contest = await db.contests.find_one({'_id': ObjectId(id)})
+    if not contest:
+        raise HTTPException(status_code=404, detail=f"{id=} not found")
+
+    await delete_contest_files(contest)
+
+    entries = await get_entries(request, id)
+    if entries:
+        for entry in entries['data']:
+            await delete_entry(request, entry['_id']['$oid'])
+
+    await db.contests.delete_one({'_id': ObjectId(id)})
+
+    return {'id': id}
+
+
+@router.patch(
+    '/',
+    responses={404: {'description': 'Contest with given id not found'}}
+)
+async def update_contest(
+    request: Request,
+    id: Annotated[str, Query()],
+    data: Annotated[Contest, Body()]
+):
+    db = request.app.database
+
+    contest = (await get_contests(request, id))['data']
+
+    await delete_contest_files(contest)
+
+    entry_dict = data.model_dump(mode='json')
+    data = db.contests.update_one(
+        {'_id': ObjectId(id)},
+        {'$set': entry_dict}
+    )
+
+    if not data:
+        raise HTTPException(status_code=404, detail=f"{id=} not found")
+
+    return {'id': id}
