@@ -1,16 +1,26 @@
 .form {
   background-color: var(--secondary-color);
   text-align: left;
-  width: 40%;
+  max-width: 800px;
   margin: auto;
   padding: 40px 40px;
   border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+  .form {
+    padding: 40px 10px;
+  }
 }
 
 .label {
   background-color: var(--primary-color);
   padding: 10px 40px;
   border-radius: 20px;
+}
+
+.label:hover {
+  cursor: pointer;
 }
 
 .button {

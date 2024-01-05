@@ -1,8 +1,15 @@
 from datetime import datetime
 from test_static_files import TEST_IMAGES_PATH
 import pytest
+from backend.api.routers.auth import create_jwt_token
 
 contest_id = "657da8091c043e6cb099e3a8"
+
+token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+
+auth_header = {
+    "Authorization": f"Bearer {token}"
+}
 
 
 @pytest.fixture
@@ -21,6 +28,7 @@ def entry():
         ],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     }
 
 
@@ -30,8 +38,11 @@ def test_create_entry(client, entry):
     post_resp = response.json()
 
     assert "id" in post_resp
-    entry_id = post_resp["id"]
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    entry_id = post_resp['id']
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
     get_resp = response.json()
     assert 'data' in get_resp
@@ -50,7 +61,10 @@ def test_create_entry(client, entry):
     assert resp_data['place'] == entry['place']
     assert resp_data['contestId'] == contest_id
 
-    response = client.get(f"/entries/{contest_id}")
+    response = client.get(
+        f"/entries/{contest_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
     assert "data" in response.json()
     entries_data = response.json()["data"]
@@ -77,13 +91,22 @@ def test_delete_entry(client, entry):
     assert 'id' in post_resp
     entry_id = post_resp['id']
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
 
-    del_response = client.delete(f'/entries/{entry_id}')
+    del_response = client.delete(
+        f'/entries/{entry_id}',
+        headers=auth_header
+    )
     assert del_response.status_code == 200
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 404
 
 
@@ -104,21 +127,25 @@ def test_evaluation(client):
         ],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     }
 
     response = client.post("/entries/", json=entry_data)
     assert response.status_code == 200
     entry_id = response.json()["id"]
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "Warsaw"
 
     evaluation = {"value": "laureat"}
-    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation)
+    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation,
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "laureat"

@@ -1,12 +1,14 @@
 import json
-from typing import Optional
+from typing import Optional, List
+
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import AnyHttpUrl, BaseModel
 from starlette.requests import Request
 from urllib.parse import urlparse
 from .static_files import delete_file
 import os
+from backend.api.routers.auth import get_current_user
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
@@ -16,20 +18,24 @@ router = APIRouter(prefix="/entries", tags=["Entries"])
 class Entry(BaseModel):
     firstName: str
     lastName: str
-    guardianFirstName: str
-    guardianLastName: str
-    phone: str
+    guardianFirstName: Optional[str]
+    guardianLastName: Optional[str]
+    phone: Optional[str]
     email: str
-    address: str
+    address: Optional[str]
     submissionDate: str
-    attachments: list[AnyHttpUrl]
+    attachments: List[AnyHttpUrl]
     place: str
     contestId: str
+    category: str
 
 
 @router.get("/{contestId}")
 async def get_entries(
-    request: Request, contestId: str, entryId: Optional[str] = None
+    request: Request,
+    contestId: str,
+    entryId: Optional[str] = None,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
     if entryId:
@@ -63,7 +69,8 @@ class Evaluation(BaseModel):
 
 
 @router.post("/{entry_id}/evaluation")
-async def evaluation(request: Request, entry_id: str, evaluation: Evaluation):
+async def evaluation(request: Request, entry_id: str, evaluation: Evaluation,
+                     user_id: str = Depends(get_current_user)):
     db: AsyncIOMotorDatabase = request.app.database
     evaluation_dict = evaluation.model_dump(mode="json")
 
@@ -92,7 +99,8 @@ async def create_entry(entry: Entry, request: Request):
 @router.delete('/{entryId}')
 async def delete_entry(
     request: Request,
-    entryId: str
+    entryId: str,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 

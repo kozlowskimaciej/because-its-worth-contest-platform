@@ -6,8 +6,11 @@ import { prepareSingleContest } from "../utils/prepareContests";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
+import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function ContestModification() {
+  useCheckToken();
   const { id } = useParams();
 
   const { data, isLoading, error } = useFetch<any>(
@@ -44,8 +47,13 @@ export default function ContestModification() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
-        <ContestCreationForm initialValues={contest} />
+      <div
+        className="container"
+        style={{ maxWidth: "800px", paddingTop: "140px" }}
+      >
+        <ContestCreationFormContextProvider initialValues={contest}>
+          <ContestCreationForm />
+        </ContestCreationFormContextProvider>
       </div>
     </>
   );

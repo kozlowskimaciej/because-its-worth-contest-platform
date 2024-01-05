@@ -15,6 +15,7 @@ export const entries = {
       attachments: [],
       place: "none",
       contestId: "657ed098a5ba96cfdd2b3d42",
+      category: "kat1",
     },
     {
       _id: {
@@ -31,6 +32,7 @@ export const entries = {
       attachments: [],
       place: "none",
       contestId: "657ed098a5ba96cfdd2b3d42",
+      category: "kat2",
     },
   ],
 };

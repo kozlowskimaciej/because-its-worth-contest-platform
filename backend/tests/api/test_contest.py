@@ -1,8 +1,16 @@
 from datetime import datetime
 from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
+from backend.api.routers.auth import create_jwt_token
 
 import pytest
+
+
+token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+
+auth_header = {
+    "Authorization": f"Bearer {token}"
+}
 
 
 @pytest.fixture
@@ -24,7 +32,7 @@ def contest():
 
 
 def test_post_contest(client, contest):
-    response = client.post('/contests/', json=contest)
+    response = client.post("/contests/", json=contest, headers=auth_header)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -59,7 +67,7 @@ def test_post_contest(client, contest):
 
 
 def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
-    response = client.post("/contests/", json=contest)
+    response = client.post("/contests/", json=contest, headers=auth_header)
     assert response.status_code == 200
     contest_id = response.json()["id"]
 
@@ -79,7 +87,8 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
         "receiver_files": [file_name, file_name],
         "form_url": "link_to_form",
     }
-    response = client.post(f"/contests/{contest_id}/publish", json=publishing)
+    response = client.post(f"/contests/{contest_id}/publish", json=publishing,
+                           headers=auth_header)
     assert response.status_code == 200
 
     assert len(mock_smtp) == 1
@@ -97,7 +106,7 @@ def test_delete_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
 
-    response = client.post('/contests/', json=contest)
+    response = client.post('/contests/', json=contest, headers=auth_header)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -117,15 +126,16 @@ def test_delete_contest(client, contest):
         "attachments": [],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     })
 
-    response = client.get(f'/entries/{contest_id}')
+    response = client.get(f'/entries/{contest_id}', headers=auth_header)
     assert response.status_code == 200
 
-    response = client.delete(f'/contests?id={contest_id}')
+    response = client.delete(f'/contests?id={contest_id}', headers=auth_header)
     assert response.status_code == 200
 
-    response = client.get(f'/entries/{contest_id}')
+    response = client.get(f'/entries/{contest_id}', headers=auth_header)
     assert response.status_code == 404
 
     response = client.get(f'/contests?id={contest_id}')
@@ -136,7 +146,7 @@ def test_update_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
 
-    response = client.post('/contests/', json=contest)
+    response = client.post('/contests/', json=contest, headers=auth_header)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -144,7 +154,8 @@ def test_update_contest(client, contest):
     contest_id = post_resp['id']
 
     contest['name'] = 'New name'
-    response = client.patch(f'/contests?id={contest_id}', json=contest)
+    response = client.patch(f'/contests?id={contest_id}', json=contest,
+                            headers=auth_header)
     assert response.status_code == 200
 
     response = client.get(f'/contests?id={contest_id}')

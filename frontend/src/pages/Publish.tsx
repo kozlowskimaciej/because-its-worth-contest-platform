@@ -5,8 +5,11 @@ import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
+import PublishContextProvider from "../contexts/PublishContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function Publish() {
+  useCheckToken();
   const { id } = useParams();
 
   const { isLoading, error } = useFetch(
@@ -29,7 +32,9 @@ export default function Publish() {
         <h2 style={{ paddingTop: "100px", paddingBottom: "60px" }}>
           Załącz pliki tekstowe z adresami email uczestników
         </h2>
-        <PublishForm />
+        <PublishContextProvider>
+          <PublishForm />
+        </PublishContextProvider>
       </div>
     </>
   );

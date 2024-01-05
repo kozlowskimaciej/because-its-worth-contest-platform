@@ -1,13 +1,11 @@
 import React from "react";
 import styles from "./styles/MultipleElementsAdder.module.css";
 import styles2 from "./styles/ContestCreationForm.module.css";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 
-interface IProps {
-  files: File[];
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-}
+export default function ContestFilesInput() {
+  const { files, setFiles } = useContestCreationFormContext();
 
-export default function ContestFilesInput({ files, setFiles }: IProps) {
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
@@ -37,7 +35,7 @@ export default function ContestFilesInput({ files, setFiles }: IProps) {
             <span>{file.name}</span>
             <button
               className={styles.remove}
-              title="usun"
+              title="usuń"
               onClick={(e) => {
                 e.preventDefault();
                 removeFile(index);
@@ -45,7 +43,7 @@ export default function ContestFilesInput({ files, setFiles }: IProps) {
             >
               <img
                 src={`${process.env.PUBLIC_URL}/icons/remove.svg`}
-                alt="usun"
+                alt="usuń"
               />
             </button>
           </li>

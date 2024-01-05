@@ -1,16 +1,11 @@
 import React from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 import styles2 from "./styles/BackgroundSelector.module.css";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 
-interface IProps {
-  background: File | null;
-  setBackground: React.Dispatch<React.SetStateAction<File | null>>;
-}
+export default function BackgroundSelector() {
+  const { background, setBackground } = useContestCreationFormContext();
 
-export default function BackgroundSelector({
-  background,
-  setBackground,
-}: IProps) {
   const handleBackgroundChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
     setBackground(file);

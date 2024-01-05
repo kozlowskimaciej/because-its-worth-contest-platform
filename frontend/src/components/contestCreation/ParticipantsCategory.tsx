@@ -1,18 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles/MultipleElementsAdder.module.css";
 import styles2 from "./styles/ContestCreationForm.module.css";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 
-interface IProps {
-  participants: string[];
-  setParticipants: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-export default function ParticipantsCategory({
-  participants,
-  setParticipants,
-}: IProps) {
+export default function ParticipantsCategory() {
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const newCategoryInputRef = useRef<HTMLInputElement>(null);
+  const { participants, setParticipants } = useContestCreationFormContext();
 
   const removeCategory = (index: number) => {
     setParticipants((prev) => prev.filter((_, id) => id !== index));

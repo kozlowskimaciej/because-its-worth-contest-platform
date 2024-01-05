@@ -1,0 +1,25 @@
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--primary-color);
+  text-align: center;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.image {
+  width: 400px;
+  max-width: 100%;
+  aspect-ratio: 2;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.success {
+  color: var(--accent-color);
+  font-weight: 500;
+  margin: 40px;
+  font-size: xx-large;
+}

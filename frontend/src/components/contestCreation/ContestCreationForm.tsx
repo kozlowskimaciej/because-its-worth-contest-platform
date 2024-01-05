@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles/ContestCreationForm.module.css";
 import { useParams } from "react-router-dom";
 import ParticipantsCategory from "./ParticipantsCategory";
@@ -11,33 +11,21 @@ import FileFormatsSelector from "./FileFormatsSelector";
 import axios from "axios";
 import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
+import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
+import { validateContestForm } from "./utils/validate";
+import { useAppContext } from "../../contexts/AppContext";
 
 interface IProps {
-  initialValues: {
-    title: string;
-    description: string;
-    deadline: Date;
-    contestCategory: string;
-    entryCategories: string[];
-    formats: string[];
-  };
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function ContestCreationForm({
-  initialValues,
-  setCreatedContestID,
-}: IProps) {
-  const [files, setFiles] = useState<File[]>([]);
-  const [background, setBackground] = useState<File | null>(null);
-  const [participants, setParticipants] = useState<string[]>(
-    initialValues.entryCategories
-  );
-  const [fileFormats, setFileFormats] = useState<string[]>(
-    initialValues.formats
-  );
+export default function ContestCreationForm({ setCreatedContestID }: IProps) {
+  const { tokenRef } = useAppContext();
+  const { initialValues, participants, fileFormats, files, background } =
+    useContestCreationFormContext();
   const { id } = useParams();
 
+  // put this to custom hook - useCreateContest / useModifyContest
   const createContest = (
     formData: FormData,
     urls: string[],
@@ -56,7 +44,11 @@ export default function ContestCreationForm({
     };
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body)
+      .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body, {
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+        },
+      })
       .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));
   };
@@ -76,6 +68,12 @@ export default function ContestCreationForm({
       ? await uploadSingleFile(background)
       : null;
 
+    formData.append("urls", JSON.stringify(urls));
+    formData.append("backgroundURL", String(backgroundURL));
+
+    const isValid = validateContestForm(formData, { withToasts: true });
+    if (!isValid) return;
+
     if (id) console.log(`Will modify contest of id: ${id}`);
     else createContest(formData, urls, backgroundURL);
   };
@@ -86,20 +84,11 @@ export default function ContestCreationForm({
         <TitleInput initial={initialValues.title} />
         <DescriptionInput initial={initialValues.description} />
         <DeadlineInput initial={initialValues.deadline} />
-        <ContestFilesInput files={files} setFiles={setFiles} />
+        <ContestFilesInput />
         <ContestCategorySelector initial={initialValues.contestCategory} />
-        <ParticipantsCategory
-          participants={participants}
-          setParticipants={setParticipants}
-        />
-        <FileFormatsSelector
-          fileFormats={fileFormats}
-          setFileFormats={setFileFormats}
-        />
-        <BackgroundSelector
-          background={background}
-          setBackground={setBackground}
-        />
+        <ParticipantsCategory />
+        <FileFormatsSelector />
+        <BackgroundSelector />
       </div>
       <button type="submit" className={styles.button}>
         {id ? "Zapisz zmiany" : "Utwórz"}

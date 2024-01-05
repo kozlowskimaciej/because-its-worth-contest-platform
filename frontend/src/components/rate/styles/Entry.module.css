@@ -1,0 +1,47 @@
+.wrapper {
+  width: 100%;
+  background-color: var(--primary-color);
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  gap: 20px;
+}
+
+.text {
+  font-size: larger;
+}
+
+.file {
+  width: 20%;
+  min-width: 100px;
+}
+
+.close {
+  margin-top: 3px;
+  all: unset;
+  height: 30px;
+}
+
+.close:hover {
+  cursor: pointer;
+}
+
+.close img {
+  height: 100%;
+  rotate: 180deg;
+}
+
+.field {
+  font-weight: 600;
+}
