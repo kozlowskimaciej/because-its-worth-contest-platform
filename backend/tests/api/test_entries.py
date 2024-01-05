@@ -28,6 +28,7 @@ def entry():
         ],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     }
 
 
@@ -126,6 +127,7 @@ def test_evaluation(client):
         ],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     }
 
     response = client.post("/entries/", json=entry_data)
@@ -138,7 +140,8 @@ def test_evaluation(client):
     assert response.json()["data"]["place"] == "Warsaw"
 
     evaluation = {"value": "laureat"}
-    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation)
+    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation,
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}
 

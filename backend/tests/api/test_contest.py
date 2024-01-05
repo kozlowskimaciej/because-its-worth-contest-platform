@@ -106,7 +106,7 @@ def test_delete_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
 
-    response = client.post('/contests/', json=contest)
+    response = client.post('/contests/', json=contest, headers=auth_header)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -126,15 +126,16 @@ def test_delete_contest(client, contest):
         "attachments": [],
         "place": "Warsaw",
         "contestId": contest_id,
+        "category": "kat1"
     })
 
-    response = client.get(f'/entries/{contest_id}')
+    response = client.get(f'/entries/{contest_id}', headers=auth_header)
     assert response.status_code == 200
 
-    response = client.delete(f'/contests?id={contest_id}')
+    response = client.delete(f'/contests?id={contest_id}', headers=auth_header)
     assert response.status_code == 200
 
-    response = client.get(f'/entries/{contest_id}')
+    response = client.get(f'/entries/{contest_id}', headers=auth_header)
     assert response.status_code == 404
 
     response = client.get(f'/contests?id={contest_id}')
@@ -145,7 +146,7 @@ def test_update_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
 
-    response = client.post('/contests/', json=contest)
+    response = client.post('/contests/', json=contest, headers=auth_header)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -153,7 +154,8 @@ def test_update_contest(client, contest):
     contest_id = post_resp['id']
 
     contest['name'] = 'New name'
-    response = client.patch(f'/contests?id={contest_id}', json=contest)
+    response = client.patch(f'/contests?id={contest_id}', json=contest,
+                            headers=auth_header)
     assert response.status_code == 200
 
     response = client.get(f'/contests?id={contest_id}')

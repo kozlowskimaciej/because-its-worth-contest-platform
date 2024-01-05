@@ -112,7 +112,8 @@ async def delete_contest_files(contest: dict):
 )
 async def delete_contest(
     request: Request,
-    id: str
+    id: str,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 
@@ -139,7 +140,8 @@ async def delete_contest(
 async def update_contest(
     request: Request,
     id: Annotated[str, Query()],
-    data: Annotated[Contest, Body()]
+    data: Annotated[Contest, Body()],
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 

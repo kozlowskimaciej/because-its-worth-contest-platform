@@ -69,7 +69,8 @@ class Evaluation(BaseModel):
 
 
 @router.post("/{entry_id}/evaluation")
-async def evaluation(request: Request, entry_id: str, evaluation: Evaluation):
+async def evaluation(request: Request, entry_id: str, evaluation: Evaluation,
+                     user_id: str = Depends(get_current_user)):
     db: AsyncIOMotorDatabase = request.app.database
     evaluation_dict = evaluation.model_dump(mode="json")
 
