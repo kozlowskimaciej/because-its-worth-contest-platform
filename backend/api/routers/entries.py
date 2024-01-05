@@ -55,10 +55,14 @@ async def get_entries(
             length=None
         )
 
-        if not entries:
+        contest = await db.contests.find_one(
+            {"_id": ObjectId(contestId)}
+        )
+
+        if not contest:
             raise HTTPException(
                 status_code=404,
-                detail=f"No entries found for contest id {contestId}",
+                detail=f"Contest of {contestId} doesn't exist.",
             )
 
         return {"data": json.loads(json_util.dumps(entries))}
