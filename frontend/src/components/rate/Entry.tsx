@@ -61,6 +61,10 @@ export default function Entry({ entry }: IProps) {
         <DeleteEntryButton entry={entry} />
       </div>
       {renderAuthorFields()}
+      <div className={styles.text}>
+        <span className={styles.field}>kategoria: </span>
+        {entry.category}
+      </div>
       {entry.guardian?.firstName && (
         <div className={styles.text}>
           <span className={styles.field}>opiekun: </span>

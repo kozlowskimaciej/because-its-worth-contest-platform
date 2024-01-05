@@ -59,6 +59,7 @@ export default function EntryFormContent({ contest }: IProps) {
       attachments: urls,
       place: "none",
       contestId: contest.id,
+      category: formData.get("type"),
     };
 
     axios
@@ -107,10 +108,15 @@ export default function EntryFormContent({ contest }: IProps) {
           required
           type="text"
         />
+        <SingleEntry
+          entryTitle="Adres email *"
+          name="email"
+          type="email"
+          required
+        />
         <SingleEntry entryTitle="Placówka" name="place" type="text" />
         <SingleEntry entryTitle="Opiekun" name="guardian" type="text" />
         <SingleEntry entryTitle="Nr telefonu" name="phone" type="text" />
-        <SingleEntry entryTitle="Adres email" name="email" type="email" />
         <EntryFiles acceptedFormats={contest.acceptedFileFormats} />
         <CategorySelector categories={contest.entryCategories} />
       </div>

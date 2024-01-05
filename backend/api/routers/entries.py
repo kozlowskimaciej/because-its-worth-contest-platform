@@ -21,12 +21,13 @@ class Entry(BaseModel):
     guardianFirstName: Optional[str]
     guardianLastName: Optional[str]
     phone: Optional[str]
-    email: Optional[str]
+    email: str
     address: Optional[str]
     submissionDate: str
     attachments: List[AnyHttpUrl]
     place: str
     contestId: str
+    category: str
 
 
 @router.get("/{contestId}")

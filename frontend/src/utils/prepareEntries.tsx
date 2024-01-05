@@ -18,6 +18,7 @@ export const prepareEntries = (entries: any): Entry[] => {
       attachments,
       place,
       contestId,
+      category,
     } = single;
 
     const author = {
@@ -41,6 +42,7 @@ export const prepareEntries = (entries: any): Entry[] => {
       submissionDate: new Date(submissionDate),
       files: attachments,
       contestID: contestId,
+      category,
     };
 
     return entry;
