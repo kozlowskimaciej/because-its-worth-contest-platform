@@ -57,7 +57,7 @@ export default function EntryFormContent({ contest }: IProps) {
       address: formData.get("place") || null,
       submissionDate: new Date(),
       attachments: urls,
-      place: "none",
+      place: "nieocenione",
       contestId: contest.id,
       category: formData.get("type"),
     };

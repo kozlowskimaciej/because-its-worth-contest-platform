@@ -14,7 +14,6 @@ const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: AuthContextProps) => {
-  useCheckToken();
   const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 

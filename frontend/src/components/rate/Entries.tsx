@@ -14,11 +14,11 @@ export default function Entries() {
   );
 
   const noRewardEntries = expandableEntries.filter(
-    (expEntry) => expEntry.entry.place === "none"
+    (expEntry) => expEntry.entry.place === "brak_nagrody"
   );
 
   const notRatedEntries = expandableEntries.filter(
-    (expEntry) => expEntry.entry.place === null
+    (expEntry) => expEntry.entry.place === "nieocenione"
   );
 
   const groups = [
