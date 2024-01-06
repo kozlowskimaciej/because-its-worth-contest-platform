@@ -1,11 +1,9 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { errorConfig, successConfig } from "../../../config/toasts";
-import { useAppContext } from "../../../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 
 export default function useDeleteContest(id: string) {
-  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const deleteContest = () => {
@@ -13,9 +11,7 @@ export default function useDeleteContest(id: string) {
 
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/contests/?id=${id}`, {
-        headers: {
-          Authorization: `Bearer ${tokenRef.current}`,
-        },
+        withCredentials: true,
       })
       .then((data) => {
         if (data.status !== 200) throw new Error();

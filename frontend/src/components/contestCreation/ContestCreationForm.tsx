@@ -13,19 +13,16 @@ import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
 import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 import { validateContestForm } from "./utils/validate";
-import { useAppContext } from "../../contexts/AppContext";
 
 interface IProps {
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export default function ContestCreationForm({ setCreatedContestID }: IProps) {
-  const { tokenRef } = useAppContext();
   const { initialValues, participants, fileFormats, files, background } =
     useContestCreationFormContext();
   const { id } = useParams();
 
-  // put this to custom hook - useCreateContest / useModifyContest
   const createContest = (
     formData: FormData,
     urls: string[],
@@ -45,9 +42,7 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body, {
-        headers: {
-          Authorization: `Bearer ${tokenRef.current}`,
-        },
+        withCredentials: true,
       })
       .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));

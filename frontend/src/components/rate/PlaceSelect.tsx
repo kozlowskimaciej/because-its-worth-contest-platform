@@ -4,7 +4,6 @@ import { useRateContext } from "../../contexts/RateContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useAppContext } from "../../contexts/AppContext";
 import { errorConfig, successConfig } from "../../config/toasts";
 
 interface IProps {
@@ -12,7 +11,6 @@ interface IProps {
 }
 
 export default function PlaceSelect({ entry }: IProps) {
-  const { tokenRef } = useAppContext();
   const { handleChangePlace } = useRateContext();
 
   const options = [
@@ -34,9 +32,7 @@ export default function PlaceSelect({ entry }: IProps) {
           value: selectedOption.value,
         },
         {
-          headers: {
-            Authorization: `Bearer ${tokenRef.current}`,
-          },
+          withCredentials: true,
         }
       )
       .then((data) => {

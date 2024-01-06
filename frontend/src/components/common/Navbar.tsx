@@ -2,13 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/Navbar.module.css";
 import { toast } from "react-toastify";
-import { useAppContext } from "../../contexts/AppContext";
 import axios from "axios";
 import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const { tokenRef } = useAppContext();
 
   const buttons = [
     {
@@ -40,9 +38,7 @@ export default function Navbar() {
         `${process.env.REACT_APP_SERVER_URL}/auth/logout`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${tokenRef.current}`,
-          },
+          withCredentials: true,
         }
       )
       .then((data) => {
@@ -53,7 +49,6 @@ export default function Navbar() {
         toast.update(id, errorConfig("Wystąpił błąd podczas wylogowywania."))
       )
       .finally(() => {
-        tokenRef.current = null;
         navigate("/login");
       });
   };
