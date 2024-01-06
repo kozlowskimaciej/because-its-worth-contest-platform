@@ -10,7 +10,7 @@ from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
 from backend.api.routers.entries import get_entries, delete_entry
-from backend.emails import email_sending
+from backend.emails import email_sending, email_content
 from backend.api.routers.static_files import delete_file
 
 
@@ -72,16 +72,28 @@ def get_all_receivers(receiver_files: list[str]):
     return receivers
 
 
-def send_emails(data: Publication):
+def send_emails(data: Publication, email_content: str):
     receivers = get_all_receivers(data.receiver_files)
-    email_body = f"{data.form_url}"
-    email_sending.send_email(receivers, "Subject", email_body)
+    email_sending.send_email(receivers, email_content)
 
 
 @router.post("/{id}/publish")
 async def publish_contest(request: Request, data: Publication, id: str):
-    send_emails(data)
     db = request.app.database
+    contest = await db.contests.find_one({"_id": ObjectId(id)})
+    if not contest:
+        raise HTTPException(status_code=404, detail=f"Contest {id} not found")
+
+    deadline_date = contest["deadline"].split("T")[0]
+
+    mail = email_content.EmailContentGenerator.generate_contest_invitation(
+            contest_name=contest["name"],
+            deadline=datetime.strptime(
+                deadline_date, "%Y-%m-%d").strftime("%d.%m.%Y"),
+            form_url=data.form_url
+        )
+
+    send_emails(data, mail)
     await db.contests.update_one(
         {"_id": ObjectId(id)}, {"$set": {"published": True}}
     )
