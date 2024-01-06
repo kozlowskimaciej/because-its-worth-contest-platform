@@ -6,7 +6,8 @@ class EmailContentGenerator:
             f"Szanowni Państwo, \n\
             zapraszamy do wzięcia udziału w konkursie {contest_name},\
             którego termin zgłoszeń upływa do końca dnia {deadline}. \n\
-            Wejdź na stronę konkursu, aby dowiedzieć się więcej: {form_url} \n\
+            Link z formularzem do wysłania zgłoszenia:\n\
+            {form_url} \n\
             Z poważaniem, \n\
             Fundacja"
         )
