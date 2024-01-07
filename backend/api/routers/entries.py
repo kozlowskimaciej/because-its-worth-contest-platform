@@ -24,7 +24,7 @@ class Entry(BaseModel):
     phone: Optional[str]
     email: str
     address: Optional[str]
-    submissionDate: str
+    submissionDate: datetime
     attachments: List[AnyHttpUrl]
     place: str
     contestId: str
@@ -55,12 +55,6 @@ async def get_entries(
         entries = await db.entries.find({"contestId": contestId}).to_list(
             length=None
         )
-
-        if not entries:
-            raise HTTPException(
-                status_code=404,
-                detail=f"No entries found for contest id {contestId}",
-            )
 
         return {"data": json.loads(json_util.dumps(entries))}
 
@@ -108,17 +102,12 @@ async def create_entry(entry: Entry, request: Request):
     return {'id': str(inserted_id)}
 
 
-def validate_submission_deadline(submission: str, deadline: str):
-    iso_date_format = "%Y-%m-%dT%H:%M:%SZ"
-
-    submission_date = datetime.strptime(submission, iso_date_format)
-    deadline_date = datetime.strptime(deadline, iso_date_format)
-
-    if submission_date > deadline_date:
+def validate_submission_deadline(submission: datetime, deadline: str):
+    if submission > datetime.fromisoformat(deadline):
         raise HTTPException(
             status_code=400,
-            detail=f"Submission date {submission_date} is \
-                     after the deadline {deadline_date}."
+            detail=f"Submission date {submission} is \
+                     after the deadline {deadline}."
         )
 
 
