@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 from typing import List, Optional
 from urllib.parse import urlparse
-
 from bson import ObjectId, json_util
 from fastapi import APIRouter, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -93,7 +92,14 @@ async def evaluation(request: Request, entry_id: str, evaluation: Evaluation,
 @router.post("/")
 async def create_entry(entry: Entry, request: Request):
     db = request.app.database
-    contest = await db.contests.find_one({'_id': ObjectId(entry.contestId)})
+
+    contestId = entry.contestId
+    contest = await db.contests.find_one({'_id': ObjectId(contestId)})
+
+    if not contest.get("published"):
+        raise HTTPException(
+            status_code=400, detail=f"Contest {contestId} is not published."
+        )
 
     validate_submission_deadline(entry.submissionDate, contest.get("deadline"))
 
@@ -110,7 +116,9 @@ def validate_submission_deadline(submission: str, deadline: str):
 
     if submission_date > deadline_date:
         raise HTTPException(
-            status_code=400, detail="Submission date is after the deadline."
+            status_code=400,
+            detail=f"Submission date {submission_date} is \
+                     after the deadline {deadline_date}."
         )
 
 
