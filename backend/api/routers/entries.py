@@ -1,16 +1,18 @@
 import json
-from typing import Optional, List
+import os
+from datetime import datetime
+from typing import List, Optional
+from urllib.parse import urlparse
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from motor.motor_asyncio import AsyncIOMotorDatabase
 from pydantic import AnyHttpUrl, BaseModel
 from starlette.requests import Request
-from urllib.parse import urlparse
-from .static_files import delete_file
-import os
+
 from backend.api.routers.auth import get_current_user
 
-from motor.motor_asyncio import AsyncIOMotorDatabase
+from .static_files import delete_file
 
 router = APIRouter(prefix="/entries", tags=["Entries"])
 
@@ -91,9 +93,25 @@ async def evaluation(request: Request, entry_id: str, evaluation: Evaluation,
 @router.post("/")
 async def create_entry(entry: Entry, request: Request):
     db = request.app.database
+    contest = await db.contests.find_one({'_id': ObjectId(entry.contestId)})
+
+    validate_submission_deadline(entry.submissionDate, contest.get("deadline"))
+
     entry_dict = entry.model_dump(mode="json")
     inserted_id = (await db.entries.insert_one(entry_dict)).inserted_id
     return {'id': str(inserted_id)}
+
+
+def validate_submission_deadline(submission: str, deadline: str):
+    iso_date_format = "%Y-%m-%dT%H:%M:%SZ"
+
+    submission_date = datetime.strptime(submission, iso_date_format)
+    deadline_date = datetime.strptime(deadline, iso_date_format)
+
+    if submission_date > deadline_date:
+        raise HTTPException(
+            status_code=400, detail="Submission date is after the deadline."
+        )
 
 
 @router.delete('/{entryId}')
