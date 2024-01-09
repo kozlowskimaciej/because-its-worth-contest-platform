@@ -1,27 +1,27 @@
 version: "3.8"
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "2137:2137"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "2137:2137"
+    depends_on:
+      - backend
 
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - mongodb
-  #   environment:
-  #     - DB_CONNECTION_URL=mongodb://mongodb:27017/mydatabase # Change "mydatabase"
-  #   volumes:
-  #     - backend_files:/contest_platform/backend/uploads
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      - DB_CONNECTION_URL=mongodb://mongodb:27017/mydatabase # Change "mydatabase"
+    volumes:
+      - backend_files:/contest_platform/backend/uploads
 
   mongodb:
     image: mongo

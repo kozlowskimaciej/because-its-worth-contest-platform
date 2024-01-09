@@ -1,2 +1,0 @@
-Opis:
-Osoba zarejestrowana w Urzędzie Pracy przeszukuje oferty pracy w systemie, składa podania o pracę. Ma obowiązek przyjęcia skierowania do pracy, w przeciwnym wypadku traci status osoby bezrobotnej. Pracownik Urzędu Pracy zarządza bazą ofert pracy, pomaga w dopasowaniu ofert do umiejętności i preferencji bezrobotnych. Wystawia skierowania do pracy dla osób zarejestrowanych. Pracodawca składa oferty pracy, aktualizuje informacje o wolnych miejscach pracy.
