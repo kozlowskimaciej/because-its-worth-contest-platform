@@ -13,6 +13,8 @@ import BackgroundSelector from "./BackgroundSelector";
 import { uploadMultipleFiles, uploadSingleFile } from "../../utils/uploadFiles";
 import { useContestCreationFormContext } from "../../contexts/ContestCreationFormContext";
 import { validateContestForm } from "./utils/validate";
+import { toast } from "react-toastify";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 interface IProps {
   setCreatedContestID?: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,22 +25,28 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
     useContestCreationFormContext();
   const { id } = useParams();
 
+  const prepareBody = (
+    formData: FormData,
+    urls: string[],
+    backgroundURL: string | null
+  ) => ({
+    name: formData.get("title"),
+    description: formData.get("description"),
+    category: formData.get("type"),
+    entryCategories: participants,
+    published: false,
+    deadline: formData.get("date") + "T00:00:00.000Z",
+    termsAndConditions: urls,
+    acceptedFileFormats: fileFormats,
+    background: backgroundURL,
+  });
+
   const createContest = (
     formData: FormData,
     urls: string[],
     backgroundURL: string | null
   ) => {
-    const body = {
-      name: formData.get("title"),
-      description: formData.get("description"),
-      category: formData.get("type"),
-      entryCategories: participants,
-      published: false,
-      deadline: formData.get("date") + "T00:00:00.000Z",
-      termsAndConditions: urls,
-      acceptedFileFormats: fileFormats,
-      background: backgroundURL,
-    };
+    const body = prepareBody(formData, urls, backgroundURL);
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/contests`, body, {
@@ -46,6 +54,30 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
       })
       .then((data) => setCreatedContestID && setCreatedContestID(data.data.id))
       .catch((err) => console.error(err));
+  };
+
+  const updateContest = (
+    formData: FormData,
+    urls: string[],
+    backgroundURL: string | null
+  ) => {
+    const body = prepareBody(formData, urls, backgroundURL);
+
+    const toastID = toast.loading("Proszę czekać...");
+
+    axios
+      .patch(`${process.env.REACT_APP_SERVER_URL}/contests/?id=${id}`, body, {
+        withCredentials: true,
+      })
+      .then(() =>
+        toast.update(toastID, successConfig("Konkurs zmodyfikowany pomyślnie."))
+      )
+      .catch(() =>
+        toast.update(
+          toastID,
+          errorConfig("Wystąpił błąd podczas modyfikowania konkursu.")
+        )
+      );
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,7 +101,7 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
     const isValid = validateContestForm(formData, { withToasts: true });
     if (!isValid) return;
 
-    if (id) console.log(`Will modify contest of id: ${id}`);
+    if (id) updateContest(formData, urls, backgroundURL);
     else createContest(formData, urls, backgroundURL);
   };
 
