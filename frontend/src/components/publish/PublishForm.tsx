@@ -24,7 +24,10 @@ export default function PublishForm() {
     const toastID = toast.loading("Proszę czekać...");
 
     try {
-      const urls = await uploadMultipleFiles(files);
+      const urls = (await uploadMultipleFiles(files)).map((filename) => {
+        const splitted = filename.split("/");
+        return splitted[splitted.length - 1];
+      });
       const formLink = `${window.origin}/forms/${id}`;
 
       const data = await axios.post(

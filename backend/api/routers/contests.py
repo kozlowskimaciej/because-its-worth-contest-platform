@@ -13,6 +13,7 @@ from backend.api.routers.auth import get_current_user
 from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending
 from backend.api.routers.static_files import delete_file
+from pathlib import Path
 
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
@@ -70,9 +71,10 @@ class Publication(BaseModel):
 
 
 def get_all_receivers(receiver_files: list[str]):
+    STATIC_FOLDER_NAME = Path(__file__).parent.parent.parent / "uploads"
     receivers = []
     for file_name in receiver_files:
-        with open(file_name, "r") as file:
+        with open(f"{STATIC_FOLDER_NAME}/{file_name}", "r") as file:
             receivers.extend([line.rstrip() for line in file])
     return receivers
 
@@ -88,6 +90,7 @@ async def publish_contest(
     request: Request, data: Publication, id: str,
     user_id: str = Depends(get_current_user)
 ):
+    print(data)
     send_emails(data)
     db = request.app.database
     await db.contests.update_one(
