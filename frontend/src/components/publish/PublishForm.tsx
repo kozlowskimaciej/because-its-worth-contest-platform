@@ -7,6 +7,7 @@ import { usePublishContext } from "../../contexts/PublishContext";
 import { uploadMultipleFiles } from "../../utils/uploadFiles";
 import { toast } from "react-toastify";
 import { errorConfig, successConfig } from "../../config/toasts";
+import axios from "axios";
 
 export default function PublishForm() {
   const { files } = usePublishContext();
@@ -26,7 +27,18 @@ export default function PublishForm() {
       const urls = await uploadMultipleFiles(files);
       const formLink = `${window.origin}/forms/${id}`;
 
-      console.log(urls, formLink);
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/contests/${id}/publish`,
+        {
+          receiver_files: urls,
+          form_url: formLink,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (data.status !== 200) throw new Error();
       toast.update(toastID, successConfig("Konkurs opublikowany pomyślnie."));
     } catch (e) {
       toast.update(

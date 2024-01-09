@@ -12,7 +12,7 @@ from backend.api.routers import hello, static_files, contests, entries, auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_client = Database()
+    db_client = Database("mongodb://localhost:27017/mydatabase")
     app.database = await db_client.database
     yield
     await db_client.close()
