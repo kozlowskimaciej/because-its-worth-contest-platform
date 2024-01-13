@@ -1,8 +1,13 @@
-from datetime import datetime
 from test_static_files import TEST_IMAGES_PATH
 import pytest
+from backend.api.routers.auth import create_jwt_token
+from datetime import datetime, timedelta
 
-contest_id = "657da8091c043e6cb099e3a8"
+token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+
+auth_header = {
+    "Authorization": f"Bearer {token}"
+}
 
 
 @pytest.fixture
@@ -15,23 +20,58 @@ def entry():
         "phone": "32423432",
         "email": "@email.com",
         "address": "jiosajd, 9023",
-        "submissionDate": datetime.now().isoformat(),
+        "submissionDate": str(datetime.now().isoformat()),
         "attachments": [
             "https://localhost:8000/static/delete_file.png",
         ],
         "place": "Warsaw",
-        "contestId": contest_id,
+        "contestId": "XYZ",
+        "category": "kat1"
     }
 
 
-def test_create_entry(client, entry):
+@pytest.fixture
+def contest():
+    return {
+        'name': 'Test Contest',
+        'description': 'This is a test contest.',
+        'category': 'Test',
+        'entryCategories': ['foo', 'boo', 'bar'],
+        'published': True,
+        'deadline': str((datetime.now() + timedelta(hours=1)).isoformat()),
+        'termsAndConditions': [
+            'https://foo.bar/static/contest-terms1.jpg',
+            'https://foo.bar/static/contest-terms2.jpg'
+        ],
+        'acceptedFileFormats': ['jpg', 'png'],
+        'background': 'https://foo.bar/static/contest-background.jpg',
+    }
+
+
+def post_contest(client, contest):
+    response = client.post("/contests/", json=contest, headers=auth_header)
+    assert response.status_code == 200
+
+    post_resp = response.json()
+    assert "id" in post_resp
+    contest_id = post_resp["id"]
+    return contest_id
+
+
+def test_create_entry(client, entry, contest):
+    contest_id = post_contest(client, contest)
+    entry["contestId"] = contest_id
+
     response = client.post("/entries/", json=entry)
     assert response.status_code == 200
     post_resp = response.json()
 
     assert "id" in post_resp
-    entry_id = post_resp["id"]
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    entry_id = post_resp['id']
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
     get_resp = response.json()
     assert 'data' in get_resp
@@ -50,7 +90,10 @@ def test_create_entry(client, entry):
     assert resp_data['place'] == entry['place']
     assert resp_data['contestId'] == contest_id
 
-    response = client.get(f"/entries/{contest_id}")
+    response = client.get(
+        f"/entries/{contest_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
     assert "data" in response.json()
     entries_data = response.json()["data"]
@@ -58,7 +101,32 @@ def test_create_entry(client, entry):
     assert entries_data[0]["contestId"] == contest_id
 
 
-def test_delete_entry(client, entry):
+def test_create_entry_late_submission_date(client, entry, contest):
+    late_submission_date = str((datetime.now() + timedelta(days=1)).
+                               isoformat())
+    entry["submissionDate"] = late_submission_date
+
+    contest_id = post_contest(client, contest)
+    entry["contestId"] = contest_id
+
+    response = client.post("/entries/", json=entry)
+    assert response.status_code == 400
+
+
+def test_create_entry_contest_not_published(client, entry, contest):
+    contest["published"] = False
+
+    contest_id = post_contest(client, contest)
+    entry["contestId"] = contest_id
+
+    response = client.post("/entries/", json=entry)
+    assert response.status_code == 400
+
+
+def test_delete_entry(client, entry, contest):
+    contest_id = post_contest(client, contest)
+    entry["contestId"] = contest_id
+
     file_path = TEST_IMAGES_PATH / 'delete_file.png'
     with open(file_path, 'rb') as file:
         files = {'file': ('delete_file.png', file, 'image/png')}
@@ -77,48 +145,45 @@ def test_delete_entry(client, entry):
     assert 'id' in post_resp
     entry_id = post_resp['id']
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 200
 
-    del_response = client.delete(f'/entries/{entry_id}')
+    del_response = client.delete(
+        f'/entries/{entry_id}',
+        headers=auth_header
+    )
     assert del_response.status_code == 200
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(
+        f"/entries/{contest_id}?entryId={entry_id}",
+        headers=auth_header
+    )
     assert response.status_code == 404
 
 
-def test_evaluation(client):
-    contest_id = "657da8091c043e6cb099e3a8"
-    entry_data = {
-        "firstName": "Janusz",
-        "lastName": "Kowal",
-        "guardianFirstName": "Jan",
-        "guardianLastName": "Janowy",
-        "phone": "32423432",
-        "email": "@email.com",
-        "address": "jiosajd, 9023",
-        "submissionDate": datetime.now().isoformat(),
-        "attachments": [
-            "https://foo.bar/static/entry-picture1.jpg",
-            "https://foo.bar/static/entry-picture2.jpg",
-        ],
-        "place": "Warsaw",
-        "contestId": contest_id,
-    }
+def test_evaluation(client, entry, contest):
+    contest_id = post_contest(client, contest)
+    entry["contestId"] = contest_id
 
-    response = client.post("/entries/", json=entry_data)
+    response = client.post("/entries/", json=entry)
     assert response.status_code == 200
     entry_id = response.json()["id"]
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "Warsaw"
 
     evaluation = {"value": "laureat"}
-    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation)
+    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation,
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}
 
-    response = client.get(f"/entries/{contest_id}?entryId={entry_id}")
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          headers=auth_header)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "laureat"

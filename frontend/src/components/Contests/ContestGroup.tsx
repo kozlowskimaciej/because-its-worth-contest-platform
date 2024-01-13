@@ -18,7 +18,7 @@ export default function ContestGroup({ title, items }: IContestGroup) {
       <div className={styles.group}>
         {items.map((item, index) => (
           <button key={index} className={styles.card} onClick={item.onclick}>
-            <h3>{item.name}</h3>
+            <h3 style={{ overflow: "hidden" }}>{item.name}</h3>
             <p>{item.description}</p>
           </button>
         ))}

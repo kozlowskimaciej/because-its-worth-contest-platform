@@ -1,8 +1,14 @@
 .wrapper {
-  width: calc(50% - 80px);
+  max-width: 1000px;
   margin: auto;
   background-color: var(--secondary-color);
   padding: 20px 40px;
   border-radius: 20px;
   margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 20px 10px;
+  }
 }

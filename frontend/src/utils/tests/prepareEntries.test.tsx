@@ -21,6 +21,7 @@ describe("prepareEntries", () => {
       submissionDate: new Date("2023-12-17T13:16:20.107Z"),
       files: [],
       contestID: "657ed098a5ba96cfdd2b3d42",
+      category: "kat1",
     },
     {
       id: "657ef4dbc4d16a709a994e20",
@@ -39,6 +40,7 @@ describe("prepareEntries", () => {
       submissionDate: new Date("2023-12-17T13:17:15.961Z"),
       files: [],
       contestID: "657ed098a5ba96cfdd2b3d42",
+      category: "kat2",
     },
   ];
 

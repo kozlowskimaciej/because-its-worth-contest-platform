@@ -23,11 +23,11 @@ export default function Cards() {
   ];
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`container ${styles.wrapper}`}>
       {cards.map((card, index) => (
         <button key={index} onClick={card.onclick} className={styles.card}>
           <h3 className={styles.title}>{card.title}</h3>
-          <div style={{ display: "flex", padding: "1rem", gap: "1rem" }}>
+          <div className={styles.content}>
             <img src={card.image} alt="" className={styles.image} />
             <p className={styles.description}>{card.description}</p>
           </div>

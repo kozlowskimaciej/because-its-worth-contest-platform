@@ -17,4 +17,10 @@ export type Entry = {
   submissionDate: Date;
   files: string[];
   contestID: string;
+  category: string;
+};
+
+export type ExpandableEntry = {
+  entry: Entry;
+  isExpanded: boolean;
 };

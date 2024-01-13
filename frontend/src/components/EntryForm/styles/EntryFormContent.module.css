@@ -1,31 +1,10 @@
 .form {
-  width: 50%;
+  max-width: 1000px;
+  /* width: 50%; */
   margin: auto;
   border-radius: 20px;
   padding: 20px;
   text-align: center;
-}
-
-.entry {
-  margin: 25px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.entry label {
-  font-size: larger;
-}
-
-.entry input {
-  width: 80%;
-  float: right;
-  margin-left: auto;
-  font-size: larger;
-  border: none;
-  background-color: var(--primary-color);
-  border-radius: 10px;
-  padding: 10px 10px;
 }
 
 .submit {

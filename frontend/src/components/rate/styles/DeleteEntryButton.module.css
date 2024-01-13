@@ -1,0 +1,17 @@
+.button {
+  all: unset;
+  background-color: #dc3545;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.button img {
+  margin-top: -2px;
+  width: 60%;
+}
+
+.button:hover {
+  cursor: pointer;
+}

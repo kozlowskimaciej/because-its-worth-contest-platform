@@ -8,6 +8,10 @@ from backend.emails import email_sending
 from smtplib import SMTP
 from pytest import MonkeyPatch
 
+import secrets
+import hashlib
+from backend.api.routers.auth import users, create_jwt_token
+
 
 TEST_DIR = Path(__file__).parent
 
@@ -68,3 +72,31 @@ def mock_smtp(monkeypatch: MonkeyPatch):
     monkeypatch.setattr(email_sending, "SMTP", FakeSMTP)
     monkeypatch.setenv("EMAIL_PASSWORD", "PASSWORD")
     return mail_registry
+
+
+@pytest.fixture
+def setup_users():
+    new_id = secrets.token_hex(16)
+    new_login = "fake_login"
+    new_password = secrets.token_hex(16)
+
+    new_user = {
+        "id": new_id,
+        "login": new_login,
+        "password": hashlib.sha256(new_password.encode()).hexdigest()
+    }
+
+    correct_user = {
+        "login": new_login,
+        "password": new_password
+    }
+
+    users.append(new_user)
+
+    token = create_jwt_token({"id": new_id})
+
+    auth_header = {
+        "Authorization": f"Bearer {token}"
+    }
+
+    return correct_user, auth_header

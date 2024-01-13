@@ -5,10 +5,11 @@ from typing import Optional, Annotated
 from urllib.parse import urlparse
 
 from bson import ObjectId, json_util
-from fastapi import APIRouter, HTTPException, Body, Query
+from fastapi import APIRouter, HTTPException, Depends, Body, Query
 from pydantic import BaseModel, AnyHttpUrl
 from starlette.requests import Request
 
+from backend.api.routers.auth import get_current_user
 from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending, email_content
 from backend.api.routers.static_files import delete_file
@@ -29,8 +30,12 @@ class Contest(BaseModel):
     background: Optional[AnyHttpUrl]
 
 
-@router.post("/")
-async def post_contest(data: Contest, request: Request):
+@router.post('/')
+async def post_contest(
+    data: Contest,
+    request: Request,
+    user_id: str = Depends(get_current_user)
+):
     db = request.app.database
 
     entry_dict = data.model_dump(mode="json")
@@ -44,7 +49,7 @@ async def post_contest(data: Contest, request: Request):
 )
 async def get_contests(
     request: Request,
-    id: Optional[str] = None,
+    id: Optional[str] = None
 ):
     db = request.app.database
 
@@ -78,7 +83,10 @@ def send_emails(data: Publication, email_content: str):
 
 
 @router.post("/{id}/publish")
-async def publish_contest(request: Request, data: Publication, id: str):
+async def publish_contest(
+    request: Request, data: Publication, id: str,
+    user_id: str = Depends(get_current_user)
+):
     db = request.app.database
     contest = await db.contests.find_one({"_id": ObjectId(id)})
     if not contest:
@@ -116,7 +124,8 @@ async def delete_contest_files(contest: dict):
 )
 async def delete_contest(
     request: Request,
-    id: str
+    id: str,
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 
@@ -143,7 +152,8 @@ async def delete_contest(
 async def update_contest(
     request: Request,
     id: Annotated[str, Query()],
-    data: Annotated[Contest, Body()]
+    data: Annotated[Contest, Body()],
+    user_id: str = Depends(get_current_user)
 ):
     db = request.app.database
 

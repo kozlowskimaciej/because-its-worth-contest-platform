@@ -1,22 +1,22 @@
 import React from "react";
 import { useReactToPrint } from "react-to-print";
 import styles from "./styles/PrintButton.module.css";
+import { useEntryFormContext } from "../../contexts/EntryFormContext";
 
-interface IProps {
-  element: HTMLElement;
-}
+export default function PrintButton() {
+  const { entryFilesRef, entryFormRef, submitButtonRef } =
+    useEntryFormContext();
 
-export default function PrintButton({ element }: IProps) {
   const handlePrint = useReactToPrint({
     onBeforeGetContent: () => {
-      document.getElementById("entry-form-file-input")!.style.display = "none";
-      document.getElementById("entry-form-submit")!.style.display = "none";
+      entryFilesRef.current!.style.display = "none";
+      submitButtonRef.current!.style.display = "none";
     },
     onAfterPrint: () => {
-      document.getElementById("entry-form-file-input")!.style.display = "block";
-      document.getElementById("entry-form-submit")!.style.display = "";
+      entryFilesRef.current!.style.display = "block";
+      submitButtonRef.current!.style.display = "";
     },
-    content: () => element,
+    content: () => entryFormRef.current,
   });
 
   return (

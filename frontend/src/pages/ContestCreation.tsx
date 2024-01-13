@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import ContestCreationForm from "../components/contestCreation/ContestCreationForm";
 import Navbar from "../components/common/Navbar";
 import ContestCreatedInfo from "../components/contestCreation/ContestCreatedInfo";
+import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function ContestCreation() {
+  useCheckToken();
   const [createdContestID, setCreatedContestID] = useState<string | null>(null);
 
   const emptyContest = {
@@ -22,11 +25,13 @@ export default function ContestCreation() {
   return (
     <>
       <Navbar />
-      <div style={{ width: "50%", margin: "auto", paddingTop: "140px" }}>
-        <ContestCreationForm
-          initialValues={emptyContest}
-          setCreatedContestID={setCreatedContestID}
-        />
+      <div
+        className="container"
+        style={{ maxWidth: "800px", paddingTop: "140px" }}
+      >
+        <ContestCreationFormContextProvider initialValues={emptyContest}>
+          <ContestCreationForm setCreatedContestID={setCreatedContestID} />
+        </ContestCreationFormContextProvider>
       </div>
     </>
   );

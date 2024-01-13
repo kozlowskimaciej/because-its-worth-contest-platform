@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { prepareContests } from "../../utils/prepareContests";
 import useFetch from "../../hooks/useFetch";
 import Loading from "../common/Loading";
+import NotFoundInfo from "../notFound/NotFoundInfo";
 
 export default function Contests() {
   const navigate = useNavigate();
@@ -13,7 +14,8 @@ export default function Contests() {
   );
 
   if (isLoading) return <Loading text="" />;
-  if (error) return <div>error</div>;
+  if (error)
+    return <NotFoundInfo text="Wystąpił błąd podczas wczytywania konkursów." />;
 
   const contests = prepareContests(data);
 

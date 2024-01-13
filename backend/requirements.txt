@@ -4,3 +4,5 @@ uvicorn
 python-magic
 python-multipart
 motor
+python-jose
+python-dotenv

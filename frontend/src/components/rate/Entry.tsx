@@ -6,36 +6,73 @@ import {
   AVAILABLE_VIDEOS_FORMATS,
 } from "../../constants";
 import styles from "./styles/Entry.module.css";
+import { useRateContext } from "../../contexts/RateContext";
+import PlaceSelect from "./PlaceSelect";
+import DeleteEntryButton from "./DeleteEntryButton";
 
 interface IProps {
   entry: EntryType;
 }
 
 export default function Entry({ entry }: IProps) {
+  const { handleCloseEntry } = useRateContext();
+
   const getExtension = (file: string): string => {
     const splitted = file.split(".");
     return splitted[splitted.length - 1];
   };
+
+  const renderAuthorFields = () => {
+    const authorFields = [];
+
+    const fieldsToNames = {
+      firstName: "imię",
+      lastName: "nazwisko",
+      phone: "numer telefonu",
+      email: "email",
+      address: "adres",
+    } as any;
+
+    for (const key in entry.author) {
+      if (entry.author.hasOwnProperty(key) && (entry.author as any)[key]) {
+        authorFields.push(
+          <div className={styles.text} key={key}>
+            <span className={styles.field}>{fieldsToNames[key]}: </span>
+            {(entry.author as any)[key]}
+          </div>
+        );
+      }
+    }
+
+    return authorFields;
+  };
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.text}>imie: {entry.author.firstName}</div>
-      <div className={styles.text}>nazwisko: {entry.author.lastName}</div>
-      {entry.author.phone && (
-        <div className={styles.text}>numer telefonu: {entry.author.phone}</div>
-      )}
-      {entry.author.email && (
-        <div className={styles.text}>email: {entry.author.email}</div>
-      )}
-      {entry.author.address && (
-        <div className={styles.text}>adres: {entry.author.address}</div>
-      )}
-      {entry.guardian && (
+      <div className={styles.controls}>
+        <PlaceSelect entry={entry} />
+        <button
+          className={styles.close}
+          onClick={() => handleCloseEntry(entry.id)}
+          title="zwiń"
+        >
+          <img src={`${process.env.PUBLIC_URL}/icons/arrow.svg`} />
+        </button>
+        <DeleteEntryButton entry={entry} />
+      </div>
+      {renderAuthorFields()}
+      <div className={styles.text}>
+        <span className={styles.field}>kategoria: </span>
+        {entry.category}
+      </div>
+      {entry.guardian?.firstName && (
         <div className={styles.text}>
-          opiekun: {entry.guardian.firstName} {entry.guardian.lastName}
+          <span className={styles.field}>opiekun: </span>
+          {entry.guardian.firstName} {entry.guardian.lastName}
         </div>
       )}
       <div className={styles.text} style={{ marginTop: "20px" }}>
-        zgłoszone prace:
+        <span className={styles.field}>zgłoszone prace: </span>
       </div>
       <ul>
         {entry.files.map((file, index) => {

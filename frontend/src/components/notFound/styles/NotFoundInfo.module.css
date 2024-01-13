@@ -1,5 +1,6 @@
 .wrapper {
   position: absolute;
+  max-width: 500px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -7,8 +8,7 @@
 }
 
 .image {
-  width: 500px;
-  height: 250px;
+  width: 100%;
   border-radius: 20px;
   object-fit: cover;
 }
@@ -25,6 +25,7 @@
   padding: 20px;
   margin-top: 30px;
   transition: scale 400ms ease;
+  text-wrap: nowrap;
 }
 
 .button:hover {

@@ -1,9 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/Navbar.module.css";
+import { toast } from "react-toastify";
+import { useAppContext } from "../../contexts/AppContext";
+import axios from "axios";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { tokenRef } = useAppContext();
 
   const buttons = [
     {
@@ -23,17 +28,72 @@ export default function Navbar() {
     },
   ];
 
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    if (!window.confirm("Czy na pewno chcesz się wylogować?")) return;
+
+    const id = toast.loading("Proszę czekać...");
+
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${tokenRef.current}`,
+          },
+        }
+      )
+      .then((data) => {
+        if (data.status !== 200) throw new Error();
+        toast.update(id, successConfig("Wylogowanie powiodło się."));
+      })
+      .catch(() =>
+        toast.update(id, errorConfig("Wystąpił błąd podczas wylogowywania."))
+      )
+      .finally(() => {
+        tokenRef.current = null;
+        navigate("/login");
+      });
+  };
+
   return (
-    <header className={styles.header}>
-      {buttons.map((button, index) => (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light p-0 fixed-top">
+      <div className="container-fluid p-0">
         <button
-          key={index}
-          onClick={button.isActive ? () => {} : button.onclick}
-          className={`${styles.button} ${button.isActive ? styles.active : ""}`}
+          className="navbar-toggler m-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerDemo03"
+          aria-controls="navbarTogglerDemo03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          {button.text}
+          <span className="navbar-toggler-icon"></span>
         </button>
-      ))}
-    </header>
+        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {buttons.map((button, index) => (
+              <li key={index} className="nav-item">
+                <button
+                  className={`${styles.button} ${
+                    button.isActive ? styles.active : null
+                  }`}
+                  onClick={button.onclick}
+                >
+                  {button.text}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <form className="d-flex">
+            <button onClick={handleLogout} className={`${styles.logout}`}>
+              WYLOGUJ SIĘ
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
   );
 }

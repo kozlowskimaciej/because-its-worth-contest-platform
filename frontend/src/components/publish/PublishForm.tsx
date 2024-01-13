@@ -1,63 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles/PublishForm.module.css";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import FileInput from "./FileInput";
+import FilesDisplayer from "./FilesDisplayer";
+import { usePublishContext } from "../../contexts/PublishContext";
+import { uploadMultipleFiles } from "../../utils/uploadFiles";
+import { toast } from "react-toastify";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function PublishForm() {
-  const navigate = useNavigate();
-  const [files, setFiles] = useState<File[]>([]);
+  const { files } = usePublishContext();
+  const { id } = useParams();
 
-  const handleNewFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles((prev) => [...prev, ...e.target.files!]);
-  };
-
-  const handleRemove = (index: number) => {
-    setFiles((prev) => prev.filter((_, id) => id !== index));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    if (files.length === 0) {
+      toast.warning("Wybierz co najmniej jeden plik.");
+      return;
+    }
 
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
+    const toastID = toast.loading("Proszę czekać...");
 
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
+    try {
+      const urls = await uploadMultipleFiles(files);
+      const formLink = `${window.origin}/forms/${id}`;
 
-    navigate(`/contests`);
+      console.log(urls, formLink);
+      toast.update(toastID, successConfig("Konkurs opublikowany pomyślnie."));
+    } catch (e) {
+      toast.update(
+        toastID,
+        errorConfig("Wystąpił błąd podczas publikownia konkursu.")
+      );
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <label htmlFor="publish-files" className={styles.label}>
-        Wybierz pliki
-      </label>
-      <input
-        type="file"
-        multiple
-        style={{ display: "none" }}
-        id="publish-files"
-        accept=".txt"
-        onChange={handleNewFiles}
-      />
-      <ul>
-        {files.map((file, index) => (
-          <li key={index}>
-            <span>{file.name}</span>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleRemove(index);
-              }}
-            >
-              x
-            </button>
-          </li>
-        ))}
-      </ul>
+    <form onSubmit={handleSubmit} className={`container ${styles.form}`}>
+      <FileInput />
+      <FilesDisplayer />
       <div style={{ width: "100%", textAlign: "center" }}>
         <button type="submit" className={styles.button}>
           Wyślij
