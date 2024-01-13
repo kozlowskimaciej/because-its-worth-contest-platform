@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
 from backend.api.routers.auth import create_jwt_token
+from backend.emails.email_content import EmailContentGenerator
 
 import pytest
 
@@ -95,7 +96,15 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
     assert mock_smtp[0]["To"] == ", ".join(
         ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"] * 2
     )
-    assert mock_smtp[0].get_content().rstrip() == "link_to_form"
+
+    deadline = contest["deadline"].split("T")[0]
+    assert mock_smtp[0].get_content().rstrip() == EmailContentGenerator.\
+        generate_contest_invitation(
+            contest_name="Test Contest",
+            deadline=datetime.strptime(
+                deadline, "%Y-%m-%d").strftime("%d.%m.%Y"),
+            form_url=publishing["form_url"]
+        )[1].rstrip()
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
