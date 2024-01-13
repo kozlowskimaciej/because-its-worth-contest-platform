@@ -39,6 +39,7 @@ export default function ContestCreationForm({ setCreatedContestID }: IProps) {
     termsAndConditions: urls,
     acceptedFileFormats: fileFormats,
     background: backgroundURL,
+    ended: false,
   });
 
   const createContest = (

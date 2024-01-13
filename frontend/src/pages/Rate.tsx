@@ -7,6 +7,7 @@ import { prepareEntries } from "../utils/prepareEntries";
 import Navbar from "../components/common/Navbar";
 import Entries from "../components/rate/Entries";
 import RateContextProvider from "../contexts/RateContext";
+import FinishButton from "../components/rate/FinishButton";
 
 export default function Rate() {
   const { id } = useParams();
@@ -40,6 +41,7 @@ export default function Rate() {
     <>
       <Navbar />
       <div style={{ height: "100px" }} />
+      <FinishButton />
       <RateContextProvider entries={entries}>
         <Entries />
       </RateContextProvider>

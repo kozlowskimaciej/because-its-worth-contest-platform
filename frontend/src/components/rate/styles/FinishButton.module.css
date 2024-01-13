@@ -1,0 +1,10 @@
+.button {
+  margin: auto;
+  all: unset;
+  border-radius: 20px;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  padding: 10px 50px;
+  margin: auto;
+  margin-bottom: 20px;
+}
