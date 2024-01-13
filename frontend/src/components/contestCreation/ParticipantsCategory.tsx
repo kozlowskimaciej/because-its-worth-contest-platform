@@ -65,6 +65,7 @@ export default function ParticipantsCategory() {
             placeholder="Wpisz nową kategorię uczestnika"
           />
           <button
+            className={styles2.add}
             onClick={(e) => {
               e.preventDefault();
               handleNewCategory();
@@ -73,6 +74,7 @@ export default function ParticipantsCategory() {
             Dodaj
           </button>
           <button
+            className={styles2.delete}
             onClick={(e) => {
               e.preventDefault();
               setIsAddingCategory(false);

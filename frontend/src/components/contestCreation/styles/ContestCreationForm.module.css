@@ -49,3 +49,23 @@
 .button:hover {
   cursor: pointer;
 }
+
+.add, .delete {
+  all: unset;
+  padding: 10px 20px;
+  margin-left: 5px;
+  color: whitesmoke;
+  border-radius: 5px;
+}
+
+.add:hover, .delete:hover {
+  cursor: pointer;
+}
+
+.add {
+  background-color: var(--accent-color);
+}
+
+.delete {
+  background-color: #dc3545;
+}
