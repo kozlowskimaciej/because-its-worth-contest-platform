@@ -1,11 +1,12 @@
 import axios from "axios";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { errorConfig, successConfig } from "../../config/toasts";
 import styles from "./styles/FinishButton.module.css";
 
 export default function FinishButton() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const handleFinishContest = () => {
@@ -22,6 +23,7 @@ export default function FinishButton() {
       .then((data) => {
         if (data.status !== 200) throw new Error();
         toast.update(toastID, successConfig("Konkurs zakończony pomyślnie."));
+        navigate(`/contests/${id}/preview`);
       })
       .catch(() => {
         toast.update(

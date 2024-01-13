@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles/PublishForm.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FileInput from "./FileInput";
 import FilesDisplayer from "./FilesDisplayer";
 import { usePublishContext } from "../../contexts/PublishContext";
@@ -10,6 +10,7 @@ import { errorConfig, successConfig } from "../../config/toasts";
 import axios from "axios";
 
 export default function PublishForm() {
+  const navigate = useNavigate();
   const { files } = usePublishContext();
   const { id } = useParams();
 
@@ -43,6 +44,7 @@ export default function PublishForm() {
 
       if (data.status !== 200) throw new Error();
       toast.update(toastID, successConfig("Konkurs opublikowany pomyślnie."));
+      navigate(`/contests/${id}/preview`);
     } catch (e) {
       toast.update(
         toastID,

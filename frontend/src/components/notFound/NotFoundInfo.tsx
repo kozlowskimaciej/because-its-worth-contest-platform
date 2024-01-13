@@ -23,7 +23,7 @@ export default function NotFoundInfo({
       <p className={styles.p}>{text}</p>
       {isDisplayingButton && (
         <button className={styles.button} onClick={() => navigate("/")}>
-          wróć na stronę główną
+          Wróć na stronę główną
         </button>
       )}
     </div>
