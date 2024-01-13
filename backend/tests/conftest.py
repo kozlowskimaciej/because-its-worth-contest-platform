@@ -40,10 +40,12 @@ def client(request, monkeypatch, mongodb_container, testdir) -> TestClient:
     from backend.api import app
     from backend.api.app import create_app, Database
     from backend.api.routers import static_files
+    from backend.api.routers import contests
 
     # setting static folder path to testdir
-    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", str(testdir))
-    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", str(testdir))
+    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", testdir)
+    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", testdir)
+    monkeypatch.setattr(contests, "STATIC_FOLDER_NAME", testdir)
 
     # setting database connection url
     monkeypatch.setenv(

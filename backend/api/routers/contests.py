@@ -12,9 +12,7 @@ from starlette.requests import Request
 from backend.api.routers.auth import get_current_user
 from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending, email_content
-from backend.api.routers.static_files import delete_file
-from pathlib import Path
-
+from backend.api.routers.static_files import delete_file, STATIC_FOLDER_NAME
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
 
@@ -71,10 +69,9 @@ class Publication(BaseModel):
 
 
 def get_all_receivers(receiver_files: list[str]):
-    STATIC_FOLDER_NAME = Path(__file__).parent.parent.parent / "uploads"
     receivers = []
     for file_name in receiver_files:
-        with open(f"{STATIC_FOLDER_NAME}/{file_name}", "r") as file:
+        with open(STATIC_FOLDER_NAME / file_name, "r") as file:
             receivers.extend([line.rstrip() for line in file])
     return receivers
 

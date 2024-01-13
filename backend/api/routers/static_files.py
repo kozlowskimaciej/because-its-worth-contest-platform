@@ -67,7 +67,7 @@ async def upload_file(file: UploadFile = File(...)):
     validate_file(file)
 
     # Save file to STATIC_FOLDER_NAME path
-    filepath = f"{STATIC_FOLDER_NAME}/{generated_filename}"
+    filepath = STATIC_FOLDER_NAME / generated_filename
     with open(filepath, "wb") as f:
         f.write(file.file.read())
 
@@ -76,7 +76,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @router.delete('/{filename}')
 async def delete_file(filename: str):
-    filepath = f"{STATIC_FOLDER_NAME}/{filename}"
+    filepath = STATIC_FOLDER_NAME / filename
 
     if os.path.exists(filepath):
         os.remove(filepath)

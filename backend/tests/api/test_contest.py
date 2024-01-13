@@ -40,7 +40,7 @@ def test_post_contest(client, contest):
     assert "id" in post_resp
     contest_id = post_resp["id"]
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
 
     get_resp = response.json()
@@ -74,7 +74,7 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
 
     assert len(mock_smtp) == 0
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
     assert not response.json()["data"]["published"]
 
@@ -106,7 +106,7 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
             form_url=publishing["form_url"]
         )[1].rstrip()
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
     assert response.json()["data"]["published"]
 
@@ -145,7 +145,7 @@ def test_delete_contest(client, contest):
     entries_data = response.json()["data"]
     assert len(entries_data) == 1
 
-    response = client.delete(f'/contests?id={contest_id}', cookies=auth_cookie)
+    response = client.delete(f'/contests/?id={contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
 
     response = client.get(f'/entries/{contest_id}', cookies=auth_cookie)
@@ -153,7 +153,7 @@ def test_delete_contest(client, contest):
     entries_data = response.json()["data"]
     assert len(entries_data) == 0
 
-    response = client.get(f'/contests?id={contest_id}')
+    response = client.get(f'/contests/?id={contest_id}')
     assert response.status_code == 404
 
 
@@ -169,11 +169,11 @@ def test_update_contest(client, contest):
     contest_id = post_resp['id']
 
     contest['name'] = 'New name'
-    response = client.patch(f'/contests?id={contest_id}', json=contest,
+    response = client.patch(f'/contests/?id={contest_id}', json=contest,
                             cookies=auth_cookie)
     assert response.status_code == 200
 
-    response = client.get(f'/contests?id={contest_id}')
+    response = client.get(f'/contests/?id={contest_id}')
     assert response.status_code == 200
 
     get_resp = response.json()
