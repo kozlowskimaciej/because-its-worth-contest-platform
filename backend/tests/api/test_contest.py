@@ -9,8 +9,8 @@ import pytest
 
 token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
 
-auth_header = {
-    "Authorization": f"Bearer {token}"
+auth_cookie = {
+    "token": token
 }
 
 
@@ -33,7 +33,7 @@ def contest():
 
 
 def test_post_contest(client, contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -68,7 +68,7 @@ def test_post_contest(client, contest):
 
 
 def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
     contest_id = response.json()["id"]
 
@@ -89,7 +89,7 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
         "form_url": "link_to_form",
     }
     response = client.post(f"/contests/{contest_id}/publish", json=publishing,
-                           headers=auth_header)
+                           cookies=auth_cookie)
     assert response.status_code == 200
 
     assert len(mock_smtp) == 1
@@ -116,7 +116,7 @@ def test_delete_contest(client, contest):
     contest['background'] = None
     contest['published'] = True
 
-    response = client.post('/contests/', json=contest, headers=auth_header)
+    response = client.post('/contests/', json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -140,15 +140,15 @@ def test_delete_contest(client, contest):
     })
     assert response.status_code == 200
 
-    response = client.get(f'/entries/{contest_id}', headers=auth_header)
+    response = client.get(f'/entries/{contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
     entries_data = response.json()["data"]
     assert len(entries_data) == 1
 
-    response = client.delete(f'/contests?id={contest_id}', headers=auth_header)
+    response = client.delete(f'/contests?id={contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
 
-    response = client.get(f'/entries/{contest_id}', headers=auth_header)
+    response = client.get(f'/entries/{contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
     entries_data = response.json()["data"]
     assert len(entries_data) == 0
@@ -161,7 +161,7 @@ def test_update_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
 
-    response = client.post('/contests/', json=contest, headers=auth_header)
+    response = client.post('/contests/', json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -170,7 +170,7 @@ def test_update_contest(client, contest):
 
     contest['name'] = 'New name'
     response = client.patch(f'/contests?id={contest_id}', json=contest,
-                            headers=auth_header)
+                            cookies=auth_cookie)
     assert response.status_code == 200
 
     response = client.get(f'/contests?id={contest_id}')

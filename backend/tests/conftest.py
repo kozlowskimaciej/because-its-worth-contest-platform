@@ -95,8 +95,8 @@ def setup_users():
 
     token = create_jwt_token({"id": new_id})
 
-    auth_header = {
-        "Authorization": f"Bearer {token}"
+    auth_cookie = {
+        "token": token
     }
 
-    return correct_user, auth_header
+    return correct_user, auth_cookie
