@@ -6,7 +6,7 @@ def test_send_email(mock_smtp):
 
     assert len(mock_smtp) == 0
     receivers = ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"]
-    email_sending.send_email(receivers, "Subject", "Body")
+    email_sending.send_email(receivers, ("Subject", "Body"))
 
     assert len(mock_smtp) == 1
 

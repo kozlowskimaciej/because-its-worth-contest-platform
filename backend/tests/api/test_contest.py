@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
 from backend.api.routers.auth import create_jwt_token
+from backend.emails.email_content import EmailContentGenerator
 
 import pytest
 
@@ -21,7 +22,7 @@ def contest():
         'category': 'Test',
         'entryCategories': ['foo', 'boo', 'bar'],
         'published': False,
-        'deadline': datetime.now().isoformat(),
+        'deadline': str((datetime.now() + timedelta(hours=1)).isoformat()),
         'termsAndConditions': [
             'https://foo.bar/static/contest-terms1.jpg',
             'https://foo.bar/static/contest-terms2.jpg'
@@ -95,7 +96,15 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
     assert mock_smtp[0]["To"] == ", ".join(
         ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"] * 2
     )
-    assert mock_smtp[0].get_content().rstrip() == "link_to_form"
+
+    deadline = contest["deadline"].split("T")[0]
+    assert mock_smtp[0].get_content().rstrip() == EmailContentGenerator.\
+        generate_contest_invitation(
+            contest_name="Test Contest",
+            deadline=datetime.strptime(
+                deadline, "%Y-%m-%d").strftime("%d.%m.%Y"),
+            form_url=publishing["form_url"]
+        )[1].rstrip()
 
     response = client.get(f"/contests?id={contest_id}")
     assert response.status_code == 200
@@ -105,6 +114,7 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
 def test_delete_contest(client, contest):
     contest['termsAndConditions'] = None
     contest['background'] = None
+    contest['published'] = True
 
     response = client.post('/contests/', json=contest, headers=auth_header)
     assert response.status_code == 200
@@ -114,7 +124,7 @@ def test_delete_contest(client, contest):
     contest_id = post_resp['id']
 
     # adding sample entry
-    client.post('/entries/', json={
+    response = client.post('/entries/', json={
         "firstName": "Janusz",
         "lastName": "Kowal",
         "guardianFirstName": "Jan",
@@ -122,21 +132,26 @@ def test_delete_contest(client, contest):
         "phone": "32423432",
         "email": "@email.com",
         "address": "jiosajd, 9023",
-        "submissionDate": datetime.now().isoformat(),
+        "submissionDate": str(datetime.now().isoformat()),
         "attachments": [],
         "place": "Warsaw",
         "contestId": contest_id,
         "category": "kat1"
     })
+    assert response.status_code == 200
 
     response = client.get(f'/entries/{contest_id}', headers=auth_header)
     assert response.status_code == 200
+    entries_data = response.json()["data"]
+    assert len(entries_data) == 1
 
     response = client.delete(f'/contests?id={contest_id}', headers=auth_header)
     assert response.status_code == 200
 
     response = client.get(f'/entries/{contest_id}', headers=auth_header)
-    assert response.status_code == 404
+    assert response.status_code == 200
+    entries_data = response.json()["data"]
+    assert len(entries_data) == 0
 
     response = client.get(f'/contests?id={contest_id}')
     assert response.status_code == 404
