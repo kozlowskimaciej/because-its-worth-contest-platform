@@ -12,6 +12,12 @@ import FinishButton from "../components/rate/FinishButton";
 export default function Rate() {
   const { id } = useParams();
 
+  const {
+    data: contest,
+    isLoading: contestIsLoading,
+    error,
+  } = useFetch(`${process.env.REACT_APP_SERVER_URL}/contests/?id=${id}`);
+
   const { data, isLoading } = useFetch(
     `${process.env.REACT_APP_SERVER_URL}/entries/${id}`,
     {
@@ -19,7 +25,7 @@ export default function Rate() {
     }
   );
 
-  if (isLoading)
+  if (isLoading || contestIsLoading)
     return (
       <>
         <Navbar />
@@ -27,15 +33,23 @@ export default function Rate() {
       </>
     );
 
-  const entries = prepareEntries(data);
-
-  if (entries.length === 0)
+  if (contest && (contest as any).data.ended === true)
     return (
       <>
         <Navbar />
-        <NotFoundInfo text="Podany konkurs nie istnieje lub nie zostały zgłoszone żadne prace." />
+        <NotFoundInfo text="Konkurs został już zakończony." />
       </>
     );
+
+  if (error)
+    return (
+      <>
+        <Navbar />
+        <NotFoundInfo text="Podany konkurs nie istnieje." />
+      </>
+    );
+
+  const entries = prepareEntries(data);
 
   return (
     <>
