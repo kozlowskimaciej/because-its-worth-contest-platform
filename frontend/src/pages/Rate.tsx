@@ -11,7 +11,7 @@ import RateContextProvider from "../contexts/RateContext";
 export default function Rate() {
   const { id } = useParams();
 
-  const { data, error, isLoading } = useFetch(
+  const { data, isLoading } = useFetch(
     `${process.env.REACT_APP_SERVER_URL}/entries/${id}`,
     {
       withCredentials: true,
@@ -26,15 +26,15 @@ export default function Rate() {
       </>
     );
 
-  if (error)
+  const entries = prepareEntries(data);
+
+  if (entries.length === 0)
     return (
       <>
         <Navbar />
         <NotFoundInfo text="Podany konkurs nie istnieje lub nie zostały zgłoszone żadne prace." />
       </>
     );
-
-  const entries = prepareEntries(data);
 
   return (
     <>
