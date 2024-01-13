@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from backend.tests.api.test_static_files import TEST_IMAGES_PATH
 from email.message import EmailMessage
 from backend.api.routers.auth import create_jwt_token
@@ -22,7 +22,7 @@ def contest():
         'category': 'Test',
         'entryCategories': ['foo', 'boo', 'bar'],
         'published': False,
-        'deadline': '2024-01-18T00:00:00Z',
+        'deadline': str((datetime.now() + timedelta(hours=1)).isoformat()),
         'termsAndConditions': [
             'https://foo.bar/static/contest-terms1.jpg',
             'https://foo.bar/static/contest-terms2.jpg'
@@ -97,10 +97,12 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
         ["maciej@bmw.pb.bi", "kolega@macieja.uwb.bi"] * 2
     )
 
+    deadline = contest["deadline"].split("T")[0]
     assert mock_smtp[0].get_content().rstrip() == EmailContentGenerator.\
         generate_contest_invitation(
             contest_name="Test Contest",
-            deadline='18.01.2024',
+            deadline=datetime.strptime(
+                deadline, "%Y-%m-%d").strftime("%d.%m.%Y"),
             form_url=publishing["form_url"]
         )[1].rstrip()
 
