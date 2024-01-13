@@ -12,7 +12,8 @@ export default function CategorySelector({ categories }: IProps) {
       <br />
       {categories.map((category, index) => (
         <React.Fragment key={index}>
-          <input type="radio" value={category} name="type" /> {category}
+          <input type="radio" value={category} name="type" />
+          <span className={styles.option}>{category}</span>
           <br />
         </React.Fragment>
       ))}

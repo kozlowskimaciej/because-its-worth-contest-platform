@@ -93,9 +93,11 @@ export default function EntryFormContent({ contest }: IProps) {
       onSubmit={handleSubmit}
       ref={entryFormRef}
     >
-      <h2>Karta zgłoszeniowa do konkursu "{contest.name}"</h2>
+      <h2 className={styles.h2}>
+        Karta zgłoszeniowa do konkursu "{contest.name}"
+      </h2>
       <div style={{ textAlign: "left" }}>
-        <div>* pole obowiązkowe</div>
+        <div className={styles.obligatory}>* pole obowiązkowe</div>
         <SingleEntry
           entryTitle="Imie *"
           name="firstname"

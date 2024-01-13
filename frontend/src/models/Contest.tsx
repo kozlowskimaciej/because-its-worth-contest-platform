@@ -9,4 +9,5 @@ export type Contest = {
   termsAndConditions: string[];
   acceptedFileFormats: string[];
   background: string;
+  ended: boolean;
 };
