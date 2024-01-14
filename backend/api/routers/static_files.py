@@ -2,6 +2,8 @@ from pathlib import Path
 import uuid
 import datetime
 import os
+from urllib.parse import quote
+import re
 
 from fastapi import File, UploadFile, HTTPException, APIRouter
 
@@ -18,7 +20,8 @@ router = APIRouter(prefix='/uploads', tags=['Upload'])
 def generate_filename(user_id, original_filename):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     random_string = str(uuid.uuid4().hex)[:8]
-    return f"{user_id}_{timestamp}_{random_string}_{original_filename}"
+    cleaned_filename = re.sub(r"%..", "_", quote(original_filename))
+    return f"{user_id}_{timestamp}_{random_string}_{cleaned_filename}"
 
 
 def __allowed_file(filename):
