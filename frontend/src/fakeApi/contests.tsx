@@ -16,6 +16,7 @@ export const contests = {
       ],
       acceptedFileFormats: ["jpg", "png"],
       background: "https://foo.bar/static/contest-background.jpg",
+      ended: false,
     },
     {
       _id: {
@@ -33,6 +34,7 @@ export const contests = {
       ],
       acceptedFileFormats: ["jpg", "png"],
       background: "https://foo.bar/static/contest-background.jpg",
+      ended: false,
     },
   ],
 };

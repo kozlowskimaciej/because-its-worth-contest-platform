@@ -1,14 +1,14 @@
 import React from "react";
 import Navbar from "../components/common/Navbar";
 import Cards from "../components/home/Cards";
-import useCheckToken from "../hooks/useCheckToken";
 
 export default function Home() {
-  useCheckToken();
-
   return (
     <div>
       <Navbar />
+      <h2 style={{ paddingTop: "170px", textAlign: "center" }}>
+        Platforma konkursowa fundacji "Bo warto"
+      </h2>
       <Cards />
     </div>
   );

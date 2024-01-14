@@ -40,10 +40,12 @@ def client(request, monkeypatch, mongodb_container, testdir) -> TestClient:
     from backend.api import app
     from backend.api.app import create_app, Database
     from backend.api.routers import static_files
+    from backend.api.routers import contests
 
     # setting static folder path to testdir
-    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", str(testdir))
-    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", str(testdir))
+    monkeypatch.setattr(app, "STATIC_FOLDER_NAME", testdir)
+    monkeypatch.setattr(static_files, "STATIC_FOLDER_NAME", testdir)
+    monkeypatch.setattr(contests, "STATIC_FOLDER_NAME", testdir)
 
     # setting database connection url
     monkeypatch.setenv(
@@ -95,8 +97,8 @@ def setup_users():
 
     token = create_jwt_token({"id": new_id})
 
-    auth_header = {
-        "Authorization": f"Bearer {token}"
+    auth_cookie = {
+        "token": token
     }
 
-    return correct_user, auth_header
+    return correct_user, auth_cookie

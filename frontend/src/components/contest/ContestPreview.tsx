@@ -8,12 +8,14 @@ import InfoSection from "./InfoSection";
 import FileListSection from "./FileListSection";
 import ListSection from "./ListSection";
 import FormLinkSection from "./FormLinkSection";
+import useDeleteContest from "./utils/deleteContest";
 
 interface IProps {
   contest: Contest;
 }
 
 export default function ContestPreview({ contest }: IProps) {
+  const { deleteContest } = useDeleteContest(contest.id);
   const navigate = useNavigate();
 
   const controlButtons = [
@@ -30,7 +32,10 @@ export default function ContestPreview({ contest }: IProps) {
     {
       text: "Usuń konkurs",
       class: styles.delete,
-      onClick: () => {},
+      onClick: () => {
+        if (!window.confirm("Czy na pewno chcesz usunąć ten konkurs?")) return;
+        deleteContest();
+      },
     },
   ];
 

@@ -7,10 +7,8 @@ import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
 import ContestCreationFormContextProvider from "../contexts/ContestCreationFormContext";
-import useCheckToken from "../hooks/useCheckToken";
 
 export default function ContestModification() {
-  useCheckToken();
   const { id } = useParams();
 
   const { data, isLoading, error } = useFetch<any>(

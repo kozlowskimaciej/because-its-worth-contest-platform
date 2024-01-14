@@ -1,10 +1,19 @@
 .form {
   max-width: 1000px;
-  /* width: 50%; */
   margin: auto;
   border-radius: 20px;
   padding: 20px;
   text-align: center;
+}
+
+.h2 {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: 700;
+}
+
+.obligatory {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: 700;
 }
 
 .submit {

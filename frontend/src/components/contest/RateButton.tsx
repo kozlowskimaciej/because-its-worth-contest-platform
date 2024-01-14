@@ -11,7 +11,7 @@ export default function RateButton() {
       className={styles.button}
       onClick={() => navigate(`/contests/${id}/rate`)}
     >
-      przeglądaj prace
+      Przeglądaj prace
     </button>
   );
 }

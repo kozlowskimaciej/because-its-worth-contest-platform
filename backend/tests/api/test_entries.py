@@ -5,7 +5,29 @@ from datetime import datetime, timedelta
 
 token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
 
-auth_header = {"Authorization": f"Bearer {token}"}
+auth_cookie = {
+    "token": token
+}
+
+
+@pytest.fixture
+def entry():
+    return {
+        "firstName": "Janusz",
+        "lastName": "Kowal",
+        "guardianFirstName": "Jan",
+        "guardianLastName": "Janowy",
+        "phone": "32423432",
+        "email": "@email.com",
+        "address": "jiosajd, 9023",
+        "submissionDate": str(datetime.now().isoformat()),
+        "attachments": [
+            "https://localhost:8000/static/delete_file.png",
+        ],
+        "place": "Warsaw",
+        "contestId": "XYZ",
+        "category": "kat1"
+    }
 
 
 @pytest.fixture
@@ -28,7 +50,7 @@ def contest():
 
 
 def post_contest(client, contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -48,7 +70,8 @@ def test_create_entry(client, entry, contest):
     assert "id" in post_resp
     entry_id = post_resp["id"]
     response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}", headers=auth_header
+        f"/entries/{contest_id}?entryId={entry_id}",
+        cookies=auth_cookie
     )
     assert response.status_code == 200
     get_resp = response.json()
@@ -68,7 +91,10 @@ def test_create_entry(client, entry, contest):
     assert resp_data["place"] == entry["place"]
     assert resp_data["contestId"] == contest_id
 
-    response = client.get(f"/entries/{contest_id}", headers=auth_header)
+    response = client.get(
+        f"/entries/{contest_id}",
+        cookies=auth_cookie
+    )
     assert response.status_code == 200
     assert "data" in response.json()
     entries_data = response.json()["data"]
@@ -122,15 +148,20 @@ def test_delete_entry(client, entry, contest):
     entry_id = post_resp["id"]
 
     response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}", headers=auth_header
+        f"/entries/{contest_id}?entryId={entry_id}",
+        cookies=auth_cookie
     )
     assert response.status_code == 200
 
-    del_response = client.delete(f"/entries/{entry_id}", headers=auth_header)
+    del_response = client.delete(
+        f'/entries/{entry_id}',
+        cookies=auth_cookie
+    )
     assert del_response.status_code == 200
 
     response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}", headers=auth_header
+        f"/entries/{contest_id}?entryId={entry_id}",
+        cookies=auth_cookie
     )
     assert response.status_code == 404
 
@@ -143,21 +174,18 @@ def test_evaluation(client, entry, contest):
     assert response.status_code == 200
     entry_id = response.json()["id"]
 
-    response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}", headers=auth_header
-    )
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          cookies=auth_cookie)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "Warsaw"
 
     evaluation = {"value": "laureat"}
-    response = client.post(
-        f"/entries/{entry_id}/evaluation", json=evaluation, headers=auth_header
-    )
+    response = client.post(f"/entries/{entry_id}/evaluation", json=evaluation,
+                           cookies=auth_cookie)
     assert response.status_code == 200
     assert response.json() == {"modifiedCount": 1}
 
-    response = client.get(
-        f"/entries/{contest_id}?entryId={entry_id}", headers=auth_header
-    )
+    response = client.get(f"/entries/{contest_id}?entryId={entry_id}",
+                          cookies=auth_cookie)
     assert response.status_code == 200
     assert response.json()["data"]["place"] == "laureat"

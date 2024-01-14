@@ -25,20 +25,30 @@ export default function Contests() {
     }
   });
 
-  const active = contests.filter((contest) => new Date() <= contest.deadline);
+  const active = contests.filter(
+    (contest) => new Date() <= contest.deadline && !contest.ended
+  );
   active.forEach((contest: any) => {
     contest.onclick = () => navigate(`/contests/${contest.id}/preview`);
   });
 
-  const finished = contests.filter((contest) => new Date() > contest.deadline);
+  const elapsed = contests.filter(
+    (contest) => new Date() > contest.deadline && !contest.ended
+  );
+  elapsed.forEach((contest: any) => {
+    contest.onclick = () => navigate(`/contests/${contest.id}/rate`);
+  });
+
+  const finished = contests.filter((contest) => contest.ended);
   finished.forEach((contest: any) => {
     contest.onclick = () => navigate(`/contests/${contest.id}/rate`);
   });
 
   return (
-    <div>
+    <>
       <ContestGroup title="W trakcie" items={active as any} />
+      <ContestGroup title="Termin zgłaszania minął" items={elapsed as any} />
       <ContestGroup title="Zakończone" items={finished as any} />
-    </div>
+    </>
   );
 }

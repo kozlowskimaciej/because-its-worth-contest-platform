@@ -18,6 +18,7 @@ describe("prepareContests", () => {
       ],
       acceptedFileFormats: ["jpg", "png"],
       background: "https://foo.bar/static/contest-background.jpg",
+      ended: false,
     },
     {
       id: "657e2152d9a591885cd7a033",
@@ -33,6 +34,7 @@ describe("prepareContests", () => {
       ],
       acceptedFileFormats: ["jpg", "png"],
       background: "https://foo.bar/static/contest-background.jpg",
+      ended: false,
     },
   ];
 

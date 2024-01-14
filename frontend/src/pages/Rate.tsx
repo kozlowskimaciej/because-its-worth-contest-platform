@@ -7,24 +7,25 @@ import { prepareEntries } from "../utils/prepareEntries";
 import Navbar from "../components/common/Navbar";
 import Entries from "../components/rate/Entries";
 import RateContextProvider from "../contexts/RateContext";
-import { useAppContext } from "../contexts/AppContext";
-import useCheckToken from "../hooks/useCheckToken";
+import FinishButton from "../components/rate/FinishButton";
 
 export default function Rate() {
-  useCheckToken();
-  const { tokenRef } = useAppContext();
   const { id } = useParams();
 
-  const { data, error, isLoading } = useFetch(
+  const {
+    data: contest,
+    isLoading: contestIsLoading,
+    error,
+  } = useFetch(`${process.env.REACT_APP_SERVER_URL}/contests/?id=${id}`);
+
+  const { data, isLoading } = useFetch(
     `${process.env.REACT_APP_SERVER_URL}/entries/${id}`,
     {
-      headers: {
-        Authorization: `Bearer ${tokenRef.current}`,
-      },
+      withCredentials: true,
     }
   );
 
-  if (isLoading)
+  if (isLoading || contestIsLoading)
     return (
       <>
         <Navbar />
@@ -32,11 +33,19 @@ export default function Rate() {
       </>
     );
 
+  if (contest && (contest as any).data.ended === true)
+    return (
+      <>
+        <Navbar />
+        <NotFoundInfo text="Konkurs został już zakończony." />
+      </>
+    );
+
   if (error)
     return (
       <>
         <Navbar />
-        <NotFoundInfo text="Podany konkurs nie istnieje lub nie zostały zgłoszone żadne prace." />
+        <NotFoundInfo text="Podany konkurs nie istnieje." />
       </>
     );
 
@@ -46,6 +55,7 @@ export default function Rate() {
     <>
       <Navbar />
       <div style={{ height: "100px" }} />
+      <FinishButton />
       <RateContextProvider entries={entries}>
         <Entries />
       </RateContextProvider>

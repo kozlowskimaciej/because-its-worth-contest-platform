@@ -1,14 +1,16 @@
 import React from "react";
 import styles from "./styles/PublishForm.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FileInput from "./FileInput";
 import FilesDisplayer from "./FilesDisplayer";
 import { usePublishContext } from "../../contexts/PublishContext";
 import { uploadMultipleFiles } from "../../utils/uploadFiles";
 import { toast } from "react-toastify";
 import { errorConfig, successConfig } from "../../config/toasts";
+import axios from "axios";
 
 export default function PublishForm() {
+  const navigate = useNavigate();
   const { files } = usePublishContext();
   const { id } = useParams();
 
@@ -23,11 +25,26 @@ export default function PublishForm() {
     const toastID = toast.loading("Proszę czekać...");
 
     try {
-      const urls = await uploadMultipleFiles(files);
+      const urls = (await uploadMultipleFiles(files)).map((filename) => {
+        const splitted = filename.split("/");
+        return splitted[splitted.length - 1];
+      });
       const formLink = `${window.origin}/forms/${id}`;
 
-      console.log(urls, formLink);
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/contests/${id}/publish`,
+        {
+          receiver_files: urls,
+          form_url: formLink,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (data.status !== 200) throw new Error();
       toast.update(toastID, successConfig("Konkurs opublikowany pomyślnie."));
+      navigate(`/contests/${id}/preview`);
     } catch (e) {
       toast.update(
         toastID,

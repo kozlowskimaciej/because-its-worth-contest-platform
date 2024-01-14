@@ -9,7 +9,9 @@ import pytest
 
 token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
 
-auth_header = {"Authorization": f"Bearer {token}"}
+auth_cookie = {
+    "token": token
+}
 
 
 @pytest.fixture
@@ -32,14 +34,14 @@ def contest():
 
 
 def test_post_contest(client, contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
     assert "id" in post_resp
     contest_id = post_resp["id"]
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
 
     get_resp = response.json()
@@ -68,13 +70,13 @@ def test_post_contest(client, contest):
 
 
 def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
     contest_id = response.json()["id"]
 
     assert len(mock_smtp) == 0
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
     assert not response.json()["data"]["published"]
 
@@ -88,9 +90,8 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
         "receiver_files": [file_name, file_name],
         "form_url": "link_to_form",
     }
-    response = client.post(
-        f"/contests/{contest_id}/publish", json=publishing, headers=auth_header
-    )
+    response = client.post(f"/contests/{contest_id}/publish", json=publishing,
+                           cookies=auth_cookie)
     assert response.status_code == 200
 
     assert len(mock_smtp) == 1
@@ -110,14 +111,14 @@ def test_publish_contest(client, mock_smtp: list[EmailMessage], contest):
         )[1].rstrip()
     )
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f"/contests/?id={contest_id}")
     assert response.status_code == 200
     assert response.json()["data"]["published"]
 
 
 def test_end_contest(client, mock_smtp: list[EmailMessage], contest, entry):
     contest["published"] = True
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
     contest_id = response.json()["id"]
 
@@ -127,7 +128,7 @@ def test_end_contest(client, mock_smtp: list[EmailMessage], contest, entry):
 
     assert len(mock_smtp) == 0
 
-    response = client.post(f"/contests/{contest_id}/end", headers=auth_header)
+    response = client.post(f"/contests/{contest_id}/end", cookies=auth_cookie)
     assert response.status_code == 200
 
     assert len(mock_smtp) == 1
@@ -136,14 +137,14 @@ def test_end_contest(client, mock_smtp: list[EmailMessage], contest, entry):
 
 
 def test_end_contest_twice(client, mock_smtp: list[EmailMessage], contest):
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post("/contests/", json=contest, cookies=auth_cookie)
     assert response.status_code == 200
     contest_id = response.json()["id"]
 
-    response = client.post(f"/contests/{contest_id}/end", headers=auth_header)
+    response = client.post(f"/contests/{contest_id}/end", cookies=auth_cookie)
     assert response.status_code == 200
 
-    response = client.post(f"/contests/{contest_id}/end", headers=auth_header)
+    response = client.post(f"/contests/{contest_id}/end", cookies=auth_cookie)
     assert response.status_code == 409
 
 
@@ -152,7 +153,7 @@ def test_delete_contest(client, contest):
     contest["background"] = None
     contest["published"] = True
 
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post('/contests/', json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
@@ -179,20 +180,21 @@ def test_delete_contest(client, contest):
     )
     assert response.status_code == 200
 
-    response = client.get(f"/entries/{contest_id}", headers=auth_header)
+    response = client.get(f'/entries/{contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
     entries_data = response.json()["data"]
     assert len(entries_data) == 1
 
-    response = client.delete(f"/contests?id={contest_id}", headers=auth_header)
+    response = client.delete(f'/contests/?id={contest_id}',
+                             cookies=auth_cookie)
     assert response.status_code == 200
 
-    response = client.get(f"/entries/{contest_id}", headers=auth_header)
+    response = client.get(f'/entries/{contest_id}', cookies=auth_cookie)
     assert response.status_code == 200
     entries_data = response.json()["data"]
     assert len(entries_data) == 0
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f'/contests/?id={contest_id}')
     assert response.status_code == 404
 
 
@@ -200,20 +202,19 @@ def test_update_contest(client, contest):
     contest["termsAndConditions"] = None
     contest["background"] = None
 
-    response = client.post("/contests/", json=contest, headers=auth_header)
+    response = client.post('/contests/', json=contest, cookies=auth_cookie)
     assert response.status_code == 200
 
     post_resp = response.json()
     assert "id" in post_resp
     contest_id = post_resp["id"]
 
-    contest["name"] = "New name"
-    response = client.patch(
-        f"/contests?id={contest_id}", json=contest, headers=auth_header
-    )
+    contest['name'] = 'New name'
+    response = client.patch(f'/contests/?id={contest_id}', json=contest,
+                            cookies=auth_cookie)
     assert response.status_code == 200
 
-    response = client.get(f"/contests?id={contest_id}")
+    response = client.get(f'/contests/?id={contest_id}')
     assert response.status_code == 200
 
     get_resp = response.json()

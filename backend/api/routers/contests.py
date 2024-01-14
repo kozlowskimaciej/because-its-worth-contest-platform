@@ -12,8 +12,7 @@ from starlette.requests import Request
 from backend.api.routers.auth import get_current_user
 from backend.api.routers.entries import get_entries, delete_entry
 from backend.emails import email_sending, email_content
-from backend.api.routers.static_files import delete_file
-
+from backend.api.routers.static_files import delete_file, STATIC_FOLDER_NAME
 
 router = APIRouter(prefix="/contests", tags=["Contests"])
 
@@ -68,7 +67,7 @@ class Publication(BaseModel):
 def get_all_receivers(receiver_files: list[str]):
     receivers = []
     for file_name in receiver_files:
-        with open(file_name, "r") as file:
+        with open(STATIC_FOLDER_NAME / file_name, "r") as file:
             receivers.extend([line.rstrip() for line in file])
     return receivers
 
@@ -136,7 +135,7 @@ async def end_contest(
         )
         send_emails([entry["email"]], mail)
 
-    return {}
+    return {"message": "Contest ended successfully."}
 
 
 async def delete_contest_files(contest: dict):

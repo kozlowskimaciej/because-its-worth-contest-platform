@@ -7,10 +7,8 @@ import useFetch from "../hooks/useFetch";
 import Loading from "../components/common/Loading";
 import NotFoundInfo from "../components/notFound/NotFoundInfo";
 import RateButton from "../components/contest/RateButton";
-import useCheckToken from "../hooks/useCheckToken";
 
 export default function Contest() {
-  useCheckToken();
   const { id } = useParams();
 
   const { data, isLoading, error } = useFetch<any>(
