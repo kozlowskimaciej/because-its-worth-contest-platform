@@ -26,11 +26,11 @@ export default function Entry({ entry }: IProps) {
     const authorFields = [];
 
     const fieldsToNames = {
-      firstName: "imię",
-      lastName: "nazwisko",
-      phone: "numer telefonu",
-      email: "email",
-      address: "adres",
+      firstName: "Imię",
+      lastName: "Nazwisko",
+      phone: "Numer telefonu",
+      email: "Email",
+      address: "Adres",
     } as any;
 
     for (const key in entry.author) {
@@ -62,17 +62,17 @@ export default function Entry({ entry }: IProps) {
       </div>
       {renderAuthorFields()}
       <div className={styles.text}>
-        <span className={styles.field}>kategoria: </span>
+        <span className={styles.field}>Kategoria: </span>
         {entry.category}
       </div>
       {entry.guardian?.firstName && (
         <div className={styles.text}>
-          <span className={styles.field}>opiekun: </span>
+          <span className={styles.field}>Opiekun: </span>
           {entry.guardian.firstName} {entry.guardian.lastName}
         </div>
       )}
       <div className={styles.text} style={{ marginTop: "20px" }}>
-        <span className={styles.field}>zgłoszone prace: </span>
+        <span className={styles.field}>Zgłoszone prace: </span>
       </div>
       <ul>
         {entry.files.map((file, index) => {

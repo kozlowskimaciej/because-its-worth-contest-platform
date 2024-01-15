@@ -99,7 +99,7 @@ export default function EntryFormContent({ contest }: IProps) {
       <div style={{ textAlign: "left" }}>
         <div className={styles.obligatory}>* pole obowiązkowe</div>
         <SingleEntry
-          entryTitle="Imie *"
+          entryTitle="Imię *"
           name="firstname"
           required
           type="text"

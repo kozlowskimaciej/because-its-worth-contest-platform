@@ -11,7 +11,6 @@ export default function DeleteEntryButton({ entry }: IProps) {
   const { handleDeleteEntry } = useRateContext();
 
   const handleDeleteEntryClick = (entry: Entry) => {
-    // usunąć bo to mrozi aplikacje i token sie nie moze odswiezyc
     if (
       !window.confirm(
         `Czy na pewno chcesz usunąć zgłoszenie od ${entry.author.firstName} ${entry.author.lastName}? Operacja jest nieodwracalna.`
